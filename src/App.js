@@ -1,24 +1,68 @@
-import React from 'react';
+import React, { Component, useDebugValue } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import TeamsList from './components/teamslist';
+import * as Msal from "msal";
 
-function App() {
-let teamslist=[
-  {"teamId":101,"teamName":"Sample team1","teamDescription":"Awesome team-1","githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":false,"createdDate":"0001-01-01T00:00:00","createdBy":"sadoshi@microsoft.com","modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]},
-  {"teamId":102,"teamName":"Sample team2","teamDescription":"Meh team-2","githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":false,"createdDate":"0001-01-01T00:00:00","createdBy":"sadoshi@microsoft.com","modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]},
-  {"teamId":103,"teamName":"Sample team3","teamDescription":"Amazing team-3","githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":false,"createdDate":"0001-01-01T00:00:00","createdBy":"sadoshi@microsoft.com","modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]},
-  {"teamId":104,"teamName":"Sample team4","teamDescription":"So-so team-4","githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":false,"createdDate":"0001-01-01T00:00:00","createdBy":"sadoshi@microsoft.com","modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]},
-  {"teamId":105,"teamName":"Sample team5","teamDescription":"Rockstars team-5","githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":false,"createdDate":"0001-01-01T00:00:00","createdBy":"sadoshi@microsoft.com","modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]}
-]
+class App extends Component {
+  constructor(props) {
+    super(props);
+    let msalConfig = {
+      auth: {
+        clientId: 'b3544b0c-1209-4fe8-b799-8f63a0179fa0',
+        authority : "https://login.microsoftonline.com/e773e193-89d3-44d9-ae4e-17766699f674"
+      }
+    };
+    let msalI = new Msal.UserAgentApplication(msalConfig);
+    this.state = {
+      msalInstance:msalI,
+      username:"",
+      email:"",
+      loggedin:false,
+      token: ''
+    };
+   
+  }
+  componentDidMount() {  
+    let loginRequest = {
+      scopes: ["user.read"] // optional Array<string>
+    };
+  
+      this.state.msalInstance.loginPopup(loginRequest)
+       .then(response => {
+          let id= this.state.msalInstance.getAccount(); 
+          this.setState({email:id.userName,username:id.name});
+       })
+       .catch(err => {
+           // handle error
+       });
 
+  }
+  
+render() {
+ 
+     
   return (
-    <div className="ui fluid container">
+    <div className="App">
       <header className="App-header">
-        <TeamsList teams={teamslist}/>
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+         Welcome {this.state.username}
+         <br/>
+         Your email is; {this.state.email}
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
       </header>
     </div>
   );
 }
+}
+
 
 export default App;
