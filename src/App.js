@@ -30,11 +30,22 @@ class App extends Component {
       this.state.msalInstance.loginPopup(loginRequest)
        .then(response => {
           let id= this.state.msalInstance.getAccount(); 
-          this.setState({email:id.userName,username:id.name});
+          this.setState({loggedin:true,email:id.userName,username:id.name});
        })
        .catch(err => {
            // handle error
        });
+
+       var endpoint = "https://nursehackapi20200906232054.azurewebsites.net/api/solutions/";
+       var options = {
+         method: "GET",
+       };
+       fetch(endpoint, options)
+         .then(response => response.json())
+         .then(data => {
+          this.setState({ teams: data });
+ 
+         })
 
   }
   
@@ -43,6 +54,7 @@ render() {
      
   return (
     <div className="App">
+      {this.state.loggedin ?
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -59,6 +71,7 @@ render() {
           Learn React
         </a>
       </header>
+      :""}
     </div>
   );
 }
