@@ -2,6 +2,7 @@ import React, { Component, useDebugValue } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import * as Msal from "msal";
+import TeamsList from './components/teamslist';
 
 class App extends Component {
   constructor(props) {
@@ -44,20 +45,7 @@ render() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-         Welcome {this.state.username}
-         <br/>
-         Your email is; {this.state.email}
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <TeamsList teams={teams}/>
       </header>
     </div>
   );
