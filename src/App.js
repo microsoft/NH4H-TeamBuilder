@@ -1,4 +1,5 @@
 import React, { Component, useDebugValue } from 'react';
+import {Route, NavLink, HashRouter} from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 import * as Msal from "msal";
@@ -53,20 +54,11 @@ class App extends Component {
 
   }
   
-render() {
- 
-     
-  return (
-    <div className="App">
-      {this.state.loggedin ?
-      <header className="App-header">
-        <TeamsList teams={this.state.teams}/>
-      </header>
-      :""}
-    </div>
-  );
+  render() {
+    return (
+      <TeamsList teams={this.state.teams}/>
+    );
+  }
 }
-}
-
 
 export default App;
