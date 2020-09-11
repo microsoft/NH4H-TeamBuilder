@@ -5,6 +5,7 @@ import './App.css';
 import * as Msal from "msal";
 import TeamsList from './components/teamslist';
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -20,15 +21,29 @@ class App extends Component {
       msalInstance:msalI,
       username:"",
       email:"",
+      db_userid:"",
       loggedin:false,
       teams:[{"teamId":101,"teamName":"Solution100","teamDescription":null,"githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":true,"createdDate":"2020-09-07T17:09:21.1433333","createdBy":null,"modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]},{"teamId":102,"teamName":"Solution1","teamDescription":null,"githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":true,"createdDate":"0001-01-01T00:00:00","createdBy":null,"modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]},{"teamId":103,"teamName":"Sample team1","teamDescription":"Sample desc","githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":false,"createdDate":"0001-01-01T00:00:00","createdBy":"sadoshi@microsoft.com","modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]},{"teamId":104,"teamName":"Sample team2","teamDescription":"Sample desc","githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":false,"createdDate":"0001-01-01T00:00:00","createdBy":"sadoshi@microsoft.com","modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]},{"teamId":105,"teamName":"team3","teamDescription":"Sample desc","githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":false,"createdDate":"0001-01-01T00:00:00","createdBy":"sadoshi@microsoft.com","modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]},{"teamId":106,"teamName":"team4","teamDescription":"Sample desc","githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":false,"createdDate":"0001-01-01T00:00:00","createdBy":"sadoshi@microsoft.com","modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]}]
     };
    
   }
+
   getUserID(){
-    
+    var endpoint = "https://nursehackapi20200906232054.azurewebsites.net/api/users/msemail";
+    var options = {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ UserMSTeamsEmail : this.state.email })
+    };
+    fetch(endpoint, options)
+      .then(response => response.json())
+      .then(data => {
+       
+        console.log("User id is:");
+        console.log(data.userId);
+      })
   }
-  
+
   componentDidMount() {  
     let loginRequest = {
       scopes: ["user.read"] // optional Array<string>
@@ -38,8 +53,10 @@ class App extends Component {
       this.setState({
       loggedin:true,
       email:id.userName,
-      username:id.name});
-      //go get userid
+      username:id.name}, () => {
+        this.getUserID();
+    });
+      
     }else{
       this.state.msalInstance.loginRedirect(loginRequest)
        .then(response => {
