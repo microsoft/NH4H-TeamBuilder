@@ -2,11 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Route, NavLink, HashRouter} from 'react-router-dom';
 import App from './App';
-<<<<<<< HEAD
-import LoggedIn from './components/loggedin';
-=======
 import Team from './components/team';
->>>>>>> e072ba2f7e330a423c786cbc11d4bd83e14ee7ff
 import * as serviceWorker from './serviceWorker';
 
 
