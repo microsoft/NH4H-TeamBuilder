@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Route, NavLink, HashRouter} from 'react-router-dom';
-import './index.css';
 import App from './App';
+import Team from './components/team';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
@@ -10,16 +10,19 @@ ReactDOM.render(
   <HashRouter>
     <div className="ui container">
       <div className="ui secondary pointing menu">
-        <NavLink to="/"><a className="active item">Home</a></NavLink>
-        <NavLink to="/teams"><a className="item">Teams</a></NavLink>
+        <NavLink to="/" className="active item">Home</NavLink>
+        <NavLink to="/teams" className="item">Teams</NavLink>
         <div className="right menu">
-        <NavLink to="/logout"><a className="ui item">Logout</a></NavLink>
+        <NavLink to="/logout" className="ui item">Logout</NavLink>
         </div>
       </div>
       <div className="ui segment">
-      <Route exact path="/"><div>Home Page</div></Route>
-      <Route exact path="/teams"><App/></Route>
-      <Route exact path="/logout"><div>Log me out!</div></Route>
+        <Route exact path="/"><div>Home Page</div></Route>
+        <Route path="/teams"><App/></Route>
+        <Route path="/logout"><div>Log me out!</div></Route>
+        <Route path="/team/:teamId" component={Team}/>
+        <Route path="/join/:teamId/:userId"><div>Join a team</div></Route>
+        <Route path="/leave/:teamId/:userId"><div>Leave a team</div></Route>
       </div>
     </div>
     </HashRouter>
