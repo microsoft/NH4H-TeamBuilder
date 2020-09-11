@@ -1,5 +1,4 @@
-import React, { Component, useDebugValue } from 'react';
-import {Route, NavLink, HashRouter} from 'react-router-dom';
+import React, { Component } from 'react';
 import * as Msal from "msal";
 import TeamsList from './components/teamslist';
 
@@ -15,13 +14,14 @@ class App extends Component {
       }
     };
     let msalI = new Msal.UserAgentApplication(msalConfig);
+    console.log("hi");
     this.state = {
       msalInstance:msalI,
       username:"",
       email:"",
       db_userid:"",
       loggedin:false,
-      teams:[{"teamId":101,"teamName":"Solution100","teamDescription":null,"githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":true,"createdDate":"2020-09-07T17:09:21.1433333","createdBy":null,"modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]},{"teamId":102,"teamName":"Solution1","teamDescription":null,"githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":true,"createdDate":"0001-01-01T00:00:00","createdBy":null,"modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]},{"teamId":103,"teamName":"Sample team1","teamDescription":"Sample desc","githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":false,"createdDate":"0001-01-01T00:00:00","createdBy":"sadoshi@microsoft.com","modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]},{"teamId":104,"teamName":"Sample team2","teamDescription":"Sample desc","githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":false,"createdDate":"0001-01-01T00:00:00","createdBy":"sadoshi@microsoft.com","modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]},{"teamId":105,"teamName":"team3","teamDescription":"Sample desc","githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":false,"createdDate":"0001-01-01T00:00:00","createdBy":"sadoshi@microsoft.com","modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]},{"teamId":106,"teamName":"team4","teamDescription":"Sample desc","githubURL":null,"msTeamsChannel":null,"msLabEnvironment":null,"msLabTenantName":null,"msLabAzureUsername":null,"msLabSPNAppId":null,"msLabSPNAppObjectId":null,"msLabSPNObjectId":null,"msLabSPNDisplayName":null,"msLabSPNKey":null,"active":false,"createdDate":"0001-01-01T00:00:00","createdBy":"sadoshi@microsoft.com","modifiedDate":"0001-01-01T00:00:00","modifiedBy":null,"tblTeamSkillMatch":[],"tblTeamHackers":[]}]
+      teams:[]
     };
    
   }
@@ -43,10 +43,11 @@ class App extends Component {
   }
 
   componentDidMount() {  
-    let loginRequest = {
-      scopes: ["user.read"] // optional Array<string>
-    };
+    if(this.state.msalInstance){
+      console.log("At least found it");
+    }
     if(this.state.msalInstance.getAccount()){ 
+      console.log("HIHIHI");
     let id=this.state.msalInstance.getAccount();
       this.setState({
       loggedin:true,
@@ -56,6 +57,9 @@ class App extends Component {
     });
       
     }else{
+      let loginRequest = {
+        scopes: ["user.read"] // optional Array<string>
+      };
       this.state.msalInstance.loginRedirect(loginRequest)
        .then(response => {
           

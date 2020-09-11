@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Route, NavLink, HashRouter} from 'react-router-dom';
+import {Route, NavLink, HashRouter, Switch} from 'react-router-dom';
 import App from './App';
 import Team from './components/team';
 import * as serviceWorker from './serviceWorker';
@@ -15,11 +15,13 @@ ReactDOM.render(
         <NavLink className="item" to="/teams">Teams</NavLink>
       </div>
       <div className="ui segment">
-      <Route exact path="/"><App/></Route>
-      <Route exact path="/teams"><App/></Route>
+      <Switch>
         <Route path="/team/:teamId" component={Team}/>
         <Route path="/join/:teamId/:userId"><div>Join a team</div></Route>
         <Route path="/leave/:teamId/:userId"><div>Leave a team</div></Route>
+        <Route path="/teams"><App/></Route>
+        <Route path="/"><App/></Route>
+        </Switch>
       </div>
     </div>
     </HashRouter>
