@@ -11,7 +11,8 @@ class App extends Component {
     let msalConfig = {
       auth: {
         clientId: 'b3544b0c-1209-4fe8-b799-8f63a0179fa0',
-        authority : "https://login.microsoftonline.com/e773e193-89d3-44d9-ae4e-17766699f674"
+        authority: "https://login.microsoftonline.com/e773e193-89d3-44d9-ae4e-17766699f674",
+    //    redirectUri:"/loggedin" 
       }
     };
     let msalI = new Msal.UserAgentApplication(msalConfig);
@@ -24,22 +25,30 @@ class App extends Component {
     };
    
   }
+  getUserID(){
+    
+  }
+  
   componentDidMount() {  
     let loginRequest = {
       scopes: ["user.read"] // optional Array<string>
     };
-  
-      this.state.msalInstance.loginPopup(loginRequest)
+    if(this.state.msalInstance.getAccount()){ 
+    let id=this.state.msalInstance.getAccount();
+      this.setState({
+      loggedin:true,
+      email:id.userName,
+      username:id.name});
+      //go get userid
+    }else{
+      this.state.msalInstance.loginRedirect(loginRequest)
        .then(response => {
-          let id= this.state.msalInstance.getAccount(); 
-          this.setState({
-            loggedin:true,
-            email:id.userName,
-            username:id.name});
+          
        })
        .catch(err => {
            // handle error
        });
+      }
 
        var endpoint = "https://nursehackapi20200906232054.azurewebsites.net/api/solutions/";
        var options = {
@@ -56,7 +65,11 @@ class App extends Component {
   
   render() {
     return (
+      <div>
+        <br/>
+        User: {this.state.email};
       <TeamsList teams={this.state.teams}/>
+      </div>
     );
   }
 }
