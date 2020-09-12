@@ -12,14 +12,15 @@ class TeamListItem extends React.Component {
 
     return(
       <tr>
-        <td>        
+        <td> 
+        {this.props.members} members       
           <button onClick={()=>{this.props.Callback('join',this.props.id)}} className="ui positive button">Join</button>
           <button onClick={()=>{this.props.Callback('leave',this.props.id)}} className="ui red button">Leave</button></td>
         <td>{this.props.name}</td>
         <td>{this.props.description}</td>
         <td>&nbsp;</td>
         <td className="right aligned collapsing">
-        placeholder
+        
         </td>
       </tr>
     )

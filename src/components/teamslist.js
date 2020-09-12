@@ -11,14 +11,16 @@ class TeamsList extends React.Component {
   }
 
   joinOrLeaveTeam(type,id){
-    this.props.Callback('type',id);
+    this.props.Callback(type,id);
   }
   
   getTeamListItems=()=>{
-  return this.props.teams.map( ({teamId, teamName, teamDescription}) => ( 
+  return this.props.teams.map( ({teamId, teamName, teamDescription,tblTeamHackers}) => ( 
     <TeamListItem Callback={this.joinOrLeaveTeam} 
       key={teamId} id={teamId} 
-      name={teamName} description={teamDescription}/>
+      name={teamName} description={teamDescription}
+      members={tblTeamHackers.length}
+      />
   ))
   }
   render() {
