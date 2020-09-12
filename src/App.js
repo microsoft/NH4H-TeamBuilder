@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {NavLink} from 'react-router-dom';
 import * as Msal from "msal";
 import TeamsList from './components/teamslist';
+import nh4h from './apis/nh4h';
 
 class App extends Component {
   constructor(props) {
@@ -22,22 +23,23 @@ class App extends Component {
       loggedin:false,
       teams:[]
     };
+
    
   }
 
-  getUserID(){
-    var endpoint = "https://nursehackapi20200906232054.azurewebsites.net/api/users/msemail";
-    var options = {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ UserMSTeamsEmail : this.state.email })
-    };
-    fetch(endpoint, options)
-      .then(response => response.json())
-      .then(data => {
-       this.setState({userid:data});
-        
-      })
+  
+  getUserID=()=>{
+    let body={ UserMSTeamsEmail : this.state.email };
+    nh4h.post('/users/msemail',body)
+    .then((response)=> {
+      this.setState({userid:response.data.userId});
+    });
+  }
+  getTeams=()=>{
+    nh4h.get('/solutions/')
+    .then((response)=>{
+      this.setState({ teams: response.data });
+    });
   }
 
   componentDidMount() {  
@@ -50,6 +52,7 @@ class App extends Component {
       email:id.userName,
       username:id.name}, () => {
         this.getUserID();
+        this.getTeams();
     });
       
     }else{
@@ -65,16 +68,7 @@ class App extends Component {
        });
       }
 
-       var endpoint = "https://nursehackapi20200906232054.azurewebsites.net/api/solutions/";
-       var options = {
-         method: "GET",
-       };
-       fetch(endpoint, options)
-         .then(response => response.json())
-         .then(data => {
-          this.setState({ teams: data });
- 
-         })
+       
 
   }
   
