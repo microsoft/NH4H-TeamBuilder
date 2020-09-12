@@ -2,30 +2,49 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
 
+import nh4h from '../apis/nh4h';
+
 class Team extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props.match.params.teamId);
+    this.state = {
+      teamId: this.props.match.params.teamId,
+      teamData: {}
+    }
   }
   
+  componentDidMount() {
+
+    let request_url = "/solutions/" + this.state.teamId;
+
+    nh4h.get(request_url)
+    .then((response) =>
+      this.setState({
+        teamData: response.data
+      })
+    ).then(()=> {
+      console.log(this.state.teamData);
+    })
+  }
+
   render() {
     
-    const joinTeamUrl = "/join/" + this.props.match.params.teamId;
-    const leaveTeamUrl = "/leave/" + this.props.match.params.teamId;
+    let joinTeamUrl = "/join/" + this.state.teamId;
+    let leaveTeamUrl = "/leave/" + this.state.teamId;
 
     return(
       <div className="ui segments">
         <div className="ui segment">
-          Team ID: <br/> {this.props.match.params.teamId}
+          Team ID: <br/> {this.state.teamData.teamId}
         </div>
         <div className="ui segment">
-          Team Name: <br/> {this.props.match.params.teamId}
+          Team Name: <br/> {this.state.teamData.teamName}
         </div>
         <div className="ui segment">
-          Team Description: <br/> {this.props.match.params.teamId}
+          Team Description: <br/> {this.state.teamData.teamDescription}
         </div>
         <div className="ui segment">
-          Team Required Skills: <br/> {this.props.match.params.teamId}
+          Challenge Name: <br/> {this.state.teamData.challengeName}
         </div>
         <div className="ui segment">
           <NavLink to={joinTeamUrl}>

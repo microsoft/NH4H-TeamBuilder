@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import {NavLink} from 'react-router-dom';
 import * as Msal from "msal";
 import TeamsList from './components/teamslist';
-
 
 class App extends Component {
   constructor(props) {
@@ -84,10 +84,16 @@ class App extends Component {
   
   render() {
     return (
-      <div>
-        <br/>
-        User: {this.state.email};
-      <TeamsList teams={this.state.teams}/>
+      <div className="ui">
+        <div className="ui segment">
+          User: {this.state.email};
+        </div>
+        <TeamsList teams={this.state.teams}/>
+        <div className="ui basic segment">
+          <NavLink to="/team/new">
+            <button className="ui positive button">Create Team</button>
+          </NavLink>
+        </div>
       </div>
     );
   }

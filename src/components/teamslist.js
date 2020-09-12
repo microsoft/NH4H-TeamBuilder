@@ -4,6 +4,9 @@ import TeamListItem from './teamlistitem';
 class TeamsList extends React.Component {
   constructor(props){
     super(props);
+    this.state = {
+      teams: []
+    }
   }
 
   render() {
@@ -18,6 +21,7 @@ class TeamsList extends React.Component {
               <th>Team ID</th>
               <th>Name</th>
               <th>Description</th>
+              <th>Challenge Name</th>
               <th></th>
             </tr>
           </thead>
