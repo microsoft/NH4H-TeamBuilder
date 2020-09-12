@@ -26,6 +26,7 @@ class App extends Component {
       showcreate:false
     };
     this.changeTeamMembership = this.changeTeamMembership.bind(this);
+    this.NewTeamCreated = this.NewTeamCreated.bind(this);
 
   }
   getMyTeam=()=>{
@@ -101,7 +102,11 @@ class App extends Component {
   toggleShowCreate =()=>{
     this.setState({showCreate:!this.state.showCreate});
   }
-
+NewTeamCreated(){
+  this.toggleShowCreate();
+  this.getTeams();
+  
+}
 
 render() {
   return (
@@ -110,7 +115,7 @@ render() {
         className="ui positive button"
       >
         {!this.state.showCreate?'Create a Team!':'Never Mind'}</button>
-      {this.state.showCreate?<TeamForm/>:""}
+      {this.state.showCreate?<TeamForm Callback={this.NewTeamCreated}/>:""}
       <TeamsList Callback={this.changeTeamMembership} teams={this.state.teams} />
       <div className="ui basic segment">
         <NavLink to="/team/new">
