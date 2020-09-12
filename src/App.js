@@ -14,7 +14,6 @@ class App extends Component {
       }
     };
     let msalI = new Msal.UserAgentApplication(msalConfig);
-    console.log("hi");
     this.state = {
       msalInstance:msalI,
       username:"",
@@ -36,18 +35,15 @@ class App extends Component {
     fetch(endpoint, options)
       .then(response => response.json())
       .then(data => {
-       
-        console.log("User id is:");
-        console.log(data.userId);
+       this.setState({userid:data});
+        
       })
   }
 
   componentDidMount() {  
-    if(this.state.msalInstance){
-      console.log("At least found it");
-    }
+    
     if(this.state.msalInstance.getAccount()){ 
-      console.log("HIHIHI");
+      
     let id=this.state.msalInstance.getAccount();
       this.setState({
       loggedin:true,
