@@ -23,7 +23,7 @@ class App extends Component {
       loggedin:false,
       teams:[]
     };
-
+    this.changeTeamMembership=this.changeTeamMembership.bind(this);
    
   }
 
@@ -67,9 +67,9 @@ class App extends Component {
            // handle error
        });
       }
-
-       
-
+  }
+  changeTeamMembership(join,id){
+    console.log("Going to ");
   }
   
   render() {
@@ -78,7 +78,7 @@ class App extends Component {
         <div className="ui segment">
           User: {this.state.email};
         </div>
-        <TeamsList teams={this.state.teams}/>
+        <TeamsList Callback={this.changeTeamMembership} teams={this.state.teams}/>
         <div className="ui basic segment">
           <NavLink to="/team/new">
             <button className="ui positive button">Create Team</button>

@@ -7,11 +7,21 @@ class TeamsList extends React.Component {
     this.state = {
       teams: []
     }
+    this.joinOrLeaveTeam=this.joinOrLeaveTeam.bind(this);
   }
 
+  joinOrLeaveTeam(type,id){
+    this.props.Callback('type',id);
+  }
+  
+  getTeamListItems=()=>{
+  return this.props.teams.map( ({teamId, teamName, teamDescription}) => ( 
+    <TeamListItem Callback={this.joinOrLeaveTeam} 
+      key={teamId} id={teamId} 
+      name={teamName} description={teamDescription}/>
+  ))
+  }
   render() {
-
-    console.log(this.props.teams);
 
     return(
       <div>
@@ -26,9 +36,7 @@ class TeamsList extends React.Component {
             </tr>
           </thead>
           <tbody>
-          {this.props.teams.map( ({teamId, teamName, teamDescription}) => (
-            <TeamListItem key={teamId} teamId={teamId} name={teamName} description={teamDescription}/>
-          ))}
+          {this.getTeamListItems()}
           </tbody>
         </table>
       </div>
