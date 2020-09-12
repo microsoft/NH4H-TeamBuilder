@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import * as Msal from "msal";
 import TeamsList from './components/teamslist';
 import nh4h from './apis/nh4h';
+import TeamForm from './components/createteam';
 
 class App extends Component {
   constructor(props) {
@@ -21,12 +22,15 @@ class App extends Component {
       email: "",
       db_userid: "",
       loggedin: false,
-      teams: []
+      teams: [],
+      showcreate:false
     };
     this.changeTeamMembership = this.changeTeamMembership.bind(this);
 
   }
-
+  getMyTeam=()=>{
+    
+  }
 
   getUserID = () => {
     let body = { UserMSTeamsEmail: this.state.email };
@@ -94,17 +98,23 @@ class App extends Component {
     console.log(body);
   }
 
+  toggleShowCreate =()=>{
+    this.setState({showCreate:!this.state.showCreate});
+  }
+
 
 render() {
   return (
     <div className="ui">
-      <div className="ui segment">
-        User: {this.state.email};
-        </div>
+      <button onClick={()=>{this.toggleShowCreate()}}
+        className="ui positive button"
+      >
+        {!this.state.showCreate?'Create a Team!':'Never Mind'}</button>
+      {this.state.showCreate?<TeamForm/>:""}
       <TeamsList Callback={this.changeTeamMembership} teams={this.state.teams} />
       <div className="ui basic segment">
         <NavLink to="/team/new">
-          <button className="ui positive button">Create Team</button>
+          <button >Create Team</button>
         </NavLink>
       </div>
     </div>

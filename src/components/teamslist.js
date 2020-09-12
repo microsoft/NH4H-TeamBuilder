@@ -20,6 +20,7 @@ class TeamsList extends React.Component {
       key={teamId} id={teamId} 
       name={teamName} description={teamDescription}
       members={tblTeamHackers.length}
+      
       />
   ))
   }
