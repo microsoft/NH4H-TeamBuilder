@@ -51,21 +51,21 @@ class TeamsList extends React.Component {
        {c}
       </Accordion.Title>
       <Accordion.Content active={this.state.activeIndex === index}>
-        <p>
-        {this.getTeamListItems(this.state.teams[c])}
-        </p>
+        <div className="ui middle aligned divided list">
+          {this.getTeamListItems(this.state.teams[c])}
+        </div>
       </Accordion.Content>
       </div>
     ));
   }
   getTeamListItems=(teamlist)=>{
   return teamlist.map( ({teamId, teamName, teamDescription,tblTeamHackers,challengeName}) => ( 
-    <TeamListItem Callback={this.joinOrLeaveTeam} 
+    <TeamListItem 
+      Callback={this.joinOrLeaveTeam} 
       key={teamId} id={teamId} 
       name={teamName} description={teamDescription}
       members={tblTeamHackers.length}
-      challengeName={challengeName}
-      
+      challengeName={challengeName}      
       />
   ))
   }

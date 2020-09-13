@@ -1,31 +1,25 @@
 import React from 'react';
-import {NavLink} from 'react-router-dom';
 
 class TeamListItem extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
+  
   render() {
-
-    
-
     return(
-      <tr>
-        <td> 
-        {this.props.members} members       
-          <button onClick={()=>{this.props.Callback('join',this.props.id)}} className="ui positive button">Join</button>
-          <button onClick={()=>{this.props.Callback('leave',this.props.id)}} className="ui red button">Leave</button></td>
-        <td>{this.props.name}</td>
-        <td>
-          <strong>{this.props.challengeName}</strong>
-          &nbsp;
-          {this.props.description}</td>
-        <td>&nbsp;</td>
-        <td className="right aligned collapsing">
-        
-        </td>
-      </tr>
+      <div className="item">
+        <div className="right floated content header">
+          (Members: {this.props.members})
+        </div>
+        <div className="content">
+          <div className="header">{this.props.name}</div>
+          <br/>
+          <div>
+            {this.props.description}
+            <br/><br/>
+            <strong>We are looking for people with the following skills: {this.props.skills}</strong>
+            <br/><br/>
+            <button onClick={()=>{this.props.Callback('join',this.props.id)}} className="ui positive button">Join</button>
+          </div>
+        </div>
+      </div>
     )
   }
 }
