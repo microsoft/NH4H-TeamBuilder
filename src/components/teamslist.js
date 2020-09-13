@@ -5,30 +5,36 @@ class TeamsList extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      teams: []
+      teams: [],
+      challenges:[]
     }
     this.joinOrLeaveTeam=this.joinOrLeaveTeam.bind(this);
+  }
+
+  componentDidUpdate() {
+    this.state.teams=this.groupBy(this.props.teams,'challengeName');
+    this.state.challenges = Object.getOwnPropertyNames(this.state.teams);
   }
 
   joinOrLeaveTeam(type,id){
     this.props.Callback(type,id);
   }
-  
-  getTeamListItems=()=>{
-  return this.props.teams.map( ({teamId, teamName, teamDescription,tblTeamHackers}) => ( 
-    <TeamListItem Callback={this.joinOrLeaveTeam} 
-      key={teamId} id={teamId} 
-      name={teamName} description={teamDescription}
-      members={tblTeamHackers.length}
-      
-      />
-  ))
-  }
-  render() {
 
-    return(
+  groupBy(array, property) {
+    var hash = {};
+    for (var i = 0; i < array.length; i++) {
+        if (!hash[array[i][property]]) hash[array[i][property]] = [];
+        hash[array[i][property]].push(array[i]);
+    }
+    return hash;
+}
+  // {this.getTeamListItems(this.state.teams[c])}
+  getChallengesList=()=>{
+    return this.state.challenges.map((c)=>(
       <div>
-        <table className="ui celled striped table">
+      <br/>
+      <span className="ui message">Challenge: {c}</span>
+      <table className="ui celled striped table">
           <thead>
             <tr>
               <th>Team ID</th>
@@ -39,9 +45,30 @@ class TeamsList extends React.Component {
             </tr>
           </thead>
           <tbody>
-          {this.getTeamListItems()}
-          </tbody>
+        {this.getTeamListItems(this.state.teams[c])}
+        </tbody>
         </table>
+       <br/>
+      </div>
+    ));
+  }
+  getTeamListItems=(teamlist)=>{
+  return teamlist.map( ({teamId, teamName, teamDescription,tblTeamHackers,challengeName}) => ( 
+    <TeamListItem Callback={this.joinOrLeaveTeam} 
+      key={teamId} id={teamId} 
+      name={teamName} description={teamDescription}
+      members={tblTeamHackers.length}
+      challengeName={challengeName}
+      
+      />
+  ))
+  }
+  //{this.getTeamListItems(this.state.teams)}
+  render() {
+
+    return(
+      <div>
+        {this.getChallengesList()}
       </div>
     );
   }
