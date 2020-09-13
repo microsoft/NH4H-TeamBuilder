@@ -4,6 +4,7 @@ import * as Msal from "msal";
 import TeamsList from './components/teamslist';
 import nh4h from './apis/nh4h';
 import TeamForm from './components/createteam';
+import TeamListItem from './components/teamlistitem';
 
 class App extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class App extends Component {
       msalInstance: msalI,
       username: "",
       email: "",
-      db_userid: "",
+      userid: "",
       loggedin: false,
       teams: [],
       myteam:-1,
@@ -41,9 +42,8 @@ class App extends Component {
         this.setState({ userid: response.data.userId });
         nh4h.get('/users/solutions/'+response.data.userId)
         .then((resp)=>{
-          
           if(resp.data.teamId.length>0){
-            this.setState({myTeam:resp.data.teamId[0]});
+            this.setState({myteam:resp.data.teamId[0]});
           }
         });
       });
@@ -116,17 +116,38 @@ NewTeamCreated(){
   this.getTeams();
   
 }
+getMyTeam=()=>{
+  let t=this.state.teams.find(obj => obj.teamId == this.state.myteam);
+  
+  return t?(
+    <div>
+      <h2>Your Team</h2>
+    <TeamListItem Callback={this.changeTeamMembership} 
+    id={t.teamId} 
+    name={t.teamName} description={t.teamDescription}
+    members={t.tblTeamHackers.length}
+    challengeName={t.challengeName}
+    />
+    </div>
+    
+  ):"";
+}
+getCreateButton=()=>{
+  let buttonText=!this.state.showCreate?'Create a Team!':'Never Mind';
+  return(<button onClick={()=>{this.toggleShowCreate()}}
+  className="ui positive button">
+    {buttonText}</button>
+    );
+}
 
 render() {
   return (
     <div className="ui">
-      <button onClick={()=>{this.toggleShowCreate()}}
-        className="ui positive button"
-      >
-        {!this.state.showCreate?'Create a Team!':'Never Mind'}</button>
+      {(this.state.myteam>0)?this.getMyTeam():this.getCreateButton()}
       {this.state.showCreate?<TeamForm Callback={this.NewTeamCreated}/>:""}
+      <br/>
+      <h2>All Teams</h2>
       <TeamsList Callback={this.changeTeamMembership} myteam={this.state.myteam} teams={this.state.teams} />
-      
     </div>
   );
 }
