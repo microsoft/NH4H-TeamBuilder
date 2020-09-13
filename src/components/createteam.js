@@ -32,8 +32,11 @@ class TeamForm extends React.Component {
       teamName: this.state.teamName,
       teamDescription: this.state.teamDescription,
       challengeName: this.state.challengeName
-    }).then(()=>{
+    }).then((resp)=>{
+      console.log(resp);
+      let teamid=resp.data.teamId;
       this.setState({created:true,submitting:false});
+      this.props.JoinTeam('join',teamid);
       this.props.Callback();
     }); 
   });

@@ -104,7 +104,13 @@ class App extends Component {
     
     //fire put request
     let url='/users/solutions/' + this.state.userid
-    nh4h.put(url, body);
+    nh4h.put(url, body)
+    .then(()=>{
+      //refresh teams list
+      this.setState({myteam:-1},()=>{this.getUserID();});
+      
+
+    });
     
   }
 
@@ -144,7 +150,7 @@ render() {
   return (
     <div className="ui">
       {(this.state.myteam>0)?this.getMyTeam():this.getCreateButton()}
-      {this.state.showCreate?<TeamForm Callback={this.NewTeamCreated}/>:""}
+      {this.state.showCreate?<TeamForm JoinTeam={this.changeTeamMembership} Callback={this.NewTeamCreated}/>:""}
       <br/>
       <h2>All Teams</h2>
       <TeamsList Callback={this.changeTeamMembership} myteam={this.state.myteam} teams={this.state.teams} />
