@@ -47,7 +47,7 @@ class TeamsList extends React.Component {
   // {this.getTeamListItems(this.state.teams[c])}
   getChallengesList=()=>{
     return this.state.challenges.map((c, index)=>(
-      <div>
+      <div class="">
       <Accordion.Title
         active={this.state.activeIndex === index}
         index={index}
@@ -57,7 +57,7 @@ class TeamsList extends React.Component {
        {c}
       </Accordion.Title>
       <Accordion.Content active={this.state.activeIndex === index}>
-        <div className="ui middle aligned divided list">
+        <div className="ui special stackable cards">
           {this.getTeamListItems(this.state.teams[c])}
         </div>
       </Accordion.Content>
@@ -79,7 +79,7 @@ class TeamsList extends React.Component {
   render() {
     return(
       <Accordion fluid styled>
-      {this.getChallengesList()}      
+        {this.getChallengesList()}      
       </Accordion>
     );
   }

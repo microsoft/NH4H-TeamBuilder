@@ -131,12 +131,14 @@ getMyTeam=()=>{
   return t?(
     <div>
       <h2>Your Team </h2>
-    <TeamListItem Callback={this.changeTeamMembership} 
-    id={t.teamId} 
-    name={t.teamName} description={t.teamDescription}
-    challengeName={t.challengeName}
-    isTeamMember={t.teamId==this.state.myteam}
-    />
+      <div className="ui special stackable cards">
+        <TeamListItem Callback={this.changeTeamMembership} 
+        id={t.teamId} 
+        name={t.teamName} description={t.teamDescription}
+        challengeName={t.challengeName}
+        isTeamMember={t.teamId==this.state.myteam}
+        />
+      </div>
     </div>
     
   ):"";

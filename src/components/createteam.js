@@ -1,4 +1,5 @@
 import React from 'react';
+import { Dropdown } from 'semantic-ui-react'
 import nh4h from '../apis/nh4h';
 
 class TeamForm extends React.Component {
@@ -7,7 +8,17 @@ class TeamForm extends React.Component {
     this.state = {
       teamName: '',
       teamDescription: '',
-      challengeName: 'Encourage mark wearing',
+      challengeNameOptions: [
+        {key: 'mark-wearing', text: 'Encourage mark wearing', value: 'Encourage mark wearing'},
+        {key: 'nursing-easier', text: 'Make nursing easier', value: 'Make nursing easier'},
+        {key: 'at-home-diagnosis', text: 'Enable at-home diagnosis and care', value: 'Enable at-home diagnosis and care'},
+        {key: 'vaccine-use', text: 'Encourage vaccine use', value: 'Encourage vaccine use'}
+      ],
+      skillsNeededOptions: [
+        {key: 'nurse', text: 'Nurse', value: 'Nurse'},
+        {key: 'developer', text: 'Developer', value: 'Developer'},
+        {key: 'other', text: 'Other', value: 'Other'}
+      ],
       teamActive: 1,
       submitting:false,
       created:false
@@ -61,15 +72,14 @@ class TeamForm extends React.Component {
             <label>Team description</label>
             <textarea name="teamDescription" rows="2" onChange={this.handleInputChange}></textarea>
           </div>
-          <div>
-          <label>Challenge</label>
-          <select name="challengeName" className="ui fluid dropdown" onChange={this.handleInputChange}>
-            <option selected value="Encourage mark wearing">Encourage mark wearing</option>
-            <option value="Make nursing easier">Make nursing easier</option>
-            <option value="Enable at-home diagnosis and care">Enable at-home diagnosis and care</option>
-            <option value="Encourage vaccine use">Encourage vaccine use</option>
-          </select>
-        </div>
+          <div className="field">
+            <label>Skills Needed</label>
+            <Dropdown placeholder='What skills do you need?' fluid multiple selection options={this.state.skillsNeededOptions} />
+          </div>
+          <div className="field">
+            <label>Challenge</label>
+            <Dropdown placeholder='Select a challenge category' fluid selection options={this.state.challengeNameOptions} />
+          </div>
           <div className="ui basic segment">
             {this.state.submitting?
             <span className="ui">Submitting</span>
@@ -78,7 +88,6 @@ class TeamForm extends React.Component {
               <button className="ui primary button" type="submit">Create Team</button>
               :<span className="ui message message-warning">All of the above are required</span>)
             }
-
           </div>
         </form>
         :
