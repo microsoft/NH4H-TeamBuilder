@@ -22,8 +22,12 @@ class TeamsList extends React.Component {
   }
 
   componentDidUpdate() {
-    this.state.teams=this.groupBy(this.props.teams,'challengeName');
-    this.state.challenges = Object.getOwnPropertyNames(this.state.teams);
+    let newt=this.groupBy(this.props.teams,'challengeName');
+    let newc= Object.getOwnPropertyNames(this.state.teams);
+    this.setState({
+      teams:newt,
+      challenges:newc
+    });
   }
 
   joinOrLeaveTeam(type,id){
