@@ -85,17 +85,19 @@ class App extends Component {
   
   changeTeamMembership(join, id) {
     
-    let team = this.state.teams.find(x => x.teamId === id);
-    if(!team){team={tblTeamHackers:[]};}
-    let teamMembers = team.tblTeamHackers;
-    let index = this.state.teams.findIndex(x => x.UserId === this.state.userid);
-
-    if (join === 'join' && index < 0) {
+    
+    
+    
+    
+    let teamMembers = [];
+    
+    
+    if (join === 'join') {
       let thisUser = { TeamId: id, UserId: this.state.userid, IsLead: 0 };
       teamMembers.splice(0, 0, thisUser);
     }
-    if (join === 'leave' && index >= 0) {
-      teamMembers.splice(index, 1);
+    if (join === 'leave') {
+      //teamMembers.splice(index, 1);
     }
     
     let body = {
@@ -151,7 +153,7 @@ render() {
   return (
     <div className="ui">
       {(this.state.myteam>0)?this.getMyTeam():this.getCreateButton()}
-      {this.state.showCreate?<TeamForm JoinTeam={this.changeTeamMembership} Callback={this.NewTeamCreated}/>:<div></div>}
+      {this.state.showCreate?<TeamForm JoinTeam={this.changeTeamMembership} Callback={this.NewTeamCreated}/>:<div/>}
       <br/>
       <h2>All Teams</h2>
       <TeamsList Callback={this.changeTeamMembership} myteam={this.state.myteam} teams={this.state.teams} />
