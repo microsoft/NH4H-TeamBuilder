@@ -1,4 +1,5 @@
 import React from 'react';
+import { Accordion, Icon } from 'semantic-ui-react'
 import TeamListItem from './teamlistitem';
 
 class TeamsList extends React.Component {
@@ -6,9 +7,18 @@ class TeamsList extends React.Component {
     super(props);
     this.state = {
       teams: [],
-      challenges:[]
+      challenges:[],
+      activeIndex: 0
     }
     this.joinOrLeaveTeam=this.joinOrLeaveTeam.bind(this);
+  }
+
+  handleClick = (e, titleProps) => {
+    const { index } = titleProps
+    const { activeIndex } = this.state
+    const newIndex = activeIndex === index ? -1 : index
+
+    this.setState({ activeIndex: newIndex })
   }
 
   componentDidUpdate() {
@@ -30,25 +40,21 @@ class TeamsList extends React.Component {
 }
   // {this.getTeamListItems(this.state.teams[c])}
   getChallengesList=()=>{
-    return this.state.challenges.map((c)=>(
+    return this.state.challenges.map((c, index)=>(
       <div>
-      <br/>
-      <span className="ui message">Challenge: {c}</span>
-      <table className="ui celled striped table">
-          <thead>
-            <tr>
-              <th>Team ID</th>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Challenge Name</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
+      <Accordion.Title
+        active={this.state.activeIndex === index}
+        index={index}
+        onClick={this.handleClick}
+        >
+        <Icon name='dropdown' />
+       {c}
+      </Accordion.Title>
+      <Accordion.Content active={this.state.activeIndex === index}>
+        <p>
         {this.getTeamListItems(this.state.teams[c])}
-        </tbody>
-        </table>
-       <br/>
+        </p>
+      </Accordion.Content>
       </div>
     ));
   }
@@ -65,11 +71,10 @@ class TeamsList extends React.Component {
   }
   //{this.getTeamListItems(this.state.teams)}
   render() {
-
     return(
-      <div>
-        {this.getChallengesList()}
-      </div>
+      <Accordion fluid styled>
+      {this.getChallengesList()}      
+      </Accordion>
     );
   }
 }
