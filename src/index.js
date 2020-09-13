@@ -11,10 +11,7 @@ ReactDOM.render(
   <React.StrictMode>
   <HashRouter>
     <div className="ui container">
-      <div className="ui secondary pointing menu">
-      <NavLink className="active item" to="/">Home</NavLink>
-        <NavLink className="item" to="/teams">Teams</NavLink>
-      </div>
+     
       <div className="ui segment">
       <Switch>
       <Route path="/team/new" component={TeamForm}/>
