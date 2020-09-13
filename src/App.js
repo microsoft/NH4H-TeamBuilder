@@ -117,11 +117,7 @@ render() {
         {!this.state.showCreate?'Create a Team!':'Never Mind'}</button>
       {this.state.showCreate?<TeamForm Callback={this.NewTeamCreated}/>:""}
       <TeamsList Callback={this.changeTeamMembership} teams={this.state.teams} />
-      <div className="ui basic segment">
-        <NavLink to="/team/new">
-          <button >Create Team</button>
-        </NavLink>
-      </div>
+      
     </div>
   );
 }
