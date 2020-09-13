@@ -151,7 +151,7 @@ render() {
   return (
     <div className="ui">
       {(this.state.myteam>0)?this.getMyTeam():this.getCreateButton()}
-      {this.state.showCreate?<TeamForm JoinTeam={this.changeTeamMembership} Callback={this.NewTeamCreated}/>:""}
+      {this.state.showCreate?<TeamForm JoinTeam={this.changeTeamMembership} Callback={this.NewTeamCreated}/>:<div></div>}
       <br/>
       <h2>All Teams</h2>
       <TeamsList Callback={this.changeTeamMembership} myteam={this.state.myteam} teams={this.state.teams} />
