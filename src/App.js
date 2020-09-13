@@ -23,6 +23,7 @@ class App extends Component {
       db_userid: "",
       loggedin: false,
       teams: [],
+      myteam:-1,
       showcreate:false
     };
     this.changeTeamMembership = this.changeTeamMembership.bind(this);
@@ -38,6 +39,13 @@ class App extends Component {
     nh4h.post('/users/msemail', body)
       .then((response) => {
         this.setState({ userid: response.data.userId });
+        nh4h.get('/users/solutions/'+response.data.userId)
+        .then((resp)=>{
+          
+          if(resp.data.teamId.length>0){
+            this.setState({myTeam:resp.data.teamId[0]});
+          }
+        });
       });
   }
   getTeams = () => {
@@ -76,8 +84,7 @@ class App extends Component {
   }
   
   changeTeamMembership(join, id) {
-    console.log(id);
-    console.log(join);
+    
     let team = this.state.teams.find(x => x.teamId === id);
     let teamMembers = team.tblTeamHackers;
     let index = this.state.teams.findIndex(x => x.UserId === this.state.userid);
@@ -89,14 +96,16 @@ class App extends Component {
     if (join === 'leave' && index >= 0) {
       teamMembers.splice(index, 1);
     }
+    
     let body = {
-      teamId: id, teamName: team.teamName,
-      teamDescription: team.teamDescription,
-      challengeName: team.challengeName,
-      active: team.active,
-      tblTeamHackers: teamMembers
+      UserId: this.state.userid,
+      tblTeamHackers:teamMembers
     };
-    console.log(body);
+    
+    //fire put request
+    let url='/users/solutions/' + this.state.userid
+    nh4h.put(url, body);
+    
   }
 
   toggleShowCreate =()=>{
@@ -116,7 +125,7 @@ render() {
       >
         {!this.state.showCreate?'Create a Team!':'Never Mind'}</button>
       {this.state.showCreate?<TeamForm Callback={this.NewTeamCreated}/>:""}
-      <TeamsList Callback={this.changeTeamMembership} teams={this.state.teams} />
+      <TeamsList Callback={this.changeTeamMembership} myteam={this.state.myteam} teams={this.state.teams} />
       
     </div>
   );
