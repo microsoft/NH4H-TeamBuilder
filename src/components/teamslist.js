@@ -64,7 +64,7 @@ class TeamsList extends React.Component {
       Callback={this.joinOrLeaveTeam} 
       key={teamId} id={teamId} 
       name={teamName} description={teamDescription}
-      members={tblTeamHackers.length}
+      isTeamMember={teamId==this.props.myteam}
       challengeName={challengeName}      
       />
   ))
