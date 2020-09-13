@@ -20,14 +20,16 @@ class TeamsList extends React.Component {
 
     this.setState({ activeIndex: newIndex })
   }
-
-  componentDidUpdate() {
+  
+  componentDidUpdate(prevProps,prevState) {
+    if(prevProps.teams != this.props.teams){
     let newt=this.groupBy(this.props.teams,'challengeName');
-    let newc= Object.getOwnPropertyNames(this.state.teams);
+    let newc= Object.getOwnPropertyNames(newt);
     this.setState({
       teams:newt,
       challenges:newc
     });
+  }
   }
 
   joinOrLeaveTeam(type,id){
