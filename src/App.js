@@ -86,6 +86,7 @@ class App extends Component {
   changeTeamMembership(join, id) {
     
     let team = this.state.teams.find(x => x.teamId === id);
+    if(!team){team={tblTeamHackers:[]};}
     let teamMembers = team.tblTeamHackers;
     let index = this.state.teams.findIndex(x => x.UserId === this.state.userid);
 
@@ -127,12 +128,12 @@ getMyTeam=()=>{
   
   return t?(
     <div>
-      <h2>Your Team</h2>
+      <h2>Your Team </h2>
     <TeamListItem Callback={this.changeTeamMembership} 
     id={t.teamId} 
     name={t.teamName} description={t.teamDescription}
-    members={t.tblTeamHackers.length}
     challengeName={t.challengeName}
+    isTeamMember={t.teamId==this.state.myteam}
     />
     </div>
     
