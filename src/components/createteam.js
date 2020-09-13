@@ -7,7 +7,7 @@ class TeamForm extends React.Component {
     this.state = {
       teamName: '',
       teamDescription: '',
-      challengeName: '',
+      challengeName: 'Encourage mark wearing',
       teamActive: 1,
       submitting:false,
       created:false
@@ -61,12 +61,10 @@ class TeamForm extends React.Component {
           <div>
           <label>Challenge</label>
           <select name="challengeName" className="ui fluid dropdown" onChange={this.handleInputChange}>
-            <option value=""></option>
-            <option value="one">Challenge #1</option>
-            <option value="two">Challenge #2</option>
-            <option value="three">Challenge #3</option>
-            <option value="four">Challenge #4</option>
-            <option value="five">Challenge #5</option>
+            <option selected value="Encourage mark wearing">Encourage mark wearing</option>
+            <option value="Make nursing easier">Make nursing easier</option>
+            <option value="Enable at-home diagnosis and care">Enable at-home diagnosis and care</option>
+            <option value="Encourage vaccine use">Encourage vaccine use</option>
           </select>
         </div>
           <div className="ui basic segment">
