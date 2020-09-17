@@ -16,7 +16,7 @@ class TeamForm extends React.Component {
       name=t.teamName;
       desc=t.teamDescription;
       skills=t.skillsWanted;
-      chall=t.ChallengeName;
+      chall=t.challengeName;
     }
     this.state = {
       teamName: name,

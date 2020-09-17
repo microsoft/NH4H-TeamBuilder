@@ -5,6 +5,7 @@ import TeamsList from './components/teamslist';
 import nh4h from './apis/nh4h';
 import TeamForm from './components/createteam';
 import TeamListItem from './components/teamlistitem';
+import { Dropdown } from 'semantic-ui-react'
 
 class App extends Component {
   constructor(props) {
@@ -26,7 +27,9 @@ class App extends Component {
       teams: [],
       t:null,
       myteam:-1,
-      showcreate:false
+      showcreate:false,
+      skillsWantedOptions:[],
+      allteams:[]
     };
     this.changeTeamMembership = this.changeTeamMembership.bind(this);
     this.NewTeamCreated = this.NewTeamCreated.bind(this);
@@ -55,7 +58,15 @@ class App extends Component {
   getTeams = () => {
     nh4h.get('/solutions/')
       .then((response) => {
-        this.setState({ teams: response.data });
+        
+        let result = response.data.map(t => t.skillsWanted);
+        var filtered = result.filter(function (el) {
+          return el != null;
+        });
+        let skillsWanted=filtered.join().split(',').map(s => s.trim());
+        let skillsWantedOptions=skillsWanted.map(s=>({key:s,text:s,value:s}));
+        this.setState({ allteams:response.data, teams: response.data, skillsWantedOptions: skillsWantedOptions});
+        
       });
   }
 
@@ -163,6 +174,11 @@ getCreateButton=()=>{
     {buttonText}</button>
     );
 }
+filter=(e,data)=>{
+  let search=data.value;
+  let res=this.state.allteams.filter(t => t.skillsWanted?t.skillsWanted.includes(search):false);
+  this.setState({teams:res});
+}
 
 render() {
   return (
@@ -170,6 +186,10 @@ render() {
       {(this.state.myteam>0)?this.getMyTeam():this.getCreateButton()}
       {this.state.showCreate?<TeamForm team={this.state.t} JoinTeam={this.changeTeamMembership} Callback={this.NewTeamCreated}/>:<div/>}
       <br/>
+      <span>
+        Filter By Teams Seeking: 
+      <Dropdown clearable onChange={this.filter} placeholder='Skills'  search selection options={this.state.skillsWantedOptions} />
+      </span>
       <h2>All Teams</h2>
       <TeamsList Callback={this.changeTeamMembership} myteam={this.state.myteam} teams={this.state.teams} />
     </div>
