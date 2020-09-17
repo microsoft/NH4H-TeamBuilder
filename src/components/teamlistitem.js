@@ -20,7 +20,7 @@ class TeamListItem extends React.Component {
 
   render() {
     return(
-      <div class="teal card">
+      <div className="teal card">
         <div className="content">
           <div className="header">{this.props.name}</div>
         </div>
@@ -32,16 +32,19 @@ class TeamListItem extends React.Component {
           <div></div>
           
         </div>
-        <div class="extra content">
+        <div className="extra content">
           <span className="right floated">
             <i className="users icon nowrap"></i>
             {this.state.members} Hacker(s)
           </span>
           <span>
           {!this.props.isTeamMember?
-          <div class="ui basic green button" onClick={()=>{this.props.Callback('join',this.props.id)}}>Join</div>
+          <div className="ui basic green button" onClick={()=>{this.props.Callback('join',this.props.id)}}>Join</div>
           :
-          <div class="ui basic red button" onClick={()=>{this.props.Callback('leave',this.props.id)}}>Leave</div>
+          <div>
+          <div className="ui basic red button" onClick={()=>{this.props.Callback('leave',this.props.id)}}>Leave</div>
+          <div className="ui basic blue button" onClick={()=>{this.props.edit()}}>Edit</div>
+          </div>
           }
           </span>
         </div>

@@ -47,7 +47,7 @@ class TeamsList extends React.Component {
   // {this.getTeamListItems(this.state.teams[c])}
   getChallengesList=()=>{
     return this.state.challenges.map((c, index)=>(
-      <div class="">
+      <div key={index} >
       <Accordion.Title
         active={this.state.activeIndex === index}
         index={index}
@@ -65,13 +65,14 @@ class TeamsList extends React.Component {
     ));
   }
   getTeamListItems=(teamlist)=>{
-  return teamlist.map( ({teamId, teamName, teamDescription,tblTeamHackers,challengeName}) => ( 
+  return teamlist.map( ({teamId, teamName, teamDescription,skillsWanted,tblTeamHackers,challengeName}) => ( 
     <TeamListItem 
       Callback={this.joinOrLeaveTeam} 
       key={teamId} id={teamId} 
       name={teamName} description={teamDescription}
       isTeamMember={teamId==this.props.myteam}
       challengeName={challengeName}      
+      skills={skillsWanted}
       />
   ))
   }

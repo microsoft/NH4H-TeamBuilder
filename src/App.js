@@ -24,13 +24,15 @@ class App extends Component {
       userid: "",
       loggedin: false,
       teams: [],
+      t:null,
       myteam:-1,
       showcreate:false
     };
     this.changeTeamMembership = this.changeTeamMembership.bind(this);
     this.NewTeamCreated = this.NewTeamCreated.bind(this);
-
+    this.editMyTeam=this.editMyTeam.bind(this);
   }
+
   getMyTeam=()=>{
     
   }
@@ -43,7 +45,9 @@ class App extends Component {
         nh4h.get('/users/solutions/'+response.data.userId)
         .then((resp)=>{
           if(resp.data.teamId.length>0){
-            this.setState({myteam:resp.data.teamId[0]});
+            let myteam=resp.data.teamId[0];
+            let t=this.state.teams.find(obj => obj.teamId == myteam );
+            this.setState({myteam:myteam,t:t});
           }
         });
       });
@@ -125,8 +129,14 @@ NewTeamCreated(){
   this.getTeams();
   
 }
+
+editMyTeam(){
+  console.log("edit team");
+  this.setState({showCreate:true});
+  
+}
 getMyTeam=()=>{
-  let t=this.state.teams.find(obj => obj.teamId == this.state.myteam);
+  let t=this.state.t;
   
   return t?(
     <div>
@@ -137,12 +147,15 @@ getMyTeam=()=>{
         name={t.teamName} description={t.teamDescription}
         challengeName={t.challengeName}
         isTeamMember={t.teamId==this.state.myteam}
+        skills={t.skillsWanted}
+        edit={this.editMyTeam}
         />
       </div>
     </div>
     
   ):"";
 }
+
 getCreateButton=()=>{
   let buttonText=!this.state.showCreate?'Create a Team!':'Never Mind';
   return(<button onClick={()=>{this.toggleShowCreate()}}
@@ -155,7 +168,7 @@ render() {
   return (
     <div className="ui">
       {(this.state.myteam>0)?this.getMyTeam():this.getCreateButton()}
-      {this.state.showCreate?<TeamForm JoinTeam={this.changeTeamMembership} Callback={this.NewTeamCreated}/>:<div/>}
+      {this.state.showCreate?<TeamForm team={this.state.t} JoinTeam={this.changeTeamMembership} Callback={this.NewTeamCreated}/>:<div/>}
       <br/>
       <h2>All Teams</h2>
       <TeamsList Callback={this.changeTeamMembership} myteam={this.state.myteam} teams={this.state.teams} />
