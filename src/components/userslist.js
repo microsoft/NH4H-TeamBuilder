@@ -37,13 +37,14 @@ class UsersList extends React.Component {
     let request_url = "/solutions/nousers"
 
     nh4h.get(request_url)
-    .then((response) =>
+    .then((response) =>{
       this.setState({
         users: response.data
-      })
-    ).then(()=> {
-      console.log(this.state.users);
-    })
+      });
+    }).catch((response)=>{
+      console.error("Error fetching unassigned users");
+      console.error(response);
+    });
     
     //get login info
     if (this.state.msalInstance.getAccount()) {
@@ -69,7 +70,14 @@ class UsersList extends React.Component {
 
 
   getUserListItems=(users)=>{
-    return users.map( ({userId, userName, userSkills}) => ( 
+    let res=this.state.users;
+    if(this.state.filterText){
+      let search=this.state.filterText;
+      res= this.state.users.filter(t => t.userSkills?t.userSkills.includes(search):false);
+    }
+    
+    
+    return res.map( ({userId, userName, userSkills}) => ( 
       <UserListItem 
         Callback={this.inviteToJoin} 
         key={userId}
@@ -80,10 +88,10 @@ class UsersList extends React.Component {
     ))
   }
 
+  
+
   filter=(e,data)=>{
-    let search=data.value;
-    let res=this.state.users.filter(t => t.userSkills?t.userSkills.includes(search):false);
-    this.setState({users:res});
+    this.setState({filterText:data.value});
   }
   
   render() {
