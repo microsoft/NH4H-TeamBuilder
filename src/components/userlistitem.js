@@ -1,19 +1,15 @@
 import React from 'react';
 
 class UserListItem extends React.Component {
-  constructor(props){
-    super(props);
-  }
-
   render() {
     return(
-      <div className="teal card">
+      <div className="blue card">
         <div className="content">
-          <div className="header">{this.props.userName}</div>
+          <div className="header">{this.props.userDisplayName}</div>
         </div>
         <div className="content">
-          My Skills: <br/>
-          {this.props.userSkills}
+          <strong>My Skills: </strong><br/>
+          {this.props.mySkills}
           <br/><br/>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown, Input } from 'semantic-ui-react'
 import nh4h from '../apis/nh4h';
 import UserListItem from './userlistitem';
 import * as Msal from "msal";
@@ -20,12 +20,7 @@ class UsersList extends React.Component {
       email: "",
       userid: "",
       userObject:null,
-      users: [
-        {'userId': 101, 'userName': 'jokarash@devupconf.org', 'mySkills': ['AI/ML', 'Nursing']},
-        {'userId': 102, 'userName': 'sadoshi@devupconf.org', 'mySkills': ['Nursing', 'Wordpress']},
-        {'userId': 103, 'userName': 'gubandia@devupconf.org', 'mySkills': ['WordPress', 'AI/ML']},
-      ],
-      allUsersSkills: ['Wordpress', '.NET', 'Nursing', 'AI/ML']
+      users: []
     }
   }
 
@@ -37,13 +32,14 @@ class UsersList extends React.Component {
 
   componentDidMount() {
 
-    let request_url = "/solutions/nousers"
+    let request_url = "/users/solutions/nousers"
 
     nh4h.get(request_url)
     .then((response) =>{
       this.setState({
         users: response.data
       });
+      console.log(response.data);
     }).catch((response)=>{
       console.error("Error fetching unassigned users");
       console.error(response);
@@ -85,12 +81,12 @@ class UsersList extends React.Component {
     
    
 
-    return res.map( ({userId, userName, mySkills}) => ( 
+    return res.map( ({userId, userDisplayName, mySkills, userMSTeamsEmail}) => ( 
       <UserListItem 
         Callback={this.inviteToJoin} 
         key={userId}
         id={userId} 
-        userName={userName}
+        userDisplayName={userDisplayName ? userDisplayName : userMSTeamsEmail}
         mySkills={mySkills}
         />
     ))
@@ -98,8 +94,10 @@ class UsersList extends React.Component {
 
   
 
-  filter=(e,data)=>{
-    this.setState({filterText:data.value});
+  filter=(event)=>{
+
+    const target = event.target;
+    this.setState({filterText: target.value});
   }
   
   updateMySkills=()=>{
@@ -114,7 +112,7 @@ class UsersList extends React.Component {
     };
     
     console.log(body);
-    nh4h.put('/users/'+this.state.userId, body)
+    nh4h.put('/users/'+this.state.userid, body)
       .then((res)=>{
         this.setState({submitting:false});
       });
@@ -125,17 +123,20 @@ class UsersList extends React.Component {
   };
   
   render() {
-    let skillsWantedOptions=this.state.allUsersSkills.map(s=>({key:s,text:s,value:s}));
     return(
       <div>
         <h2>My Skills</h2>
         <label>Comma seperaged list of your skills (ex: Nursing, C#, ICU, Mobile)</label>
         <br/>
-        <input placeholder={this.state.mySkills} onChange={ this.handleChange } type="text" value={this.state.myskills}/>
-        {this.state.submitting?"":<button onClick={this.updateMySkills}>Update</button>}
+        <div className="inline field">
+          <div className="ui input">
+          <input placeholder={this.state.mySkills} onChange={ this.handleChange } type="text" value={this.state.myskills}/>          
+          {this.state.submitting?"":<button className="ui primary button" onClick={this.updateMySkills}>Update</button>}
+          </div>
+        </div>
         <h2>All Unassigned Users</h2>
         Show users with selected skills: 
-        <Dropdown clearable onChange={this.filter} placeholder='Skills'  search selection options={skillsWantedOptions} />
+        <div className="ui input"><input type="text" onChange={this.filter} placeholder="Search..."/></div>
         <div>&nbsp;</div>
         <div class="ui cards">
         { this.getUserListItems(this.state.users)}
