@@ -136,12 +136,14 @@ NewTeamCreated(){
 
 editMyTeam(){
   
-  this.setState({showCreate:true});
+  this.setState({showCreate:!this.state.showCreate});
   
 }
 getMyTeam=()=>{
   let t=this.state.t;
-  
+  if(this.state.showCreate){
+    return "";
+  }
   return t?(
     <div>
       <h2>Your Team </h2>
@@ -177,7 +179,7 @@ filter=(e,data)=>{
 render() {
   return (
     <div className="ui">
-      {(this.state.myteam>0)?this.getMyTeam():this.getCreateButton()}
+      {this.state.t?this.getMyTeam():this.getCreateButton()}
       {this.state.showCreate?<TeamForm team={this.state.t} JoinTeam={this.changeTeamMembership} Callback={this.NewTeamCreated}/>:<div/>}
       <br/>
       <span>
