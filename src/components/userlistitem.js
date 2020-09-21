@@ -12,6 +12,7 @@ class UserListItem extends React.Component {
           <div className="header">{this.props.userName}</div>
         </div>
         <div className="content">
+          My Skills: <br/>
           {this.props.userSkills}
           <br/><br/>
         </div>

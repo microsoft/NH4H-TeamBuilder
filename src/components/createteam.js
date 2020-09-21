@@ -8,7 +8,7 @@ class TeamForm extends React.Component {
     let name='';
     let desc='';
     let skills='';
-    let chall='';
+    let chall='Improve access to reliable, trusted information';
     if(props.team){
       
       let t=props.team;
@@ -23,10 +23,8 @@ class TeamForm extends React.Component {
       teamDescription: desc,
       challengeName: chall,
       challengeNameOptions: [
-        {key: 'mark-wearing', text: 'Encourage mark wearing', value: 'Encourage mark wearing'},
-        {key: 'nursing-easier', text: 'Make nursing easier', value: 'Make nursing easier'},
-        {key: 'at-home-diagnosis', text: 'Enable at-home diagnosis and care', value: 'Enable at-home diagnosis and care'},
-        {key: 'vaccine-use', text: 'Encourage vaccine use', value: 'Encourage vaccine use'}
+        {key: 'info-access', text: 'Improve access to reliable, trusted information',value:'Improve access to reliable, trusted information'},
+        {key: 'other', text: 'Other', value: 'Other'}
       ],
       skillsWanted:skills,
       teamActive: 1,
@@ -115,13 +113,12 @@ class TeamForm extends React.Component {
             <textarea value={this.state.teamDescription} name="teamDescription" rows="2" onChange={this.handleInputChange}></textarea>
           </div>
           <div className="field">
-            <label>We are looking for people with these skills</label>
+            <label>We are looking for people with these skills (comma seperated (ex: C#, HIPPA, EPIC)</label>
             <input value={this.state.skillsWanted}name="skillsWanted" type="text" onChange={this.handleInputChange}/>
           </div>
           {this.props.team?"":
           <div className="field">
-            <label>Challenge</label>
-            <Dropdown name="challengeName" placeholder='Select a challenge category' fluid selection options={this.state.challengeNameOptions}  onChange={this.handleInputChange} />
+            
           </div>
           }
           <div className="ui basic segment">

@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Route, NavLink, HashRouter, Switch} from 'react-router-dom';
 import App from './App';
-import Team from './components/team';
-import TeamForm from './components/createteam';
+import UsersList from './components/userslist';
+
 import * as serviceWorker from './serviceWorker';
 
 
@@ -11,14 +11,14 @@ ReactDOM.render(
   <React.StrictMode>
   <HashRouter>
     <div className="ui container">
-     
+      <div className="ui secondary pointing menu">
+        <NavLink to="/"><a className="active item">Teams</a></NavLink>
+        <NavLink to="/users"><a className="item">Users</a></NavLink>
+        
+      </div>
       <div className="ui segment">
       <Switch>
-      <Route path="/team/new" component={TeamForm}/>
-        <Route path="/team/:teamId" component={Team}/>
-        <Route path="/join/:teamId/:userId"><div>Join a team</div></Route>
-        <Route path="/leave/:teamId/:userId"><div>Leave a team</div></Route>
-        <Route path="/teams"><App/></Route>
+        <Route path="/users"><UsersList/></Route>
         <Route path="/"><App/></Route>
         </Switch>
       </div>

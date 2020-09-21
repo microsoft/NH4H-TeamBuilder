@@ -1,14 +1,18 @@
 import React from 'react';
 import { Dropdown } from 'semantic-ui-react'
-import TeamListItem from './teamlistitem';
+import nh4h from '../apis/nh4h';
+import UserListItem from './userlistitem';
 
 class UsersList extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      users: [],
-      allUsersSkills: [],
-      userSkills: []
+      users: [
+        {'userId': 101, 'userName': 'jokarash@devupconf.org', 'userSkills': ['AI/ML', 'Nursing']},
+        {'userId': 102, 'userName': 'sadoshi@devupconf.org', 'userSkills': ['Nursing', 'Wordpress']},
+        {'userId': 103, 'userName': 'gubandia@devupconf.org', 'userSkills': ['WordPress', 'AI/ML']},
+      ],
+      allUsersSkills: ['Wordpress', '.NET', 'Nursing', 'AI/ML']
     }
   }
 
@@ -16,8 +20,23 @@ class UsersList extends React.Component {
     console.log("invite user: " + id)
   }
 
-  getUserListItems=(teamlist)=>{
-    return teamlist.map( ({userId, userName, userSkills}) => ( 
+  componentDidMount() {
+
+    let request_url = "/solutions/nousers"
+
+    nh4h.get(request_url)
+    .then((response) =>
+      this.setState({
+        users: response.data
+      })
+    ).then(()=> {
+      console.log(this.state.users);
+    })
+  }
+
+
+  getUserListItems=(users)=>{
+    return users.map( ({userId, userName, userSkills}) => ( 
       <UserListItem 
         Callback={this.inviteToJoin} 
         key={userId}
@@ -35,11 +54,15 @@ class UsersList extends React.Component {
   }
   
   render() {
+    let skillsWantedOptions=this.state.allUsersSkills.map(s=>({key:s,text:s,value:s}));
     return(
       <div>
-      Filter By Teams Seeking: 
-      <Dropdown clearable onChange={this.filter} placeholder='Skills'  search selection options={this.state.allUsersSkills} />
-      { getUserListItems }
+        Show users with selected skills: 
+        <Dropdown clearable onChange={this.filter} placeholder='Skills'  search selection options={skillsWantedOptions} />
+        <div>&nbsp;</div>
+        <div class="ui cards">
+        { this.getUserListItems(this.state.users)}
+        </div>
       </div>
     );
   }

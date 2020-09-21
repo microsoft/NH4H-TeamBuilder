@@ -1,11 +1,13 @@
 import React from 'react';
 import nh4h from '../apis/nh4h';
-
+//links to general of prod channel
+const DEF_TEAMSLINK='https://teams.microsoft.com/l/channel/19%3a6c83ba5af8664dc3b1a0d8a8a0774094%40thread.tacv2/General?groupId=abc0763c-f446-424c-ba5f-e374147c11a0&tenantId=e773e193-89d3-44d9-ae4e-17766699f674';
 class TeamListItem extends React.Component {
+  
   constructor(props){
     super(props);
     this.state={
-      members:10
+      members:1
     }
   }
 
@@ -15,6 +17,9 @@ class TeamListItem extends React.Component {
       
       this.setState({members: response.data.userID.length});
     })
+  }
+  getTeamsLink=()=>{
+    return this.props.teamslink?this.props.teamslink:DEF_TEAMSLINK;
   }
 
 
@@ -33,10 +38,14 @@ class TeamListItem extends React.Component {
           
         </div>
         <div className="extra content">
-          <span className="right floated">
-            <i className="users icon nowrap"></i>
-            {this.state.members} Hacker(s)
+        <span className="right floated">
+            <a href={this.getTeamsLink()}>
+              <i className="chat icon nowrap"></i>
+              Chat with {this.state.members} Hacker{this.state.members==1?'':'s'} </a>
+            
           </span>
+          {this.props.isTeamMember?<br/>:''}
+         
           <span>
           {!this.props.isTeamMember?
           <div className="ui basic green button" onClick={()=>{this.props.Callback('join',this.props.id)}}>Join</div>
