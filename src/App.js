@@ -99,14 +99,7 @@ class App extends Component {
   }
   
   changeTeamMembership(join, id) {
-    
-    
-    
-    
-    
     let teamMembers = [];
-    
-    
     if (join === 'join') {
       let thisUser = { TeamId: id, UserId: this.state.userid, IsLead: 0 };
       teamMembers.splice(0, 0, thisUser);
@@ -125,7 +118,7 @@ class App extends Component {
     nh4h.put(url, body)
     .then(()=>{
       //refresh teams list
-      this.setState({myteam:-1},()=>{this.getUserID();});
+      this.setState({myteam:-1,t:null},()=>{this.getUserID();});
       
 
     });
@@ -142,7 +135,7 @@ NewTeamCreated(){
 }
 
 editMyTeam(){
-  console.log("edit team");
+  
   this.setState({showCreate:true});
   
 }
