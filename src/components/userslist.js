@@ -2,11 +2,23 @@ import React from 'react';
 import { Dropdown } from 'semantic-ui-react'
 import nh4h from '../apis/nh4h';
 import UserListItem from './userlistitem';
+import * as Msal from "msal";
 
 class UsersList extends React.Component {
   constructor(props){
     super(props);
+    let msalConfig = {
+      auth: {
+        clientId: 'b3544b0c-1209-4fe8-b799-8f63a0179fa0',
+        authority: "https://login.microsoftonline.com/e773e193-89d3-44d9-ae4e-17766699f674",
+        //redirectUri:"/loggedin" 
+      }
+    };
+    let msalI = new Msal.UserAgentApplication(msalConfig);
     this.state = {
+      msalInstance: msalI,
+      email: "",
+      userid: "",
       users: [
         {'userId': 101, 'userName': 'jokarash@devupconf.org', 'userSkills': ['AI/ML', 'Nursing']},
         {'userId': 102, 'userName': 'sadoshi@devupconf.org', 'userSkills': ['Nursing', 'Wordpress']},
@@ -32,6 +44,27 @@ class UsersList extends React.Component {
     ).then(()=> {
       console.log(this.state.users);
     })
+    
+    //get login info
+    if (this.state.msalInstance.getAccount()) {
+
+      let id = this.state.msalInstance.getAccount();
+      this.setState({
+        email: id.userName,
+        username: id.name
+      }, () => {
+        this.getUserID();
+      });
+
+    } 
+  }
+
+  getUserID = () => {
+    let body = { UserMSTeamsEmail: this.state.email };
+    nh4h.post('/users/msemail', body)
+      .then((response) => {
+        this.setState({ userid: response.data.userId });
+      });
   }
 
 
