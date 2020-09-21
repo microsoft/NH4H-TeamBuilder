@@ -19,10 +19,11 @@ class UsersList extends React.Component {
       msalInstance: msalI,
       email: "",
       userid: "",
+      userObject:null,
       users: [
-        {'userId': 101, 'userName': 'jokarash@devupconf.org', 'userSkills': ['AI/ML', 'Nursing']},
-        {'userId': 102, 'userName': 'sadoshi@devupconf.org', 'userSkills': ['Nursing', 'Wordpress']},
-        {'userId': 103, 'userName': 'gubandia@devupconf.org', 'userSkills': ['WordPress', 'AI/ML']},
+        {'userId': 101, 'userName': 'jokarash@devupconf.org', 'mySkills': ['AI/ML', 'Nursing']},
+        {'userId': 102, 'userName': 'sadoshi@devupconf.org', 'mySkills': ['Nursing', 'Wordpress']},
+        {'userId': 103, 'userName': 'gubandia@devupconf.org', 'mySkills': ['WordPress', 'AI/ML']},
       ],
       allUsersSkills: ['Wordpress', '.NET', 'Nursing', 'AI/ML']
     }
@@ -31,6 +32,8 @@ class UsersList extends React.Component {
   inviteToJoin(id){
     console.log("invite user: " + id)
   }
+
+  
 
   componentDidMount() {
 
@@ -64,7 +67,11 @@ class UsersList extends React.Component {
     let body = { UserMSTeamsEmail: this.state.email };
     nh4h.post('/users/msemail', body)
       .then((response) => {
-        this.setState({ userid: response.data.userId });
+        this.setState({ 
+          userObject:response.data,
+          userid: response.data.userId,
+          mySkills: response.data.mySkills
+         });
       });
   }
 
@@ -73,17 +80,18 @@ class UsersList extends React.Component {
     let res=this.state.users;
     if(this.state.filterText){
       let search=this.state.filterText;
-      res= this.state.users.filter(t => t.userSkills?t.userSkills.includes(search):false);
+      res= this.state.users.filter(t => t.mySkills?t.mySkills.includes(search):false);
     }
     
-    
-    return res.map( ({userId, userName, userSkills}) => ( 
+   
+
+    return res.map( ({userId, userName, mySkills}) => ( 
       <UserListItem 
         Callback={this.inviteToJoin} 
         key={userId}
         id={userId} 
         userName={userName}
-        userSkills={userSkills}
+        mySkills={mySkills}
         />
     ))
   }
@@ -94,10 +102,38 @@ class UsersList extends React.Component {
     this.setState({filterText:data.value});
   }
   
+  updateMySkills=()=>{
+    this.setState({submitting:true});
+    let body={
+      'Active':this.state.userObject.active,
+      'UserRegEmail':this.state.userObject.userRegEmail,
+      'UserDisplayName':this.state.userObject.UserDisplayName,
+      'UserRole':this.state.userObject.userRole,
+      'UserMSTeamsEmail':this.state.userObject.userMSTeamsEmail,
+      'mySkills':this.state.mySkills
+    };
+    
+    console.log(body);
+    nh4h.put('/users/'+this.state.userId, body)
+      .then((res)=>{
+        this.setState({submitting:false});
+      });
+  }
+
+  handleChange=(e)=> {
+    this.setState({ mySkills: e.target.value });
+  };
+  
   render() {
     let skillsWantedOptions=this.state.allUsersSkills.map(s=>({key:s,text:s,value:s}));
     return(
       <div>
+        <h2>My Skills</h2>
+        <label>Comma seperaged list of your skills (ex: Nursing, C#, ICU, Mobile)</label>
+        <br/>
+        <input placeholder={this.state.mySkills} onChange={ this.handleChange } type="text" value={this.state.myskills}/>
+        {this.state.submitting?"":<button onClick={this.updateMySkills}>Update</button>}
+        <h2>All Unassigned Users</h2>
         Show users with selected skills: 
         <Dropdown clearable onChange={this.filter} placeholder='Skills'  search selection options={skillsWantedOptions} />
         <div>&nbsp;</div>
