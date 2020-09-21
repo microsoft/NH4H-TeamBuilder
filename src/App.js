@@ -152,7 +152,7 @@ getMyTeam=()=>{
   return t?(
     <div>
       <h2>Your Team </h2>
-      <div className="ui special stackable cards">
+      <div className="ui special fluid">
         <TeamListItem Callback={this.changeTeamMembership} 
         id={t.teamId} 
         name={t.teamName} description={t.teamDescription}
@@ -160,6 +160,7 @@ getMyTeam=()=>{
         isTeamMember={t.teamId==this.state.myteam}
         skills={t.skillsWanted}
         edit={this.editMyTeam}
+        teamslink={t.msTeamsChannel}
         />
       </div>
     </div>
