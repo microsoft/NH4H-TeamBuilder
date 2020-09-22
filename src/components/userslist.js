@@ -37,9 +37,8 @@ class UsersList extends React.Component {
     nh4h.get(request_url)
     .then((response) =>{
       this.setState({
-        users: response.data
+        users: response.data.filter(u => !(u.mySkills === null))
       });
-      console.log(response.data);
     }).catch((response)=>{
       console.error("Error fetching unassigned users");
       console.error(response);
@@ -125,21 +124,25 @@ class UsersList extends React.Component {
   render() {
     return(
       <div>
-        <h2>My Skills</h2>
-        <label>Comma seperaged list of your skills (ex: Nursing, C#, ICU, Mobile)</label>
-        <br/>
-        <div className="inline field">
-          <div className="ui input">
-          <input placeholder={this.state.mySkills} onChange={ this.handleChange } type="text" value={this.state.myskills}/>          
-          {this.state.submitting?"":<button className="ui primary button" onClick={this.updateMySkills}>Update</button>}
+        <div className="ui segment">
+          <h2>My Skills</h2>
+          <label>Comma seperaged list of your skills (ex: Nursing, C#, ICU, Mobile)</label>
+          <br/>
+          <div className="inline field">
+            <div className="ui input">
+            <input placeholder={this.state.mySkills} onChange={ this.handleChange } type="text" value={this.state.myskills}/>          
+            {this.state.submitting?"":<button className="ui primary button" onClick={this.updateMySkills}>Update</button>}
+            </div>
           </div>
         </div>
-        <h2>All Unassigned Users</h2>
-        Show users with selected skills: 
-        <div className="ui input"><input type="text" onChange={this.filter} placeholder="Search..."/></div>
-        <div>&nbsp;</div>
-        <div class="ui cards">
-        { this.getUserListItems(this.state.users)}
+        <div className="ui segment">
+          <h2>All Unassigned Users</h2>
+          Show users with selected skills: 
+          <div className="ui input"><input type="text" onChange={this.filter} placeholder="Search..."/></div>
+          <div>&nbsp;</div>
+          <div class="ui cards">
+          { this.getUserListItems(this.state.users)}
+          </div>
         </div>
       </div>
     );
