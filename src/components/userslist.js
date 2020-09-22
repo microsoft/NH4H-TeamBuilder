@@ -37,7 +37,8 @@ class UsersList extends React.Component {
     nh4h.get(request_url)
     .then((response) =>{
       this.setState({
-        users: response.data.filter(u => !(u.mySkills === null))
+        users: response.data
+        //users: response.data.filter(u => !(u.mySkills === null))
       });
     }).catch((response)=>{
       console.error("Error fetching unassigned users");
@@ -140,7 +141,7 @@ class UsersList extends React.Component {
         <div className="ui segment">
           <h2>All Unassigned Users</h2>
           Show users with selected skills: 
-          <div className="ui input"><input type="text" onChange={this.filter} placeholder="Search..."/></div>
+          <div className="ui input"><input type="text" onChange={this.filter} placeholder="Nursing.."/></div>
           <div>&nbsp;</div>
           <div class="ui cards">
           { this.getUserListItems(this.state.users)}
