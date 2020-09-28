@@ -3,6 +3,7 @@ import { Dropdown, Input } from 'semantic-ui-react'
 import nh4h from '../apis/nh4h';
 import UserListItem from './userlistitem';
 import * as Msal from "msal";
+import { Message } from 'semantic-ui-react'
 
 class UsersList extends React.Component {
   constructor(props){
@@ -19,8 +20,9 @@ class UsersList extends React.Component {
       msalInstance: msalI,
       email: "",
       userid: "",
-      userObject:null,
-      users: []
+      userObject:{mySkills:null},
+      users: [],
+      visible: true 
     }
   }
 
@@ -108,36 +110,58 @@ class UsersList extends React.Component {
       'UserDisplayName':this.state.userObject.UserDisplayName,
       'UserRole':this.state.userObject.userRole,
       'UserMSTeamsEmail':this.state.userObject.userMSTeamsEmail,
-      'mySkills':this.state.mySkills
+      'mySkills':this.state.mySkills.trim()
     };
     
     console.log(body);
     nh4h.put('/users/'+this.state.userid, body)
       .then((res)=>{
-        this.setState({submitting:false});
+        let tmpUserObject = this.state.userObject;
+        tmpUserObject.mySkills = this.state.mySkills;
+        this.setState({submitting:false, userObject:tmpUserObject});
       });
+
+    
   }
 
   handleChange=(e)=> {
     this.setState({ mySkills: e.target.value });
   };
+
+ 
+  handleDismiss = () => {
+    this.setState({ visible: false })
+  }
   
-  render() {
+ 
+
+  render() { 
+    
+    let showNotification = !this.state.userObject.mySkills && this.state.visible?true:false;
+
     return(
       <div>
-        {/*
+        {
         <div className="ui segment">
           <h2>My Skills</h2>
+          {showNotification?          
+              <Message
+                onDismiss={this.handleDismiss}
+                header='Update Your Skills!'
+                content='Please update your skills so others can find you.'
+              />:""}
+          
+
           <label>Comma seperated list of your skills (ex: Nursing, C#, ICU, Mobile)</label>
           <br/>
           <div className="inline field">
             <div className="ui input">
-            <input placeholder={this.state.mySkills} onChange={ this.handleChange } type="text" value={this.state.myskills}/>          
-            {this.state.submitting?"":<button className="ui primary button" onClick={this.updateMySkills}>Update</button>}
+            <input placeholder={this.state.userObject.mySkills?this.state.userObject.mySkills:"No Skills Provided"} onChange={ this.handleChange } type="text" value={this.state.mySkills}/>          
+            {this.state.submitting?"":<button className="ui primary button" onClick={this.updateMySkills}>{this.state.userObject.mySkills?"Update":"Save"}</button>}
             </div>
           </div>
         </div>
-        */}
+        }
         <div className="ui segment">
           <h2>All Unassigned Users</h2>
           Show users with selected skills: 
