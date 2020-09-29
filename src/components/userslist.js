@@ -39,8 +39,7 @@ class UsersList extends React.Component {
     nh4h.get(request_url)
     .then((response) =>{
       this.setState({
-        users: response.data
-        //users: response.data.filter(u => !(u.mySkills === null))
+        users: response.data.filter(u => !(u.mySkills === null))
       });
     }).catch((response)=>{
       console.error("Error fetching unassigned users");
@@ -153,8 +152,7 @@ class UsersList extends React.Component {
                 header='Update Your Skills!'
                 content='Please update your skills so others can find you.'
               />:""}
-          
-
+              
           <label>Comma seperated list of your skills (ex: Nursing, C#, ICU, Mobile)</label>
           <br/>
           <div className="inline field">
@@ -170,6 +168,13 @@ class UsersList extends React.Component {
           Show hackers with specific skill:&nbsp; 
           <div className="ui input"><input type="text" onChange={this.filter} placeholder="Nursing.."/></div>
           <div>&nbsp;</div>
+          {this.state.users.length == 0 ? 
+            <div className="ui">
+              <div class="ui active inverted dimmer">
+                <div class="ui large text loader">Loading...</div>
+              </div>
+            </div>
+             :""}
           <div class="ui cards">
           { this.getUserListItems(this.state.users)}
           </div>
