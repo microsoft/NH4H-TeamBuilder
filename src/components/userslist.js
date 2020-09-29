@@ -134,10 +134,13 @@ class UsersList extends React.Component {
   }
   
  
-
   render() { 
     
     let showNotification = !this.state.userObject.mySkills && this.state.visible?true:false;
+
+    const divStyle = {
+      width: '80%'
+    };
 
     return(
       <div>
@@ -155,7 +158,7 @@ class UsersList extends React.Component {
           <label>Comma seperated list of your skills (ex: Nursing, C#, ICU, Mobile)</label>
           <br/>
           <div className="inline field">
-            <div className="ui input">
+            <div className="ui input" style={divStyle}>
             <input placeholder={this.state.userObject.mySkills?this.state.userObject.mySkills:"No Skills Provided"} onChange={ this.handleChange } type="text" value={this.state.mySkills}/>          
             {this.state.submitting?"":<button className="ui primary button" onClick={this.updateMySkills}>{this.state.userObject.mySkills?"Update":"Save"}</button>}
             </div>
