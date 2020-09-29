@@ -159,15 +159,15 @@ class UsersList extends React.Component {
           <br/>
           <div className="inline field">
             <div className="ui input" style={divStyle}>
-            <input placeholder={this.state.userObject.mySkills?this.state.userObject.mySkills:"No Skills Provided"} onChange={ this.handleChange } type="text" value={this.state.mySkills}/>          
+            <input placeholder={this.state.userObject.mySkills?this.state.userObject.mySkills:"Add skills"} onChange={ this.handleChange } type="text" value={this.state.mySkills}/>          
             {this.state.submitting?"":<button className="ui primary button" onClick={this.updateMySkills}>{this.state.userObject.mySkills?"Update":"Save"}</button>}
             </div>
           </div>
         </div>
         }
         <div className="ui segment">
-          <h2>All Unassigned Users</h2>
-          Show users with selected skills: 
+          <h2>All Available Hackers</h2>
+          Show hackers with specific skill:&nbsp; 
           <div className="ui input"><input type="text" onChange={this.filter} placeholder="Nursing.."/></div>
           <div>&nbsp;</div>
           <div class="ui cards">
