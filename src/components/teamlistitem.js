@@ -27,8 +27,12 @@ class TeamListItem extends React.Component {
     return(
       <div className="teal card">
         <div className="content">
+        {!this.props.isTeamMember?
           <div className="header">{this.props.name}</div>
-        </div>
+          :
+          <div className="header"><h3>{this.props.name}</h3></div>
+        }
+        </div>        
         <div className="content">
           {this.props.description}
           <br/><br/>

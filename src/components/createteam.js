@@ -8,7 +8,7 @@ class TeamForm extends React.Component {
     let name='';
     let desc='';
     let skills='';
-    let chall='Improve access to reliable, trusted information';
+    let chall='';  //Education, Communication
     if(props.team){
       
       let t=props.team;
@@ -23,8 +23,8 @@ class TeamForm extends React.Component {
       teamDescription: desc,
       challengeName: chall,
       challengeNameOptions: [
-        {key: 'info-access', text: 'Improve access to reliable, trusted information',value:'Improve access to reliable, trusted information'},
-        {key: 'other', text: 'Other', value: 'Other'}
+        {key: 'Education', text: 'Education',value:'Education'},
+        {key: 'Communication', text: 'Communication', value: 'Communication'}
       ],
       skillsWanted:skills,
       teamActive: 1,
@@ -91,6 +91,7 @@ class TeamForm extends React.Component {
   }
 
   render() {
+    //Check if all fields have been populated
     let valid=(
       this.state.challengeName!=''
       && this.state.teamName.trim()!=''
@@ -99,9 +100,20 @@ class TeamForm extends React.Component {
       
       
     return(
-      <div className="ui segment">
+      <div className="ui segment">                
         {!this.state.created?
         <form onSubmit={this.handleSubmit} className="ui form">
+          {!this.props.team?"":
+          <div className="field">            
+            <h2>{this.state.teamName}</h2>
+          </div>
+          }
+
+          <div className="field">
+            <label>Challenge</label>
+            <Dropdown name="challengeName" placeholder='Select a challenge' fluid selection options={this.state.challengeNameOptions}  onChange={this.handleInputChange} defaultValue={this.state.challengeName} />
+          </div>
+          
           {this.props.team?"":
           <div className="field">
             <label>Team Name</label>

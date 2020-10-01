@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
 import * as Msal from "msal";
 import TeamsList from './components/teamslist';
 import nh4h from './apis/nh4h';
@@ -36,8 +35,8 @@ class App extends Component {
     this.editMyTeam=this.editMyTeam.bind(this);
   }
 
-  getMyTeam=()=>{
-    
+  getMyTeam=()=>{    
+        
   }
 
   getUserID = () => {
@@ -49,12 +48,13 @@ class App extends Component {
         .then((resp)=>{
           if(resp.data.teamId.length>0){
             let myteam=resp.data.teamId[0];
-            let t=this.state.teams.find(obj => obj.teamId == myteam );
+            let t=this.state.teams.find(obj => obj.teamId === myteam );
             this.setState({myteam:myteam,t:t});
           }
         });
       });
   }
+
   getTeams = () => {
     nh4h.get('/solutions/')
       .then((response) => {
@@ -105,6 +105,8 @@ class App extends Component {
       teamMembers.splice(0, 0, thisUser);
     }
     if (join === 'leave') {
+      this.setState({myteam:-1, teams:this.state.allteams, t:null}); 
+
       //teamMembers.splice(index, 1);
     }
     
@@ -118,27 +120,26 @@ class App extends Component {
     nh4h.put(url, body)
     .then(()=>{
       //refresh teams list
-      this.setState({myteam:-1,t:null},()=>{this.getUserID();});
-      
-
+      //this.setState({myteam:-1,t:null},()=>{this.getUserID();});
+      this.getTeams();
+      this.getUserID();
     });
     
   }
 
-  toggleShowCreate =()=>{
-    this.setState({showCreate:!this.state.showCreate});
-  }
-NewTeamCreated(){
-  this.toggleShowCreate();
-  this.getTeams();
-  
+toggleShowCreate =()=>{
+  this.setState({showCreate:!this.state.showCreate});
 }
 
-editMyTeam(){
-  
-  this.setState({showCreate:!this.state.showCreate});
-  
+NewTeamCreated(){
+  this.toggleShowCreate();
+  this.getTeams();  
 }
+
+editMyTeam(){  
+  this.setState({showCreate:!this.state.showCreate});  
+}
+
 getMyTeam=()=>{
   let t=this.state.t;
   if(this.state.showCreate){
@@ -152,7 +153,7 @@ getMyTeam=()=>{
         id={t.teamId} 
         name={t.teamName} description={t.teamDescription}
         challengeName={t.challengeName}
-        isTeamMember={t.teamId==this.state.myteam}
+        isTeamMember={t.teamId===this.state.myteam}
         skills={t.skillsWanted}
         edit={this.editMyTeam}
         teamslink={t.msTeamsChannel}
@@ -176,7 +177,21 @@ filter=(e,data)=>{
   this.setState({teams:res});
 }
 
+filteroutMyTeam=()=>{
+  let res=this.state.teams.filter(t => t.teamId!==this.state.myteam);
+  if (res.length!==this.state.teams.length)
+  { 
+    this.setState({teams:res});
+  }
+}
+
 render() {
+  //console.log(this.state.teams);
+  //console.log(this.state.myteam);
+  if(this.state.myteam>0){
+    this.filteroutMyTeam();
+  }
+
   return (
     <div className="ui">
       {this.state.t?this.getMyTeam():this.getCreateButton()}
