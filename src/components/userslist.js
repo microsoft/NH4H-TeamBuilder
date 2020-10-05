@@ -89,6 +89,7 @@ class UsersList extends React.Component {
         id={userId} 
         userDisplayName={userDisplayName ? userDisplayName : userMSTeamsEmail}
         mySkills={mySkills}
+        userMSTeamsEmail={userMSTeamsEmail}
         />
     ))
   }
