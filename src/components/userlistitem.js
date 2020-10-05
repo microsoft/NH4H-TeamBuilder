@@ -6,8 +6,6 @@ class UserListItem extends React.Component {
     let teamschatlink = 'https://teams.microsoft.com/l/chat/0/0?users=' + this.props.userMSTeamsEmail.replace('@','_') + '%23EXT%23%40devupconforg2.onmicrosoft.com';
     if (this.props.userMSTeamsEmail.includes("devupconf.org")) {teamschatlink = 'https://teams.microsoft.com/l/chat/0/0?users=' + this.props.userMSTeamsEmail;}
 
-
-
     return(
       <div className="blue card">
         <div className="content">
