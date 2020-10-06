@@ -76,11 +76,9 @@ class UsersList extends React.Component {
   getUserListItems=(users)=>{
     let res=this.state.users;
     if(this.state.filterText){
-      let search=this.state.filterText;
-      res= this.state.users.filter(t => t.mySkills?t.mySkills.includes(search):false);
+      let search=this.state.filterText.toLowerCase();
+      res= this.state.users.filter(t => t.mySkills?t.mySkills.toLowerCase().includes(search):false);
     }
-    
-   
 
     return res.map( ({userId, userDisplayName, mySkills, userMSTeamsEmail}) => ( 
       <UserListItem 
@@ -94,10 +92,7 @@ class UsersList extends React.Component {
     ))
   }
 
-  
-
   filter=(event)=>{
-
     const target = event.target;
     this.setState({filterText: target.value});
   }
@@ -120,8 +115,6 @@ class UsersList extends React.Component {
         tmpUserObject.mySkills = this.state.mySkills;
         this.setState({submitting:false, userObject:tmpUserObject});
       });
-
-    
   }
 
   handleChange=(e)=> {
@@ -132,7 +125,6 @@ class UsersList extends React.Component {
   handleDismiss = () => {
     this.setState({ visible: false })
   }
-  
  
   render() { 
     
