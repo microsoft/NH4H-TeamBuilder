@@ -22,7 +22,9 @@ class UsersList extends React.Component {
       userid: "",
       userObject:{mySkills:null},
       users: [],
-      visible: true 
+      visible: true,
+      allSkillsOption: [],
+      unAssignedUsers: []
     }
   }
 
@@ -31,6 +33,9 @@ class UsersList extends React.Component {
   }
 
   
+  unique = (value, index, self) => {
+    return self.indexOf(value) === index
+  }
 
   componentDidMount() {
 
@@ -38,8 +43,18 @@ class UsersList extends React.Component {
 
     nh4h.get(request_url)
     .then((response) =>{
+      let result = response.data.map(t => t.mySkills);
+      let filtered = result.filter(function (el) {
+        return el != null;
+      });
+      let allSkills=filtered.join().split(',').map(s => s.trim());
+      allSkills = allSkills.filter((value, index, self) => {
+        return self.indexOf(value) === index
+      });
+      let allSkillsOption=allSkills.map(s=>({key:s,text:s,value:s}));
       this.setState({
-        users: response.data.filter(u => !(u.mySkills === null))
+        users: response.data.filter(u => !(u.mySkills === null)),
+        allSkillsOption: allSkillsOption
       });
     }).catch((response)=>{
       console.error("Error fetching unassigned users");
@@ -74,10 +89,10 @@ class UsersList extends React.Component {
 
 
   getUserListItems=(users)=>{
-    let res=this.state.users;
+    let res = this.state.users;
     if(this.state.filterText){
-      let search=this.state.filterText.toLowerCase();
-      res= this.state.users.filter(t => t.mySkills?t.mySkills.toLowerCase().includes(search):false);
+      let search = this.state.filterText.toLowerCase();
+      res = this.state.users.filter(t => t.mySkills?t.mySkills.toLowerCase().includes(search):false);
     }
 
     return res.map( ({userId, userDisplayName, mySkills, userMSTeamsEmail}) => ( 
@@ -92,9 +107,9 @@ class UsersList extends React.Component {
     ))
   }
 
-  filter=(event)=>{
-    const target = event.target;
-    this.setState({filterText: target.value});
+  filter=(event, data)=>{
+    let search = data.value;
+    this.setState({filterText: search});
   }
   
   updateMySkills=()=>{
@@ -159,7 +174,9 @@ class UsersList extends React.Component {
         <div className="ui segment">
           <h2>All Available Hackers</h2>
           Show hackers with specific skill:&nbsp; 
-          <div className="ui input"><input type="text" onChange={this.filter} placeholder="Nursing.."/></div>
+          <div className="ui input">
+          <Dropdown clearable onChange={this.filter} placeholder='Skills'  search selection options={this.state.allSkillsOption} />
+          </div>
           <div>&nbsp;</div>
           {this.state.users.length == 0 ? 
             <div className="ui">

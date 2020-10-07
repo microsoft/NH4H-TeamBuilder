@@ -110,7 +110,7 @@ class TeamForm extends React.Component {
           }
 
           <div className="field">
-            <label>Challenge</label>
+            <label>Challenge Area</label>
             <Dropdown name="challengeName" placeholder='Select a challenge' fluid selection options={this.state.challengeNameOptions}  onChange={this.handleInputChange} defaultValue={this.state.challengeName} />
           </div>
           

@@ -44,7 +44,7 @@ class Team extends React.Component {
           Team Description: <br/> {this.state.teamData.teamDescription}
         </div>
         <div className="ui segment">
-          Challenge Name: <br/> {this.state.teamData.challengeName}
+          Challenge Area: <br/> {this.state.teamData.challengeName}
         </div>
         <div className="ui segment">
           <NavLink to={joinTeamUrl}>
