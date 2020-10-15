@@ -22,7 +22,7 @@ ReactDOM.render(
           </div>
         </Route>
         <Route path="/">
-          <Menu team="true"/>
+          <Menu team="a"/>
           <div className="ui segment">
           <App/>
           </div>

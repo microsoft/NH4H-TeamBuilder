@@ -5,6 +5,7 @@ import nh4h from './apis/nh4h';
 import TeamForm from './components/createteam';
 import TeamListItem from './components/teamlistitem';
 import { Dropdown } from 'semantic-ui-react'
+import { Message } from 'semantic-ui-react'
 
 class App extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class App extends Component {
       msalInstance: msalI,
       username: "",
       email: "",
-      userid: "",
+      userid: null,
       loggedin: false,
       teams: [],
       t:null,
@@ -43,7 +44,9 @@ class App extends Component {
     let body = { UserMSTeamsEmail: this.state.email };
     nh4h.post('/users/msemail', body)
       .then((response) => {
-        this.setState({ userid: response.data.userId });
+        if(!response.returnError){
+          this.setState({ userid: response.data.userId });
+        }
         nh4h.get('/users/solutions/'+response.data.userId)
         .then((resp)=>{
           if(resp.data.teamId.length>0){
@@ -194,6 +197,9 @@ render() {
 
   return (
     <div className="ui">
+      {!this.state.userid?<Message header='Contact Support!'
+                content='User Not found please ask for help in general channel.'
+              />:""}
       {this.state.t?this.getMyTeam():this.getCreateButton()}
       {this.state.showCreate?<TeamForm team={this.state.t} JoinTeam={this.changeTeamMembership} Callback={this.NewTeamCreated}/>:<div/>}
       <br/>

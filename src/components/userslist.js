@@ -19,7 +19,7 @@ class UsersList extends React.Component {
     this.state = {
       msalInstance: msalI,
       email: "",
-      userid: "",
+      userid: null,
       userObject:{mySkills:null},
       users: [],
       visible: true,
@@ -79,11 +79,13 @@ class UsersList extends React.Component {
     let body = { UserMSTeamsEmail: this.state.email };
     nh4h.post('/users/msemail', body)
       .then((response) => {
+        if(!response.returnError){
         this.setState({ 
           userObject:response.data,
           userid: response.data.userId,
           mySkills: response.data.mySkills
          });
+        }
       });
   }
 
@@ -151,6 +153,9 @@ class UsersList extends React.Component {
 
     return(
       <div>
+        {!this.state.userid?<Message header='Contact Support!'
+                content='User Not found please ask for help in general channel.'
+              />:""}
         {
         <div className="ui segment">
           <h2>My Skills</h2>
@@ -180,12 +185,12 @@ class UsersList extends React.Component {
           <div>&nbsp;</div>
           {this.state.users.length == 0 ? 
             <div className="ui">
-              <div class="ui active inverted dimmer">
-                <div class="ui large text loader">Loading...</div>
+              <div className="ui active inverted dimmer">
+                <div className="ui large text loader">Loading...</div>
               </div>
             </div>
              :""}
-          <div class="ui cards">
+          <div className="ui cards">
           { this.getUserListItems(this.state.users)}
           </div>
         </div>
