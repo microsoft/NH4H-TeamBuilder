@@ -12,8 +12,18 @@ TODO: Guide users through getting your code up and running on their own system. 
 # Build and Test
 TODO: Describe and show how to build your code and run the tests. 
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+# Ideas for Spring
+* Maybe sort teams by least number of participants
+* Add flag to indicate team is "full"
+* Team create: check off what skills you're bringing to the team
+* Team create:Team Description gets changed to problem pitch (keep away from solution and focus on problem)
+* Team create: update problem types
+* Team channel names maynot be autocreated
+* Admin can associate a team to a channel
+* Admin page / authorization 
+* capture usage meterics for teams and users
+* questions we want answers to: "how many searches are done?" "When were teams created?"" etc...
+
 
 If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
 - [ASP.NET Core](https://github.com/aspnet/Home)
