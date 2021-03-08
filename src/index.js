@@ -1,35 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Route, NavLink, HashRouter, Switch} from 'react-router-dom';
 import App from './App';
-import UsersList from './components/userslist';
-import Menu from './components/menu';
 
 import * as serviceWorker from './serviceWorker';
 
-
 ReactDOM.render(
   <React.StrictMode>
-  <HashRouter>
+ 
     <div className="ui container">
-     
-      
-      <Switch>
-        <Route path="/users">
-          <Menu/>
-          <div className="ui segment">
-          <UsersList/>
-          </div>
-        </Route>
-        <Route path="/">
-          <Menu team="a"/>
           <div className="ui segment">
           <App/>
           </div>
-        </Route>
-        </Switch>
-    </div>
-    </HashRouter>
+    </div>    
+
   </React.StrictMode>,
   document.getElementById('root')
 );
