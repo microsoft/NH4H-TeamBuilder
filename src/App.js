@@ -4,6 +4,7 @@ import TeamsList from './components/teamslist';
 import nh4h from './apis/nh4h';
 import TeamForm from './components/createteam';
 import TeamListItem from './components/teamlistitem';
+import GitHubUserEntry from './components/gituserentry-modal-hook';
 import { Dropdown } from 'semantic-ui-react'
 import { Message } from 'semantic-ui-react'
 
@@ -22,6 +23,8 @@ class App extends Component {
       msalInstance: msalI,
       username: "",
       email: "",
+      githubid:"",
+      enableTeamBuilder:false,
       userid: null,
       loggedin: false,
       teams: [],
@@ -85,7 +88,10 @@ class App extends Component {
       }, () => {
         this.getUserID();
         this.getTeams();
+        
       });
+
+     
 
     } else {
       let loginRequest = {
@@ -195,22 +201,44 @@ render() {
     this.filteroutMyTeam();
   }
 
-  return (
-    <div className="ui">
-      {!this.state.userid?<Message header='Contact Support!'
-                content='User Not found please ask for help in general channel.'
-              />:""}
-      {this.state.t?this.getMyTeam():this.getCreateButton()}
-      {this.state.showCreate?<TeamForm team={this.state.t} JoinTeam={this.changeTeamMembership} Callback={this.NewTeamCreated}/>:<div/>}
-      <br/>
-      <span>
-        Filter By Teams Seeking: 
-      <Dropdown clearable onChange={this.filter} placeholder='Skills'  search selection options={this.state.skillsWantedOptions} />
-      </span>
-      <h2>All Teams</h2>
-      <TeamsList Callback={this.changeTeamMembership} myteam={this.state.myteam} teams={this.state.teams} />
-    </div>
-  );
+  if(this.state.enableTeamBuilder) {
+    return (
+      <div className="ui">
+        {!this.state.userid?<Message header='Contact Support!'
+                  content='User Not found please ask for help in general channel.'
+                />:""}
+        {this.state.t?this.getMyTeam():this.getCreateButton()}
+        {this.state.showCreate?<TeamForm team={this.state.t} JoinTeam={this.changeTeamMembership} Callback={this.NewTeamCreated}/>:<div/>}
+        <br/>
+        <span>
+          Filter By Teams Seeking: 
+        <Dropdown clearable onChange={this.filter} placeholder='Skills'  search selection options={this.state.skillsWantedOptions} />
+        </span>
+        <h2>All Teams</h2>
+        <TeamsList Callback={this.changeTeamMembership} myteam={this.state.myteam} teams={this.state.teams} />
+      </div>
+    );
+  } else {
+    return (
+      <div className="ui">
+        <GitHubUserEntry />
+        
+        {!this.state.userid?<Message header='Contact Support!'
+                  content='User Not found please ask for help in general channel.'
+                />:""}
+        {this.state.t?this.getMyTeam():this.getCreateButton()}
+        {this.state.showCreate?<TeamForm team={this.state.t} JoinTeam={this.changeTeamMembership} Callback={this.NewTeamCreated}/>:<div/>}
+        <br/>
+        <span>
+          Filter By Teams Seeking: 
+        <Dropdown clearable onChange={this.filter} placeholder='Skills'  search selection options={this.state.skillsWantedOptions} />
+        </span>
+        <h2>All Teams</h2>
+        <TeamsList Callback={this.changeTeamMembership} myteam={this.state.myteam} teams={this.state.teams} />
+        
+      </div>
+    );
+  }
 }
 }
 
