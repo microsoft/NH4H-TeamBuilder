@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dropdown } from 'semantic-ui-react'
 import nh4h from '../apis/nh4h';
+import App from '../App';
 
 class TeamForm extends React.Component {
   constructor(props){
@@ -23,8 +24,11 @@ class TeamForm extends React.Component {
       teamDescription: desc,
       challengeName: chall,
       challengeNameOptions: [
-        {key: 'Education', text: 'Education',value:'Education'},
-        {key: 'Communication', text: 'Communication', value: 'Communication'}
+        {key: 'Education', text: 'Vaccine Education & Delivery',value:'Vaccine Education & Delivery'},
+        {key: 'MedicalDeserts', text: 'Medical Deserts', value: 'Medical Deserts'},
+        {key: 'Equity', text: 'Health Equity & Racial Disparities', value: 'Health Equity & Racial Disparities'},
+        {key: 'Care', text: 'New Models and Settings for Care', value: 'New Models and Settings for Care'},
+        {key: 'Open', text: 'Open Topic', value: 'Open Topic'}
       ],
       skillsWanted:skills,
       teamActive: 1,
@@ -53,8 +57,7 @@ class TeamForm extends React.Component {
       teamDescription: this.state.teamDescription,
       challengeName: this.state.challengeName,
       skillsWanted: this.state.skillsWanted
-    }).then((resp)=>{
-      
+    }).then((resp)=>{      
       let teamid=resp.data.teamId;
       this.setState({created:true,submitting:false});
       this.props.JoinTeam('join',teamid);
