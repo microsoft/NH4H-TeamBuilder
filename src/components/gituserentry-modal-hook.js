@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import gitapi from '../apis/gitapi';
-import { Button, Modal, Input, Dropdown } from 'semantic-ui-react'
+import { Button, Modal, Input, Dropdown, Icon } from 'semantic-ui-react'
 import GitHubUserEntry from './gituserentry-modal';
 
  
@@ -16,9 +16,9 @@ function modalReducer (state, action) {
 }
 
 const GitHubUserEntryHook = () => {
-  console.log("ho")
   const [username, setName] = useState(" ");
-
+  const [ghuserlist, setUserList] = useState([]);
+  const [isFetching, setFetchStatus] = useState(false);
   const [state, dispatch] = React.useReducer(modalReducer, 
     {
       open: true,
@@ -29,14 +29,31 @@ const GitHubUserEntryHook = () => {
   )
   const {dimmer, open, size} = state;
 
-  const handleUserInput = event => {
-    gitapi.get("/" + event.target.value).then((resp) => {
-      console.log(resp)
-    })
+  const handleUserInput = (event, data) => {
+    console.log("event:", event)
+    setName(data.searchQuery)
+    if(username.length >=2) {
+      setFetchStatus(true);
+      setTimeout(getGitHubUser, 2000);
+    }
+    
   };
 
+  const letsgo = (event, data) => {
+    var letsgobutton = document.getElementById("letsgo");
+    letsgobutton.className = "ui positive button";
+  }
+
   const getGitHubUser = () => {
-    gitapi.get("/" + username).then((resp) => {
+    
+    var tempghuserlist = [];
+    gitapi.get("/users?q=" + username).then((resp) => {
+      resp.data.items.map(i => {
+        tempghuserlist.push({ key: i.login , text: i.login , value: i.login, image: { avatar: true, src: i.avatar_url }});
+        setFetchStatus(false);
+        setUserList(tempghuserlist)
+      })       
+    }).catch (err => {
 
     })
   }
@@ -51,15 +68,29 @@ const GitHubUserEntryHook = () => {
       >
         <Modal.Header>Do you have a GitHub Account?</Modal.Header>
         <Modal.Content>
-        
-          <div className="ui icon input">
-            <Input onChange={handleUserInput} id="gituser-id" label='@' placeholder='Username' /><i aria-hidden="true" onClick={() => getGitHubUser()} className="search circular link icon"></i>
-          </div> <br /><br />
-          
+          <div className="ui ">
+            <Dropdown
+              button
+              border
+              fluid
+              className='icon'
+              floating
+              labeled
+              onSearchChange={handleUserInput}
+              onChange={letsgo}
+              icon='at'
+              options={ghuserlist}
+              search
+              placeholder='Search Github User'
+              loading={isFetching}
+            />
+          {/* <Input onChange={handleUserInput} id="gituser-id" label='@' placeholder='Username' /><i aria-hidden="true" onClick={() => getGitHubUser()} className="search circular link icon"></i>*/}
+          </div>   
+          <br /><br />
           Don't have one? It's easy! Here's <a href="https://github.com/join">how</a> :) <br /><br />
         </Modal.Content>
         <Modal.Actions>
-          <Button className="disabled inactive" positive onClick={() => dispatch({ type: 'CLOSE_MODAL' })}>
+          <Button id="letsgo" className="disabled inactive" positive onClick={() => dispatch({ type: 'CLOSE_MODAL' })}>
             I'm ready!
           </Button>
         </Modal.Actions>
