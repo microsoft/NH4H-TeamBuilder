@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import gitapi from '../apis/gitapi';
-import { Button, Modal, Input, Dropdown, Menu, Icon, Label, Grid, Form, Divider } from 'semantic-ui-react'
-import GitHubUserEntry from './gituserentry-modal';
+import { Button, Modal, Input, Dropdown, Menu, Label, Form, Divider } from 'semantic-ui-react';
 import nh4h from '../apis/nh4h';
 
  
@@ -16,14 +15,10 @@ function modalReducer (state, action) {
   }
 }
 
-function test(event) {
-  alert('call me');
-}
-const GitHubUserEntryHook = () => {
-  const [usercount, setCount] = useState(0);
-  const [username, setName] = useState(" ");
+const GitHubUserEntryHook = (props) => {
+  const placeholdertxt = "Select your user id"
   const [ghuserlist, setUserList] = useState([]);
-  const [isFetching, setFetchStatus] = useState(false);
+  const [isSaving, setSavingStatus] = useState(false);
   const [state, dispatch] = React.useReducer(modalReducer, 
     {
       open: true,
@@ -33,50 +28,50 @@ const GitHubUserEntryHook = () => {
     }
   )
   const {dimmer, open, size} = state;
-  var count;
 
-  const handleUserInput = (event, data) => {
-    setFetchStatus(true);
-    getGitHubUser(count);    
-  };
-
-  const letsgo = (event, data) => {
+  const letsgo = () => {
+    let user = document.getElementById("selected-user").querySelectorAll('[aria-atomic="true"]')[0].innerText;
+  
     var letsgobutton = document.getElementById("letsgo");
-    letsgobutton.className = "ui positive button";
+    letsgobutton.className = "ui positive button active";
   }
 
-  const getGitHubUser = (event, data) => {    
-    var userdropdown = document.getElementById("userdropdown");
-    //var ghuser = userdropdown.getElementsByTagName("input")[0].value;
-    //setName(userdropdown.getElementsByTagName("input")[0].value)
-    var ghuser = document.getElementById("gituserid-input").value;
+  const getGitHubUser = () => {    
+    let ghuser = document.getElementById("gituserid-input").value;
     var tempghuserlist = [];
     
     gitapi.get("/users?q=" + ghuser + "&per_page=100").then((resp) => {
-      
-      setCount(resp.data.total_count);
-      console.log("totalcount:", usercount)
-      console.log(resp.data)
       resp.data.items.map(i => {
+        setUserList(tempghuserlist);
         tempghuserlist.push({ key: i.login , text: i.login , value: i.login, image: { avatar: true, src: i.avatar_url }});
-        setFetchStatus(false);
         setUserList(tempghuserlist)
         document.getElementById("displayusers").style["display"] = ""
       })       
       
     }).catch (err => {
-      setFetchStatus(false);
-      console.log("i'm err:", username)
+      console.log("err:", err)
     })
   }
   
   const saveGitUserId = () => {
-    dispatch({ type: 'CLOSE_MODAL' })
-    // nh4h.post().then((resp) => {
-    //   dispatch({ type: 'CLOSE_MODAL' })
-    // }).catch((err) => {
-
-    // });
+    setSavingStatus(true);
+    let userid = document.getElementById("selected-user").querySelectorAll('[aria-atomic="true"]')[0].innerText;
+    let body = {
+      UserId: props.userid,
+      GitHubId: userid 
+    };
+    nh4h.put("/users/github/" + props.userid, body ).then((resp) => {
+      setSavingStatus(false);
+      dispatch({ type: 'CLOSE_MODAL' })
+    }).catch((err) => {
+      setUserList([]);
+      setUserList((state) => {
+        document.getElementById("error").style["display"] = ""
+        setSavingStatus(false);
+        return state;
+      })
+      
+    });
   };
 
   return (
@@ -102,7 +97,7 @@ const GitHubUserEntryHook = () => {
                 <Divider />
                 <Label color='teal' pointing="right">Select your username: </Label>
                 <Menu compact>
-                  <Dropdown placeholder='Select your user' onChange={letsgo} options={ghuserlist} simple item />
+                  <Dropdown id="selected-user" placeholder={placeholdertxt} onChange={letsgo} closeOnChange selection options={ghuserlist} item />
                 </Menu>      
               </Form.Field>
             </Form>
@@ -110,7 +105,10 @@ const GitHubUserEntryHook = () => {
           
         </Modal.Content>
         <Modal.Actions>
-          <Button id="letsgo" className="disabled inactive" positive onClick={() => { saveGitUserId(); }}>
+           <Label id="error" style={{"display": "none"}} prompt pointing="right">
+              Uh oh. Reselect your id and please try again.
+          </Label> 
+          <Button id="letsgo" className="disabled inactive" positive onClick={() => { saveGitUserId(); }} loading={isSaving}>
             I'm ready!
           </Button>
         </Modal.Actions>

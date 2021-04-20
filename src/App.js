@@ -221,7 +221,7 @@ render() {
   } else {
     return (
       <div className="ui">
-        <GitHubUserEntry />
+        <GitHubUserEntry userid={this.state.userid} />
         
         {!this.state.userid?<Message header='Contact Support!'
                   content='User Not found please ask for help in general channel.'
