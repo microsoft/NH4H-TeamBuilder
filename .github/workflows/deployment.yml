@@ -31,7 +31,7 @@ jobs:
       run: |
         git clone "$GITURL"
         cp -ra build/* NH4HApps/static/TeamBuilder
-        cd NH4HAppss
+        cd nh4happs
         git add .
         git commit -m "$MESSAGE"
         git push
