@@ -32,6 +32,8 @@ jobs:
         git clone "$GITURL"
         cp -ra build/* nh4happs/static/TeamBuilder
         cd nh4happs
+        git config user.email "gh@auto.com"
+        git config user.name "GitHub Action"
         git add .
         git commit -m "$MESSAGE"
         git push
