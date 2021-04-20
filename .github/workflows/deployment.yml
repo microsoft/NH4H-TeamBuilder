@@ -30,7 +30,7 @@ jobs:
     - name: 'Deploy to Web'
       run: |
         git clone "$GITURL"
-        cp -ra build/* NH4HApps/static/TeamBuilder
+        cp -ra build/* nh4happs/static/TeamBuilder
         cd nh4happs
         git add .
         git commit -m "$MESSAGE"
