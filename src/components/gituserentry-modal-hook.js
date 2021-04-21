@@ -4,21 +4,33 @@ import { Button, Modal, Input, Dropdown, Menu, Label, Form, Divider } from 'sema
 import nh4h from '../apis/nh4h';
 
  
-function modalReducer (state, action) {
-  switch (action.type) {
-    case 'OPEN_MODAL':
-      return { open: true, dimmer: action.dimmer, size: action.size }
-    case 'CLOSE_MODAL':
-      return { open: false }
-    default:
-      throw new Error()
-  }
-}
+// function modalReducer (state, action) {
+//   switch (action.type) {
+//     case 'OPEN_MODAL':
+//       return { open: true, dimmer: action.dimmer, size: action.size }
+//     case 'CLOSE_MODAL':
+//       return { open: false }
+//     default:
+//       throw new Error()
+//   }
+// }
 
 const GitHubUserEntryHook = (props) => {
-  const placeholdertxt = "Select your user id"
+  const placeholdertxt = "Select your user id";
   const [ghuserlist, setUserList] = useState([]);
   const [isSaving, setSavingStatus] = useState(false);
+  
+  const modalReducer = (state, action) => {
+    switch (action.type) {
+      case 'OPEN_MODAL':
+        return { open: true, dimmer: action.dimmer, size: action.size }
+      case 'CLOSE_MODAL':
+        return { open: false }
+      default:
+        throw new Error()
+    }
+  };
+
   const [state, dispatch] = React.useReducer(modalReducer, 
     {
       open: true,
@@ -26,7 +38,7 @@ const GitHubUserEntryHook = (props) => {
       size: 'tiny',
       type:"OPEN_MODAL"
     }
-  )
+  );
   const {dimmer, open, size} = state;
 
   const letsgo = () => {
@@ -34,7 +46,7 @@ const GitHubUserEntryHook = (props) => {
   
     var letsgobutton = document.getElementById("letsgo");
     letsgobutton.className = "ui positive button active";
-  }
+  };
 
   const getGitHubUser = () => {    
     let ghuser = document.getElementById("gituserid-input").value;
@@ -44,32 +56,38 @@ const GitHubUserEntryHook = (props) => {
       resp.data.items.map(i => {
         setUserList(tempghuserlist);
         tempghuserlist.push({ key: i.login , text: i.login , value: i.login, image: { avatar: true, src: i.avatar_url }});
-        setUserList(tempghuserlist)
-        document.getElementById("displayusers").style["display"] = ""
+        setUserList(tempghuserlist);
+        document.getElementById("displayusers").style["display"] = "";
       })       
       
     }).catch (err => {
-      console.log("err:", err)
+      console.log("err:", err);
     })
   }
   
   const saveGitUserId = () => {
+    // Loading status
     setSavingStatus(true);
+    
     let userid = document.getElementById("selected-user").querySelectorAll('[aria-atomic="true"]')[0].innerText;
     let body = {
       UserId: props.userid,
       GitHubId: userid 
     };
+
     nh4h.put("/users/github/" + props.userid, body ).then((resp) => {
+      // Loading status
       setSavingStatus(false);
+      // Close Dialog
       dispatch({ type: 'CLOSE_MODAL' })
     }).catch((err) => {
+      // Empty the list
       setUserList([]);
       setUserList((state) => {
-        document.getElementById("error").style["display"] = ""
+        document.getElementById("error").style["display"] = "";
         setSavingStatus(false);
         return state;
-      })
+      });
       
     });
   };
