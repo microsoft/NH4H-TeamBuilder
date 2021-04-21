@@ -5,9 +5,15 @@ import nh4h from '../apis/nh4h';
 
 const GitHubUserEntryHook = (props) => {
   const placeholdertxt = "Select your user id";
+  // Github Userlist for the dropdown
   const [ghuserlist, setUserList] = useState([]);
+  // Github Id to send to API
+  const [githubid, setId] = useState("");
+  // Loading status for the button
   const [isSaving, setSavingStatus] = useState(false);
   
+  // Modal Dialog Options
+  /////////////////////////////
   const modalReducer = (state, action) => {
     switch (action.type) {
       case 'OPEN_MODAL':
@@ -29,6 +35,9 @@ const GitHubUserEntryHook = (props) => {
   );
   const {dimmer, open, size} = state;
 
+  //////////////////////////
+
+  // Enable Let's Go button
   const letsgo = () => {
     let user = document.getElementById("selected-user").querySelectorAll('[aria-atomic="true"]')[0].innerText;
   
@@ -36,15 +45,18 @@ const GitHubUserEntryHook = (props) => {
     letsgobutton.className = "ui positive button active";
   };
 
+  // Retrieve Github user
   const getGitHubUser = () => {    
     let ghuser = document.getElementById("gituserid-input").value;
     var tempghuserlist = [];
     
     gitapi.get("/users?q=" + ghuser + "&per_page=100").then((resp) => {
       resp.data.items.map(i => {
-        setUserList(tempghuserlist);
+        setId(i.id); 
         tempghuserlist.push({ key: i.login , text: i.login , value: i.login, image: { avatar: true, src: i.avatar_url }});
         setUserList(tempghuserlist);
+        
+        // Display the populated Github user dropdown
         document.getElementById("displayusers").style["display"] = "";
       })       
       
@@ -56,12 +68,16 @@ const GitHubUserEntryHook = (props) => {
   const saveGitUserId = () => {
     // Loading status
     setSavingStatus(true);
-    
-    let userid = document.getElementById("selected-user").querySelectorAll('[aria-atomic="true"]')[0].innerText;
+
+    // Reading Github username from dropdown
+    let username = document.getElementById("selected-user").querySelectorAll('[aria-atomic="true"]')[0].innerText;
     let body = {
       UserId: props.userid,
-      GitHubId: userid 
+      GitHubUser: username,
+      GitHubId: githubid
     };
+
+    console.log("props", props)
 
     nh4h.put("/users/github/" + props.userid, body ).then((resp) => {
       // Loading status
@@ -69,9 +85,10 @@ const GitHubUserEntryHook = (props) => {
       // Close Dialog
       dispatch({ type: 'CLOSE_MODAL' })
     }).catch((err) => {
-      // Empty the list
+      // Empty the dropdown list
       setUserList([]);
       setUserList((state) => {
+        // Error message for the user
         document.getElementById("error").style["display"] = "";
         setSavingStatus(false);
         return state;
@@ -86,7 +103,6 @@ const GitHubUserEntryHook = (props) => {
         dimmer={dimmer}
         open={open}
         size={size}
-        // onClose={() => dispatch({ type: 'CLOSE_MODAL' })}
       >
         <Modal.Header>Do you have a GitHub Account?</Modal.Header>
         <Modal.Content>

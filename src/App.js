@@ -93,7 +93,6 @@ class App extends Component {
   componentDidMount() {
 
     if (this.state.msalInstance.getAccount()) {
-
       let id = this.state.msalInstance.getAccount();
       this.setState({
         loggedin: true,
