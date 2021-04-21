@@ -3,18 +3,6 @@ import gitapi from '../apis/gitapi';
 import { Button, Modal, Input, Dropdown, Menu, Label, Form, Divider } from 'semantic-ui-react';
 import nh4h from '../apis/nh4h';
 
- 
-// function modalReducer (state, action) {
-//   switch (action.type) {
-//     case 'OPEN_MODAL':
-//       return { open: true, dimmer: action.dimmer, size: action.size }
-//     case 'CLOSE_MODAL':
-//       return { open: false }
-//     default:
-//       throw new Error()
-//   }
-// }
-
 const GitHubUserEntryHook = (props) => {
   const placeholdertxt = "Select your user id";
   const [ghuserlist, setUserList] = useState([]);

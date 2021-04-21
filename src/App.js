@@ -23,7 +23,7 @@ class App extends Component {
       msalInstance: msalI,
       username: "",
       email: "",
-      githubid:"",
+      githubid: null,
       enableTeamBuilder:false,
       userid: null,
       loggedin: false,
@@ -43,7 +43,7 @@ class App extends Component {
         
   }
 
-  getUserID = () => {
+  getUserInfo = () => {
     let body = { UserMSTeamsEmail: this.state.email };
     nh4h.post('/users/msemail', body)
       .then((response) => {
@@ -52,11 +52,24 @@ class App extends Component {
         }
         nh4h.get('/users/solutions/'+response.data.userId)
         .then((resp)=>{
-          if(resp.data.teamId.length>0){
+          if(resp.data.teamId.length>0) {
             let myteam=resp.data.teamId[0];
             let t=this.state.teams.find(obj => obj.teamId === myteam );
             this.setState({myteam:myteam,t:t});
+          }          
+        });
+        nh4h.get('/users/githubid/' + this.state.userid).then((resp) => {
+          if(resp.data.gitHubId != null) {
+            this.setState({ githubid: response.data.gitHubId });
+            this.setState((state) => {
+              if(state != null) {
+                this.getTeams();
+              }
+            });
+            this.setState({ enableTeamBuilder: true });
+         
           }
+
         });
       });
   }
@@ -73,6 +86,7 @@ class App extends Component {
         let skillsWantedOptions=skillsWanted.map(s=>({key:s,text:s,value:s}));
         this.setState({ allteams:response.data, teams: response.data, skillsWantedOptions: skillsWantedOptions});
         
+        
       });
   }
 
@@ -86,12 +100,9 @@ class App extends Component {
         email: id.userName,
         username: id.name
       }, () => {
-        this.getUserID();
+        this.getUserInfo();
         this.getTeams();
-        
-      });
-
-     
+      });     
 
     } else {
       let loginRequest = {
@@ -131,7 +142,8 @@ class App extends Component {
       //refresh teams list
       //this.setState({myteam:-1,t:null},()=>{this.getUserID();});
       this.getTeams();
-      this.getUserID();
+      this.getUserInfo();
+
     });
     
   }

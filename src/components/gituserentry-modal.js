@@ -16,10 +16,6 @@ class GitHubUserEntry extends React.Component {
    
   }
   
-  handleUserInput = event => {
-    this.setState({ username: event.target.value });
-    console.log(this.state.username);
-  };
 
   modalReducer = (state, action) => {
     switch (action.type) {
