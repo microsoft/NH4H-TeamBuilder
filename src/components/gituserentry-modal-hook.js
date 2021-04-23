@@ -111,7 +111,7 @@ const GitHubUserEntryHook = (props) => {
               <Form.Field>
                 <Input id="gituserid-input" label='@' placeholder='Search username' action={{ onClick: () => getGitHubUser(), icon:"search" }} />
                 <Label pointing>
-                  Don't have one? It's easy! Here's <a href="https://github.com/join">how</a> :)
+                  Don't have one? It's easy! Here's <a target="_blank" href="https://github.com/join">how</a> :)
                 </Label> <br /><br />
                 
               </Form.Field>
