@@ -7,6 +7,7 @@ import TeamListItem from './components/teamlistitem';
 import GitHubUserEntry from './components/gituserentry-modal-hook';
 import { Dropdown } from 'semantic-ui-react'
 import { Message } from 'semantic-ui-react'
+import User from './apis/user';
 
 class App extends Component {
   constructor(props) {
@@ -21,6 +22,7 @@ class App extends Component {
     let msalI = new Msal.UserAgentApplication(msalConfig);
     this.state = {
       msalInstance: msalI,
+      user: new User(),
       username: "",
       email: "",
       githubid: null,
@@ -39,40 +41,27 @@ class App extends Component {
     this.editMyTeam=this.editMyTeam.bind(this);
   }
 
-  getMyTeam=()=>{    
-        
-  }
+  
 
   getUserInfo = () => {
-    let body = { UserMSTeamsEmail: this.state.email };
-    nh4h.post('/users/msemail', body)
-      .then((response) => {
-        if(!response.returnError){
-          this.setState({ userid: response.data.userId });
-        }
-        nh4h.get('/users/solutions/'+response.data.userId)
-        .then((resp)=>{
-          if(resp.data.teamId.length>0) {
-            let myteam=resp.data.teamId[0];
-            let t=this.state.teams.find(obj => obj.teamId === myteam );
-            this.setState({myteam:myteam,t:t});
-          }          
+    this.state.user.getUserID()
+    .then(()=>{
+      if(this.state.user.githubuser){   
+        this.getTeams();
+        this.setState({enableTeamBuilder:true});
+        this.state.user.getTeam()
+        .then(()=>{
+          let myteam=this.state.user.myteam;
+          let t=this.state.teams.find(obj => obj.teamId === myteam );
+          this.setState({t:t});
         });
-        nh4h.get('/users/githubid/' + this.state.userid).then((resp) => {
-          if(resp.data.gitHubId != null) {
-            this.setState({ githubid: response.data.gitHubId });
-            this.setState((state) => {
-              if(state != null) {
-                this.getTeams();
-              }
-            });
-            this.setState({ enableTeamBuilder: true });
-         
-          }
-
-        });
-      });
-  }
+      }
+    });  
+      
+       
+        
+      }
+  
 
   getTeams = () => {
     nh4h.get('/solutions/')
@@ -94,13 +83,16 @@ class App extends Component {
 
     if (this.state.msalInstance.getAccount()) {
       let id = this.state.msalInstance.getAccount();
+      let nUser=this.state.user;
+      nUser.email=id.userName;
+      
       this.setState({
         loggedin: true,
+        user: nUser,
         email: id.userName,
         username: id.name
       }, () => {
         this.getUserInfo();
-        this.getTeams();
       });     
 
     } else {
@@ -120,7 +112,7 @@ class App extends Component {
   changeTeamMembership(join, id) {
     let teamMembers = [];
     if (join === 'join') {
-      let thisUser = { TeamId: id, UserId: this.state.userid, IsLead: 0 };
+      let thisUser = { TeamId: id, UserId: this.state.user.userid, IsLead: 0 };
       teamMembers.splice(0, 0, thisUser);
     }
     if (join === 'leave') {
@@ -130,12 +122,12 @@ class App extends Component {
     }
     
     let body = {
-      UserId: this.state.userid,
+      UserId: this.state.user.userid,
       tblTeamHackers:teamMembers
     };
     
     //fire put request
-    let url='/users/solutions/' + this.state.userid
+    let url='/users/solutions/' + this.state.user.userid
     nh4h.put(url, body)
     .then(()=>{
       //refresh teams list
@@ -173,7 +165,7 @@ getMyTeam=()=>{
         id={t.teamId} 
         name={t.teamName} description={t.teamDescription}
         challengeName={t.challengeName}
-        isTeamMember={t.teamId===this.state.myteam}
+        isTeamMember={t.teamId===this.state.user.myteam}
         skills={t.skillsWanted}
         edit={this.editMyTeam}
         teamslink={t.msTeamsChannel}
@@ -198,24 +190,34 @@ filter=(e,data)=>{
 }
 
 filteroutMyTeam=()=>{
-  let res=this.state.teams.filter(t => t.teamId!==this.state.myteam);
+  let res=this.state.teams.filter(t => t.teamId!==this.state.user.myteam);
   if (res.length!==this.state.teams.length)
   { 
     this.setState({teams:res});
   }
 }
 
+saveGitUser=(body)=>{
+  console.log("From the controller");
+  body.UserId=this.state.user.userid;
+  nh4h.put("/users/github/" + this.state.user.userid, body )
+  .then((resp) => {
+    this.setState({enableTeamBuilder:true});
+  });
+  
+}
+
 render() {
   //console.log(this.state.teams);
-  //console.log(this.state.myteam);
-  if(this.state.myteam>0){
+  console.log(this.state.user);
+  if(this.state.user.myteam>0){
     this.filteroutMyTeam();
   }
 
   if(this.state.enableTeamBuilder) {
     return (
       <div className="ui">
-        {!this.state.userid?<Message header='Contact Support!'
+        {!this.state.user.userid?<Message header='Contact Support!'
                   content='User Not found please ask for help in general channel.'
                 />:""}
         {this.state.t?this.getMyTeam():this.getCreateButton()}
@@ -226,15 +228,15 @@ render() {
         <Dropdown clearable onChange={this.filter} placeholder='Skills'  search selection options={this.state.skillsWantedOptions} />
         </span>
         <h2>All Teams</h2>
-        <TeamsList Callback={this.changeTeamMembership} myteam={this.state.myteam} teams={this.state.teams} />
+        <TeamsList Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.teams} />
       </div>
     );
   } else {
     return (
       <div className="ui">
-        <GitHubUserEntry userid={this.state.userid} />
+        <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} />
         
-        {!this.state.userid?<Message header='Contact Support!'
+        {!this.state.user.userid?<Message header='Contact Support!'
                   content='User Not found please ask for help in general channel.'
                 />:""}
         {this.state.t?this.getMyTeam():this.getCreateButton()}
@@ -245,7 +247,7 @@ render() {
         <Dropdown clearable onChange={this.filter} placeholder='Skills'  search selection options={this.state.skillsWantedOptions} />
         </span>
         <h2>All Teams</h2>
-        <TeamsList Callback={this.changeTeamMembership} myteam={this.state.myteam} teams={this.state.teams} />
+        <TeamsList Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.teams} />
         
       </div>
     );

@@ -68,7 +68,7 @@ const GitHubUserEntryHook = (props) => {
   const saveGitUserId = () => {
     // Loading status
     setSavingStatus(true);
-
+   
     // Reading Github username from dropdown
     let username = document.getElementById("selected-user").querySelectorAll('[aria-atomic="true"]')[0].innerText;
     let body = {
@@ -76,25 +76,8 @@ const GitHubUserEntryHook = (props) => {
       GitHubUser: username,
       GitHubId: githubid
     };
-
-    console.log("props", props)
-
-    nh4h.put("/users/github/" + props.userid, body ).then((resp) => {
-      // Loading status
-      setSavingStatus(false);
-      // Close Dialog
-      dispatch({ type: 'CLOSE_MODAL' })
-    }).catch((err) => {
-      // Empty the dropdown list
-      setUserList([]);
-      setUserList((state) => {
-        // Error message for the user
-        document.getElementById("error").style["display"] = "";
-        setSavingStatus(false);
-        return state;
-      });
-      
-    });
+    props.saveGH(body);
+   
   };
 
   return (
