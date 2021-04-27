@@ -59,8 +59,9 @@ class App extends Component {
           }          
         });
         nh4h.get('/users/githubid/' + this.state.userid).then((resp) => {
-          if(resp.data.gitHubId != 0) {
-            this.setState({ githubid: response.data.gitHubId });
+          console.log("resp.data", resp.data)
+          if(resp.data.githubId != 0) {
+            this.setState({ githubUser: response.data.gitHubId });
             this.setState((state) => {
               if(state != null) {
                 this.getTeams();
