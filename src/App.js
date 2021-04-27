@@ -59,7 +59,7 @@ class App extends Component {
           }          
         });
         nh4h.get('/users/githubid/' + this.state.userid).then((resp) => {
-          if(resp.data.gitHubId == 0) {
+          if(resp.data.gitHubId != 0) {
             this.setState({ githubid: response.data.gitHubId });
             this.setState((state) => {
               if(state != null) {
