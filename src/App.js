@@ -54,6 +54,7 @@ class App extends Component {
           let myteam=this.state.user.myteam;
           let t=this.state.teams.find(obj => obj.teamId === myteam );
           this.setState({t:t});
+
         });
       }
     });  
@@ -204,7 +205,7 @@ saveGitUser=(body)=>{
   .then((resp) => {
     this.setState({enableTeamBuilder:true});
   });
-  
+
 }
 
 render() {
