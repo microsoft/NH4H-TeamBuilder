@@ -10,7 +10,6 @@ class TeamsList extends React.Component {
       challenges:[],
       activeIndex: 0
     }
-    this.joinOrLeaveTeam=this.joinOrLeaveTeam.bind(this);
   }
 
   handleClick = (e, titleProps) => {
@@ -22,20 +21,25 @@ class TeamsList extends React.Component {
   }
   
   componentDidUpdate(prevProps,prevState) {
-    if(prevProps.teams != this.props.teams){
-    let newt=this.groupBy(this.props.teams,'challengeName');
-    let newc= Object.getOwnPropertyNames(newt);
-    this.setState({
-      teams:newt,
-      challenges:newc
-    });
+    if(prevProps.teams !== this.props.teams){
+      if(this.props.teams){
+        let newt=this.groupBy(this.props.teams,'challengeName');
+        let newc= Object.getOwnPropertyNames(newt);
+        this.setState({
+          teams:newt,
+          challenges:newc
+        });
+    }
   }
   }
 
-  joinOrLeaveTeam(type,id){
+  joinOrLeaveTeam=(type,id)=>{
     this.props.Callback(type,id);
   }
 
+  editTeam=(e)=>{
+   this.props.edit();
+  }
   groupBy(array, property) {
     var hash = {};
     for (var i = 0; i < array.length; i++) {
@@ -68,9 +72,10 @@ class TeamsList extends React.Component {
   return teamlist.map( ({teamId, teamName, teamDescription,skillsWanted,tblTeamHackers,challengeName,msTeamsChannel}) => ( 
     <TeamListItem 
       Callback={this.joinOrLeaveTeam} 
+      edit={this.editTeam}
       key={teamId} id={teamId} 
       name={teamName} description={teamDescription}
-      isTeamMember={teamId==this.props.myteam}
+      isTeamMember={teamId===this.props.myteam}
       challengeName={challengeName}      
       skills={skillsWanted}
       teamslink={msTeamsChannel}

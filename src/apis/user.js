@@ -144,7 +144,22 @@ class User {
     });
   }
 
-  
+  changeTeamMembership=(join, id,islead=0) =>{
+    let teamMembers = [];
+    if (join) {
+      let thisUser = { TeamId: id, UserId: this.userid, IsLead: islead };
+      teamMembers.splice(0, 0, thisUser);
+    }else{
+      //teamMembers.splice(index, 1);
+    }
+    
+    let body = {
+      UserId: this.userid,
+      tblTeamHackers:teamMembers
+    };
+        
+   return nh4h.put('/users/solutions/' + this.userid, body);
+  }
 
 }
 export default User;

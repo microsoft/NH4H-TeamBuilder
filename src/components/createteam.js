@@ -1,7 +1,6 @@
 import React from 'react';
 import { Dropdown } from 'semantic-ui-react'
-import nh4h from '../apis/nh4h';
-import App from '../App';
+
 
 class TeamForm extends React.Component {
   constructor(props){
@@ -11,7 +10,6 @@ class TeamForm extends React.Component {
     let skills='';
     let chall='';  //Education, Communication
     if(props.team){
-      
       let t=props.team;
       
       name=t.teamName;
@@ -36,7 +34,23 @@ class TeamForm extends React.Component {
       created:false
     };
   }
-
+  componentDidUpdate(prevProps,prevState) {
+    if(prevProps.team !== this.props.team){
+      if(this.props.team){
+        let t=this.props.team;
+        let name=t.teamName;
+        let desc=t.teamDescription;
+        let chall=t.challengeName;
+        console.log(chall);
+        this.setState ({
+          teamName: name,
+          teamDescription: desc,
+          challengeName: chall
+        });
+      }   
+    }
+  
+  }
   handleInputChange = (event,d) => {
     
     const target = event.target;
@@ -52,31 +66,23 @@ class TeamForm extends React.Component {
   }
 
   newTeam=()=>{
-    nh4h.post('/solutions', {
+    let body={
       teamName: this.state.teamName,
       teamDescription: this.state.teamDescription,
       challengeName: this.state.challengeName,
       skillsWanted: this.state.skillsWanted
-    }).then((resp)=>{      
-      let teamid=resp.data.teamId;
-      this.setState({created:true,submitting:false});
-      this.props.JoinTeam('join',teamid);
-      this.props.Callback();
-    }); 
+    }
+    this.props.createTeam(body);
   }
 
   editTeam=()=>{
-    nh4h.put('/solutions/'+this.props.team.teamId, {
+    let body={
       teamName: this.props.team.teamName,
       teamDescription: this.state.teamDescription,
       challengeName: this.state.challengeName,
       skillsWanted: this.state.skillsWanted
-    }).then((resp)=>{
-      
-      let teamid=resp.data.teamId;
-      this.setState({created:true,submitting:false});
-      this.props.Callback();
-    }); 
+    };
+    this.props.editTeam(body);   
   }
   
 
@@ -94,16 +100,17 @@ class TeamForm extends React.Component {
   }
 
   render() {
+    
     //Check if all fields have been populated
     let valid=(
-      this.state.challengeName!=''
-      && this.state.teamName.trim()!=''
-      && this.state.teamDescription.trim()!=''      
+      this.state.challengeName!==''
+      && this.state.teamName.trim()!==''
+      && this.state.teamDescription.trim()!==''      
       );
       
       
     return(
-      <div className="ui segment">                
+      <div hidden={!this.props.visible} className="ui segment">                
         {!this.state.created?
         <form onSubmit={this.handleSubmit} className="ui form">
           {!this.props.team?"":
@@ -111,11 +118,12 @@ class TeamForm extends React.Component {
             <h2>{this.state.teamName}</h2>
           </div>
           }
-
+          {this.props.team?"":
           <div className="field">
             <label>Challenge Area</label>
             <Dropdown name="challengeName" placeholder='Select a challenge' fluid selection options={this.state.challengeNameOptions}  onChange={this.handleInputChange} defaultValue={this.state.challengeName} />
           </div>
+          }
           
           {this.props.team?"":
           <div className="field">
