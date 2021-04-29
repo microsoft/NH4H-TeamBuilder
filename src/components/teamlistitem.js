@@ -1,6 +1,6 @@
 import React from 'react';
 import nh4h from '../apis/nh4h';
-import { Card, Button } from 'semantic-ui-react'
+import { Card, Button, Icon } from 'semantic-ui-react'
 //links to general of prod channel
 const DEF_TEAMSLINK='https://teams.microsoft.com/l/channel/19%3a6c83ba5af8664dc3b1a0d8a8a0774094%40thread.tacv2/General?groupId=abc0763c-f446-424c-ba5f-e374147c11a0&tenantId=e773e193-89d3-44d9-ae4e-17766699f674';
 class TeamListItem extends React.Component {
@@ -46,8 +46,12 @@ class TeamListItem extends React.Component {
                 (!this.props.hasTeam? <Button basic color="green" onClick={()=>{this.props.Callback(true,this.props.id)}}>Join</Button>: '' )            
               :              
                 <div >
-                  <Button basic color='red' onClick={()=>{this.props.Callback(false,this.props.id)}}>Leave</Button>                               
+                   <Button color="green" onClick={()=>{this.props.Callback(true,this.props.id,1)}} icon>
+                    <Icon name='heart' />
+                    Lead
+                  </Button>
                   <Button basic color='blue' onClick={()=>{this.props.edit()}}>Edit</Button>
+                  <Button basic color='red' onClick={()=>{this.props.Callback(false,this.props.id)}}>Leave</Button>                               
                 </div>                
               }
             </Card.Content>
