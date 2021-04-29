@@ -41,18 +41,12 @@ class TeamListItem extends React.Component {
           <div></div>
           
         </div>
-        <div className="extra content">
-        <span className="right floated">
-            <a href={this.getTeamsLink()}>
-              <i className="chat icon nowrap"></i>
-              Chat with {this.state.members} Hacker{this.state.members===1?'':'s'} </a>
-            
-          </span>
+        <div className="extra content">        
           {this.props.isTeamMember?<br/>:''}
          
           <span>
-          {!this.props.isTeamMember?
-          <div className="ui basic green button" onClick={()=>{this.props.Callback(true,this.props.id)}}>Join</div>
+          {!this.props.isTeamMember? 
+            (!this.props.hasTeam? <div className="ui basic green button" onClick={()=>{this.props.Callback(true,this.props.id)}}>Join</div>: '' )            
           :
           <div>
           <div className="ui basic red button" onClick={()=>{this.props.Callback(false,this.props.id)}}>Leave</div>

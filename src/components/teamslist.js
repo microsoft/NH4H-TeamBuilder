@@ -52,7 +52,7 @@ class TeamsList extends React.Component {
   getChallengesList=()=>{
     return this.state.challenges.map((c, index)=>(
       <div key={index} >
-      <Accordion.Title
+      <Accordion.Title        
         active={this.state.activeIndex === index}
         index={index}
         onClick={this.handleClick}
@@ -60,7 +60,10 @@ class TeamsList extends React.Component {
         <Icon name='dropdown' />
        {c}
       </Accordion.Title>
-      <Accordion.Content active={this.state.activeIndex === index}>
+      <Accordion.Content 
+        active={true}
+        //active={this.state.activeIndex === index}
+      >
         <div className="ui special stackable cards">
           {this.getTeamListItems(this.state.teams[c])}
         </div>
@@ -76,6 +79,7 @@ class TeamsList extends React.Component {
       key={teamId} id={teamId} 
       name={teamName} description={teamDescription}
       isTeamMember={teamId===this.props.myteam}
+      hasTeam={this.props.myteam>0}
       challengeName={challengeName}      
       skills={skillsWanted}
       teamslink={msTeamsChannel}
@@ -85,7 +89,10 @@ class TeamsList extends React.Component {
   //{this.getTeamListItems(this.state.teams)}
   render() {
     return(
-      <Accordion fluid styled>
+      <Accordion 
+        fluid 
+        styled                 
+        exclusive={false}>
         {this.getChallengesList()}      
       </Accordion>
     );
