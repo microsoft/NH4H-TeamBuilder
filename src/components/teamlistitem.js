@@ -25,6 +25,7 @@ class TeamListItem extends React.Component {
 
 
   render() {
+    let islead=this.props.islead?this.props.islead===1:false;
     return(
       
         
@@ -46,10 +47,17 @@ class TeamListItem extends React.Component {
                 (!this.props.hasTeam? <Button basic color="green" onClick={()=>{this.props.Callback(true,this.props.id)}}>Join</Button>: '' )            
               :              
                 <div >
-                   <Button color="green" onClick={()=>{this.props.Callback(true,this.props.id,1)}} icon>
+                  {islead?
+                  <Button color="red" onClick={()=>{this.props.Callback(true,this.props.id,0)}} icon>
+                  <Icon name='heart' />
+                  Don't Lead
+                </Button>
+                  :
+                  <Button color="green" onClick={()=>{this.props.Callback(true,this.props.id,1)}} icon>
                     <Icon name='heart' />
                     Lead
                   </Button>
+                  }
                   <Button basic color='blue' onClick={()=>{this.props.edit()}}>Edit</Button>
                   <Button basic color='red' onClick={()=>{this.props.Callback(false,this.props.id)}}>Leave</Button>                               
                 </div>                

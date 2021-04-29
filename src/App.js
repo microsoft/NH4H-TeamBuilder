@@ -66,16 +66,11 @@ class App extends Component {
     .then(()=>{
       this.setState({user:this.state.user});
       if(this.state.user.githubuser){   
-        this.getTeams();
-        this.setState({enableTeamBuilder:true});
         this.state.user.getTeam()
         .then(()=>{
-           
-            let t=this.state.team.allteams.find(obj => obj.teamId === this.state.user.myteam );
-            this.setState({
+           this.setState({
               user:this.state.user,
-              t:t});
-          this.setState({user:this.state.user});
+              enableTeamBuilder:true},()=>{this.getTeams()});
         });
       }else{
         this.setState({enableTeamBuilder:false});
@@ -89,7 +84,13 @@ class App extends Component {
   getTeams = () => {
     this.state.team.getAllTeams()
    .then(()=>{
-     this.setState({team:this.state.team});
+     console.log("hi");
+     this.setState({team:this.state.team},()=>{
+      let t=this.state.team.allteams.find(obj => obj.teamId === this.state.user.myteam );
+      console.log(t);
+      console.log(this.state.team);
+      this.setState({t:t});
+     });
      
     });
     
@@ -137,6 +138,10 @@ saveGitUser=(body)=>{
 
 }
 
+setMyTeam=()=>{
+  let t=this.state.team.allteams.find(obj => obj.teamId === this.state.user.myteam );
+  this.setState({t:t});
+}
 render() {
  
   
@@ -154,7 +159,7 @@ render() {
                   <h2>Your Team </h2>
                   <div className="ui special fluid">
                     <TeamListItem Callback={this.changeTeamMembership} edit={this.toggleShowCreate}
-                    id={this.state.t.teamId} name={this.state.t.teamName} description={this.state.t.teamDescription} challengeName={this.state.t.challengeName} isTeamMember={this.state.t.teamId===this.state.user.myteam} skills={this.state.t.skillsWanted} edit={this.toggleShowCreate} teamslink={this.state.t.msTeamsChannel}/>
+                    islead={this.state.user.islead} id={this.state.t.teamId} name={this.state.t.teamName} description={this.state.t.teamDescription} challengeName={this.state.t.challengeName} isTeamMember={this.state.t.teamId===this.state.user.myteam} skills={this.state.t.skillsWanted} teamslink={this.state.t.msTeamsChannel}/>
                   </div>
                 </div>
               :
