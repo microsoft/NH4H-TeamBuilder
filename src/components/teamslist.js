@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Icon } from 'semantic-ui-react'
+import { Accordion, Icon, Card } from 'semantic-ui-react'
 import TeamListItem from './teamlistitem';
 
 class TeamsList extends React.Component {
@@ -8,7 +8,7 @@ class TeamsList extends React.Component {
     this.state = {
       teams: [],
       challenges:[],
-      activeIndex: 0
+      activeIndex: -1
     }
   }
 
@@ -53,20 +53,18 @@ class TeamsList extends React.Component {
     return this.state.challenges.map((c, index)=>(
       <div key={index} >
       <Accordion.Title        
-        active={this.state.activeIndex === index}
+        active={this.state.activeIndex === index}        
         index={index}
         onClick={this.handleClick}
         >
-        <Icon name='dropdown' />
-       {c}
+        <h3><Icon name='dropdown' />{c}</h3>
       </Accordion.Title>
-      <Accordion.Content 
-        active={true}
-        //active={this.state.activeIndex === index}
-      >
-        <div className="ui special stackable cards">
-          {this.getTeamListItems(this.state.teams[c])}
-        </div>
+      <Accordion.Content         
+        active={this.state.activeIndex === index}
+      >          
+         <Card.Group>
+          {this.getTeamListItems(this.state.teams[c])}
+        </Card.Group>   
       </Accordion.Content>
       </div>
     ));
