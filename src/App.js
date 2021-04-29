@@ -106,7 +106,7 @@ class App extends Component {
     body.modifiedBy=this.state.user.email; 
     this.state.team.editTeam(this.state.user.myteam,body)
     .then(()=>{
-      this.editMyTeam();
+      this.toggleShowCreate();
       this.getTeams();  
     });
    }
@@ -123,19 +123,6 @@ class App extends Component {
 
 toggleShowCreate =()=>{
   this.setState({showCreate:!this.state.showCreate});
-}
-
-editMyTeam=()=>{  
-  this.setState({showCreate:!this.state.showCreate});  
-}
-
-
-filteroutMyTeam=()=>{
-  let res=this.state.team.allteams.filter(t => t.teamId!==this.state.user.myteam);
-  if (res.length!==this.state.team.allteams.length)
-  { 
-    this.setState({teams:res});
-  }
 }
 
 saveGitUser=(body)=>{
@@ -163,8 +150,8 @@ render() {
                 <div hidden={this.state.showCreate}>
                   <h2>Your Team </h2>
                   <div className="ui special fluid">
-                    <TeamListItem Callback={this.changeTeamMembership} edit={this.editMyTeam}
-                    id={this.state.t.teamId} name={this.state.t.teamName} description={this.state.t.teamDescription} challengeName={this.state.t.challengeName} isTeamMember={this.state.t.teamId===this.state.user.myteam} skills={this.state.t.skillsWanted} dit={this.editMyTeam} teamslink={this.state.t.msTeamsChannel}/>
+                    <TeamListItem Callback={this.changeTeamMembership} edit={this.toggleShowCreate}
+                    id={this.state.t.teamId} name={this.state.t.teamName} description={this.state.t.teamDescription} challengeName={this.state.t.challengeName} isTeamMember={this.state.t.teamId===this.state.user.myteam} skills={this.state.t.skillsWanted} edit={this.toggleShowCreate} teamslink={this.state.t.msTeamsChannel}/>
                   </div>
                 </div>
               :
@@ -172,7 +159,7 @@ render() {
               }
               <TeamForm visible={this.state.showCreate} team={this.state.t} createTeam={this.CreateNewTeam} editTeam={this.editTeam} />
               <br/><h2>All Teams</h2>
-              <TeamsList edit={this.editMyTeam} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} />
+              <TeamsList edit={this.toggleShowCreate} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} />
             </div>
           :
             <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} />
