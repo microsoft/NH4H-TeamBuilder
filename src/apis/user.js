@@ -29,6 +29,7 @@ class User {
   sonsielnewsletter;
   msftnewsletter;
   myteam;
+  islead;
   githubid;
   githubuser;
 
@@ -138,8 +139,8 @@ class User {
    return nh4h.get(User.APIURL +'solutions/'+this.userid)
     .then((resp)=>{
       if(resp.data.teamId.length>0) {
-        let myteam=resp.data.teamId[0];
-        this.myteam=myteam;       
+        this.myteam=resp.data.teamId[0];
+        this.islead=resp.data.isLead;
       }          
     });
   }
