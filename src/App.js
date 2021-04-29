@@ -64,18 +64,21 @@ class App extends Component {
   getUserInfo = () => {
     this.state.user.getUserID()
     .then(()=>{
+      this.setState({user:this.state.user});
       if(this.state.user.githubuser){   
         this.getTeams();
         this.setState({enableTeamBuilder:true});
         this.state.user.getTeam()
         .then(()=>{
-            console.log(this.state.user);
+           
             let t=this.state.team.allteams.find(obj => obj.teamId === this.state.user.myteam );
             this.setState({
               user:this.state.user,
               t:t});
           this.setState({user:this.state.user});
         });
+      }else{
+        this.setState({enableTeamBuilder:false});
       }
     });  
       
