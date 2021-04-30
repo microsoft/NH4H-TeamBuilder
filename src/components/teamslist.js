@@ -81,6 +81,7 @@ class TeamsList extends React.Component {
       challengeName={challengeName}      
       skills={skillsWanted}
       teamslink={msTeamsChannel}
+      msTeamsChannel={msTeamsChannel}
       />
   ))
   }

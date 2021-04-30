@@ -25,36 +25,31 @@ class TeamListItem extends React.Component {
 
 
   render() {
-    return(
-      
+    return(      
         
           <Card fluid color='teal'>
             <Card.Content>
-              <Card.Header>
-                {!this.props.isTeamMember? (this.props.name): (this.props.name)}                      
-              </Card.Header>              
-              <Card.Description>
-                {this.props.description}
-                <br/>
-                <strong>We are looking for people with the following skills: {this.props.skills}</strong>
-                <br/>
-              </Card.Description>              
-         
-            </Card.Content>
-            <Card.Content extra textAlign={'right'}>
               {!this.props.isTeamMember? 
-                (!this.props.hasTeam? <Button basic color="green" onClick={()=>{this.props.Callback(true,this.props.id)}}>Join</Button>: '' )            
-              :              
-                <div >
-                  <Button basic color='red' onClick={()=>{this.props.Callback(false,this.props.id)}}>Leave</Button>                               
-                  <Button basic color='blue' onClick={()=>{this.props.edit()}}>Edit</Button>
-                </div>                
+                (!this.props.hasTeam? <Button  floated='right' basic color="green" onClick={()=>{this.props.Callback(true,this.props.id)}}>Join</Button>: '' )            
+                :              
+                  <div>
+                    <Button floated='right' basic color='red' onClick={()=>{this.props.Callback(false,this.props.id)}}>Leave</Button>                               
+                    <Button floated='right' basic color='blue' onClick={()=>{this.props.edit()}}>Edit</Button>
+                  </div>                
               }
-            </Card.Content>
-          </Card>
+              <Card.Header>
+              {this.props.msTeamsChannel} : {this.props.name}                                    
+              </Card.Header>
+                         
+              <Card.Description>
+              <strong>{this.props.description}
+                <br></br><br></br>
 
-       
-      
+               We are looking for people with the following skills:</strong> {this.props.skills}
+                <br/>
+              </Card.Description>    
+            </Card.Content>
+          </Card>      
     )
   }
 }

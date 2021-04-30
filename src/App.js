@@ -77,10 +77,7 @@ class App extends Component {
           this.setState({user:this.state.user});
         });
       }
-    });  
-      
-       
-        
+    });          
   }
   
   getTeams = () => {
@@ -164,7 +161,7 @@ render() {
                   <h2>Your Team </h2>
                   <div className="ui special fluid">
                     <TeamListItem Callback={this.changeTeamMembership} edit={this.editMyTeam}
-                    id={this.state.t.teamId} name={this.state.t.teamName} description={this.state.t.teamDescription} challengeName={this.state.t.challengeName} isTeamMember={this.state.t.teamId===this.state.user.myteam} skills={this.state.t.skillsWanted} dit={this.editMyTeam} teamslink={this.state.t.msTeamsChannel}/>
+                    id={this.state.t.teamId} name={this.state.t.teamName} description={this.state.t.teamDescription} challengeName={this.state.t.challengeName} isTeamMember={this.state.t.teamId===this.state.user.myteam} skills={this.state.t.skillsWanted} dit={this.editMyTeam} teamslink={this.state.t.msTeamsChannel} msTeamsChannel={this.state.t.msTeamsChannel}/>
                   </div>
                 </div>
               :
