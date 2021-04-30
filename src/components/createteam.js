@@ -18,11 +18,11 @@ class TeamForm extends React.Component {
       desc=t.teamDescription;
       skills=t.skillsWanted;
       chall=t.challengeName;
-      channel=t.mSTeamsChannel;
+      channel=t.msTeamsChannel;
     }
 
     const channelItems = [];
-    channelItems.push({key:'', text:'', value:''});
+    //channelItems.push({key:'', text:'', value:''});
     for (let i = 1; i < 21; i++) {  channelItems.push({key:'Team 1.'+('0' + i).slice(-2), text:'Team 1.'+('0' + i).slice(-2), value:'Team 1.'+('0' + i).slice(-2)}); }
     for (let i = 1; i < 21; i++) {  channelItems.push({key:'Team 2.'+('0' + i).slice(-2), text:'Team 2.'+('0' + i).slice(-2), value:'Team 2.'+('0' + i).slice(-2)}); }
     for (let i = 1; i < 21; i++) {  channelItems.push({key:'Team 3.'+('0' + i).slice(-2), text:'Team 3.'+('0' + i).slice(-2), value:'Team 3.'+('0' + i).slice(-2)}); }
@@ -44,7 +44,7 @@ class TeamForm extends React.Component {
       teamActive: 1,
       submitting:false,
       created:false,
-      mSTeamsChannel:channel,
+      msTeamsChannel:channel,
       channelOptions: channelItems
     };
   }
@@ -55,14 +55,15 @@ class TeamForm extends React.Component {
         let name=t.teamName;
         let desc=t.teamDescription;
         let chall=t.challengeName;
-        let channel=t.mSTeamsChannel;
+        let channel=t.msTeamsChannel;
+        console.log(t);
         console.log('channel from db=' + channel);
         console.log(chall);
         this.setState ({
           teamName: name,
           teamDescription: desc,
           challengeName: chall,
-          mSTeamsChannel: channel
+          msTeamsChannel: channel
         });
       }   
     }
@@ -83,14 +84,14 @@ class TeamForm extends React.Component {
   }
 
   newTeam=()=>{
-    console.log('team channel: ' + this.state.mSTeamsChannel);
+    console.log('team channel: ' + this.state.msTeamsChannel);
 
     let body={
       teamName: this.state.teamName,
       teamDescription: this.state.teamDescription,
       challengeName: this.state.challengeName,
       skillsWanted: this.state.skillsWanted,      
-      mSTeamsChannel: this.state.mSTeamsChannel
+      msTeamsChannel: this.state.msTeamsChannel
     }
     this.props.createTeam(body);
   }
@@ -101,7 +102,7 @@ class TeamForm extends React.Component {
       teamDescription: this.state.teamDescription,
       challengeName: this.state.challengeName,
       skillsWanted: this.state.skillsWanted,
-      mSTeamsChannel: this.state.mSTeamsChannel
+      msTeamsChannel: this.state.msTeamsChannel
     };
     this.props.editTeam(body);   
   }
@@ -125,7 +126,7 @@ class TeamForm extends React.Component {
     //Check if all fields have been populated
     let valid=(
       this.state.challengeName!==''
-      && this.state.mSTeamsChannel!==''
+      && this.state.msTeamsChannel!==''
       && this.state.teamName.trim()!==''
       && this.state.teamDescription.trim()!==''      
       );
@@ -146,10 +147,11 @@ class TeamForm extends React.Component {
               <Dropdown name="challengeName" placeholder='Select a challenge' fluid selection options={this.state.challengeNameOptions}  onChange={this.handleInputChange} defaultValue={this.state.challengeName} />              
             </div>
           }
-          
+
           <div className="field">                      
               <label>Assigned Team Channel</label>
-              <Dropdown name="mSTeamsChannel" placeholder='Select your assigned Team Channel' fluid selection options={this.state.channelOptions}  onChange={this.handleInputChange} defaultValue={this.state.msTeamsChannel} />
+              <Dropdown name="msTeamsChannel" placeholder={this.state.msTeamsChannel} fluid selection options={this.state.channelOptions}  onChange={this.handleInputChange} defaultValue={this.state.msTeamsChannel} />
+              
           </div>
 
           {this.props.team?"":
