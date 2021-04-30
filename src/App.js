@@ -64,18 +64,16 @@ class App extends Component {
   getUserInfo = () => {
     this.state.user.getUserID()
     .then(()=>{
+      this.setState({user:this.state.user});
       if(this.state.user.githubuser){   
-        this.getTeams();
-        this.setState({enableTeamBuilder:true});
         this.state.user.getTeam()
         .then(()=>{
-            console.log(this.state.user);
-            let t=this.state.team.allteams.find(obj => obj.teamId === this.state.user.myteam );
-            this.setState({
+           this.setState({
               user:this.state.user,
-              t:t});
-          this.setState({user:this.state.user});
+              enableTeamBuilder:true},()=>{this.getTeams()});
         });
+      }else{
+        this.setState({enableTeamBuilder:false});
       }
     });          
   }
@@ -83,7 +81,13 @@ class App extends Component {
   getTeams = () => {
     this.state.team.getAllTeams()
    .then(()=>{
-     this.setState({team:this.state.team});
+     console.log("hi");
+     this.setState({team:this.state.team},()=>{
+      let t=this.state.team.allteams.find(obj => obj.teamId === this.state.user.myteam );
+      console.log(t);
+      console.log(this.state.team);
+      this.setState({t:t});
+     });
      
     });
     
@@ -103,7 +107,7 @@ class App extends Component {
     body.modifiedBy=this.state.user.email; 
     this.state.team.editTeam(this.state.user.myteam,body)
     .then(()=>{
-      this.editMyTeam();
+      this.toggleShowCreate();
       this.getTeams();  
     });
    }
@@ -122,19 +126,6 @@ toggleShowCreate =()=>{
   this.setState({showCreate:!this.state.showCreate});
 }
 
-editMyTeam=()=>{  
-  this.setState({showCreate:!this.state.showCreate});  
-}
-
-
-filteroutMyTeam=()=>{
-  let res=this.state.team.allteams.filter(t => t.teamId!==this.state.user.myteam);
-  if (res.length!==this.state.team.allteams.length)
-  { 
-    this.setState({teams:res});
-  }
-}
-
 saveGitUser=(body)=>{
   body.UserId=this.state.user.userid;
   nh4h.put("/users/github/" + this.state.user.userid, body )
@@ -144,6 +135,10 @@ saveGitUser=(body)=>{
 
 }
 
+setMyTeam=()=>{
+  let t=this.state.team.allteams.find(obj => obj.teamId === this.state.user.myteam );
+  this.setState({t:t});
+}
 render() {
  
   
@@ -160,8 +155,8 @@ render() {
                 <div hidden={this.state.showCreate}>
                   <h2>Your Team </h2>
                   <div className="ui special fluid">
-                    <TeamListItem Callback={this.changeTeamMembership} edit={this.editMyTeam}
-                    id={this.state.t.teamId} name={this.state.t.teamName} description={this.state.t.teamDescription} challengeName={this.state.t.challengeName} isTeamMember={this.state.t.teamId===this.state.user.myteam} skills={this.state.t.skillsWanted} dit={this.editMyTeam} teamslink={this.state.t.msTeamsChannel} msTeamsChannel={this.state.t.msTeamsChannel}/>
+                    <TeamListItem Callback={this.changeTeamMembership} edit={this.toggleShowCreate}
+                    islead={this.state.user.islead} id={this.state.t.teamId} name={this.state.t.teamName} description={this.state.t.teamDescription} challengeName={this.state.t.challengeName} isTeamMember={this.state.t.teamId===this.state.user.myteam} skills={this.state.t.skillsWanted} teamslink={this.state.t.msTeamsChannel} msTeamsChannel={this.state.t.msTeamsChannel}/>
                   </div>
                 </div>
               :
@@ -169,7 +164,7 @@ render() {
               }
               <TeamForm visible={this.state.showCreate} team={this.state.t} createTeam={this.CreateNewTeam} editTeam={this.editTeam} />
               <br/><h2>All Teams</h2>
-              <TeamsList edit={this.editMyTeam} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} />
+              <TeamsList edit={this.toggleShowCreate} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} />
             </div>
           :
             <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} />
