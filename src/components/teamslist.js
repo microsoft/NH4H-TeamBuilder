@@ -70,22 +70,18 @@ class TeamsList extends React.Component {
     ));
   }
   getTeamListItems=(teamlist)=>{
-  return teamlist.map( ({teamId, teamName, teamDescription,skillsWanted,tblTeamHackers,challengeName,msTeamsChannel}) => ( 
+  return teamlist.map( (team) => ( 
     <TeamListItem 
       Callback={this.joinOrLeaveTeam} 
       edit={this.editTeam}
-      key={teamId} id={teamId} 
-      name={teamName} description={teamDescription}
-      isTeamMember={teamId===this.props.myteam}
+      key={team.teamId}
+      team={team}
+      isTeamMember={team.teamId===this.props.myteam}
       hasTeam={this.props.myteam>0}
-      challengeName={challengeName}      
-      skills={skillsWanted}
-      teamslink={msTeamsChannel}
-      msTeamsChannel={msTeamsChannel}
       />
   ))
   }
-  //{this.getTeamListItems(this.state.teams)}
+  
   render() {
     return(
       <Accordion 
