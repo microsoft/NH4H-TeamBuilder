@@ -9,6 +9,8 @@ class TeamForm extends React.Component {
     let desc='';
     let skills='';
     let chall='';  //Education, Communication
+    let channel=''; //team channel
+
     if(props.team){
       let t=props.team;
       
@@ -16,7 +18,17 @@ class TeamForm extends React.Component {
       desc=t.teamDescription;
       skills=t.skillsWanted;
       chall=t.challengeName;
+      channel=t.msTeamsChannel;
     }
+
+    const channelItems = [];
+    //channelItems.push({key:'', text:'', value:''});
+    for (let i = 1; i < 21; i++) {  channelItems.push({key:'Team 1.'+('0' + i).slice(-2), text:'Team 1.'+('0' + i).slice(-2), value:'Team 1.'+('0' + i).slice(-2)}); }
+    for (let i = 1; i < 21; i++) {  channelItems.push({key:'Team 2.'+('0' + i).slice(-2), text:'Team 2.'+('0' + i).slice(-2), value:'Team 2.'+('0' + i).slice(-2)}); }
+    for (let i = 1; i < 21; i++) {  channelItems.push({key:'Team 3.'+('0' + i).slice(-2), text:'Team 3.'+('0' + i).slice(-2), value:'Team 3.'+('0' + i).slice(-2)}); }
+    for (let i = 1; i < 21; i++) {  channelItems.push({key:'Team 4.'+('0' + i).slice(-2), text:'Team 4.'+('0' + i).slice(-2), value:'Team 4.'+('0' + i).slice(-2)}); }
+    for (let i = 1; i < 21; i++) {  channelItems.push({key:'Team 5.'+('0' + i).slice(-2), text:'Team 5.'+('0' + i).slice(-2), value:'Team 5.'+('0' + i).slice(-2)}); }
+    
     this.state = {
       teamName: name,
       teamDescription: desc,
@@ -31,7 +43,9 @@ class TeamForm extends React.Component {
       skillsWanted:skills,
       teamActive: 1,
       submitting:false,
-      created:false
+      created:false,
+      msTeamsChannel:channel,
+      channelOptions: channelItems
     };
   }
   componentDidUpdate(prevProps,prevState) {
@@ -41,11 +55,15 @@ class TeamForm extends React.Component {
         let name=t.teamName;
         let desc=t.teamDescription;
         let chall=t.challengeName;
+        let channel=t.msTeamsChannel;
+        console.log(t);
+        console.log('channel from db=' + channel);
         console.log(chall);
         this.setState ({
           teamName: name,
           teamDescription: desc,
-          challengeName: chall
+          challengeName: chall,
+          msTeamsChannel: channel
         });
       }   
     }
@@ -66,11 +84,14 @@ class TeamForm extends React.Component {
   }
 
   newTeam=()=>{
+    console.log('team channel: ' + this.state.msTeamsChannel);
+
     let body={
       teamName: this.state.teamName,
       teamDescription: this.state.teamDescription,
       challengeName: this.state.challengeName,
-      skillsWanted: this.state.skillsWanted
+      skillsWanted: this.state.skillsWanted,      
+      msTeamsChannel: this.state.msTeamsChannel
     }
     this.props.createTeam(body);
   }
@@ -80,7 +101,8 @@ class TeamForm extends React.Component {
       teamName: this.props.team.teamName,
       teamDescription: this.state.teamDescription,
       challengeName: this.state.challengeName,
-      skillsWanted: this.state.skillsWanted
+      skillsWanted: this.state.skillsWanted,
+      msTeamsChannel: this.state.msTeamsChannel
     };
     this.props.editTeam(body);   
   }
@@ -104,6 +126,7 @@ class TeamForm extends React.Component {
     //Check if all fields have been populated
     let valid=(
       this.state.challengeName!==''
+      && this.state.msTeamsChannel!==''
       && this.state.teamName.trim()!==''
       && this.state.teamDescription.trim()!==''      
       );
@@ -114,23 +137,30 @@ class TeamForm extends React.Component {
         {!this.state.created?
         <form onSubmit={this.handleSubmit} className="ui form">
           {!this.props.team?"":
-          <div className="field">            
-            <h2>{this.state.teamName}</h2>
-          </div>
+            <div className="field">            
+              <h2>{this.state.teamName}</h2>
+            </div>
           }
           {this.props.team?"":
-          <div className="field">
-            <label>Challenge Area</label>
-            <Dropdown name="challengeName" placeholder='Select a challenge' fluid selection options={this.state.challengeNameOptions}  onChange={this.handleInputChange} defaultValue={this.state.challengeName} />
-          </div>
+            <div className="field">
+              <label>Challenge Area</label>
+              <Dropdown name="challengeName" placeholder='Select a challenge' fluid selection options={this.state.challengeNameOptions}  onChange={this.handleInputChange} defaultValue={this.state.challengeName} />              
+            </div>
           }
-          
+
+          <div className="field">                      
+              <label>Assigned Team Channel</label>
+              <Dropdown name="msTeamsChannel" placeholder={this.state.msTeamsChannel} fluid selection options={this.state.channelOptions}  onChange={this.handleInputChange} defaultValue={this.state.msTeamsChannel} />
+              
+          </div>
+
           {this.props.team?"":
           <div className="field">
             <label>Team Name</label>
             <input value={this.state.teamName} name="teamName" type="text" onChange={this.handleInputChange}/>
           </div>
           }
+          
           <div className="field">
             <label>Team description</label>
             <textarea value={this.state.teamDescription} name="teamDescription" rows="2" onChange={this.handleInputChange}></textarea>

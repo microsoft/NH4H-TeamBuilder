@@ -1,21 +1,34 @@
 import nh4h from './nh4h';
-
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { gql } from '@apollo/client';
+const TEAMSQUERY=gql `
+query{
+  teams:getAllTeams{teamName teamId teamDescription   githubURL 
+    skillsWanted modifiedBy createdBy challengeName
+    msTeamsChannel Users{userID}}
+}
+`;
 class Team {
   static APIURL='/solutions';  
- 
+  static GRAPHAPIURL='https://nh4hgrap.azurewebsites.net/api/hack';//'http://localhost:7071/api/hack';
     
   teamid;
   allteams;
- 
+  graphclient;
 
   constructor(){
     this.allteams=[];
+    this.graphclient = new ApolloClient({
+      uri: Team.GRAPHAPIURL,
+      cache: new InMemoryCache()
+    });
   }
 
   getAllTeams=()=>{
-    return nh4h.get(Team.APIURL)
-    .then((response) => {
-      this.allteams=response.data;
+   return this.graphclient.query({
+      query:TEAMSQUERY
+    }).then((response)=>{
+      this.allteams=response.data.teams;
     });
   }
   createNewTeam=(body)=>{
