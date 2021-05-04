@@ -26,12 +26,12 @@ class TeamListItem extends React.Component {
                   <Button floated='right' basic color='red' onClick={()=>{this.props.Callback(false, this.props.team.teamId, this.props.team.teamName)}}>Leave</Button>   
                   <Button floated='right' basic color='blue' onClick={()=>{this.props.edit()}}>Edit</Button>
                   {islead?
-                  <Button floated='right' color="red" onClick={()=>{this.props.Callback(true, this.props.team.id, 0, 0)}} icon>
+                  <Button floated='right' color="red" onClick={()=>{this.props.Callback(true, this.props.team.teamId, 0, 0)}} icon>
                   <Icon name='heart' />
                   Don't Lead
                 </Button>
                   :
-                  <Button floated='right' color="green" onClick={()=>{this.props.Callback(true, this.props.team.id, 0, 1)}} icon>
+                  <Button floated='right' color="green" onClick={()=>{this.props.Callback(true, this.props.team.teamId, 0, 1)}} icon>
                     <Icon name='heart' />
                     Lead
                   </Button>
