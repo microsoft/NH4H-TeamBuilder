@@ -33,8 +33,8 @@ class TeamsList extends React.Component {
   }
   }
 
-  joinOrLeaveTeam=(type,id)=>{
-    this.props.Callback(type,id);
+  joinOrLeaveTeam=(type,id, name)=>{
+    this.props.Callback(type,id, name);
   }
 
   editTeam=(e)=>{

@@ -43,7 +43,7 @@ class TeamListItem extends React.Component {
             </Card.Content>
             <Card.Content extra textAlign={'right'}>
               {!this.props.isTeamMember? 
-                (!this.props.hasTeam? <Button basic color="green" onClick={()=>{this.props.Callback(true,this.props.id)}}>Join</Button>: '' )            
+                (!this.props.hasTeam? <Button basic color="green" onClick={()=>{this.props.Callback(true,this.props.id, this.props.name)}}>Join</Button>: '' )            
               :              
                 <div >
                    <Button color="green" onClick={()=>{this.props.Callback(true,this.props.id,1)}} icon>
@@ -51,7 +51,7 @@ class TeamListItem extends React.Component {
                     Lead
                   </Button>
                   <Button basic color='blue' onClick={()=>{this.props.edit()}}>Edit</Button>
-                  <Button basic color='red' onClick={()=>{this.props.Callback(false,this.props.id)}}>Leave</Button>                               
+                  <Button basic color='red' onClick={()=>{this.props.Callback(false,this.props.id, this.props.name)}}>Leave</Button>                               
                 </div>                
               }
             </Card.Content>
