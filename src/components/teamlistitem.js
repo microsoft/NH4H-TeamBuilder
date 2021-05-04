@@ -44,7 +44,9 @@ class TeamListItem extends React.Component {
                          
               <Card.Description>
               <strong>{this.props.team.teamDescription}
-                <br></br><br></br>
+                <br></br>
+                {this.props.team.Users.hackers.length} teamMembers
+                <br></br>
 
                We are looking for people with the following skills:</strong> {this.props.team.skills}
                 <br/>
