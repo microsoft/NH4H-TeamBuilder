@@ -138,6 +138,7 @@ class User {
   getTeam=()=>{
    return nh4h.get(User.APIURL +'solutions/'+this.userid)
     .then((resp)=>{
+      console.log("resp", resp);
       if(resp.data.teamId.length>0) {
         this.myteam=resp.data.teamId[0];
         this.islead=resp.data.isLead;

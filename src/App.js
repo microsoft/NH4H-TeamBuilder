@@ -81,7 +81,6 @@ class App extends Component {
   getTeams = () => {
     this.state.team.getAllTeams()
    .then(()=>{
-     console.log("hi");
      this.setState({team:this.state.team},()=>{
       let t=this.state.team.allteams.find(obj => obj.teamId === this.state.user.myteam );
       console.log(t);
@@ -112,9 +111,9 @@ class App extends Component {
     });
    }
 
-  changeTeamMembership=(join, id, name, islead=0) =>{
+  changeTeamMembership=(join, id, name, isFromCreate, islead=0) =>{
     console.log("name", name)
-    this.state.user.changeTeamMembership(join, id, name, 0, islead)
+    this.state.user.changeTeamMembership(join, id, name, isFromCreate, islead)
     .then(()=>{
       //refresh teams list
       //this.setState({myteam:-1,t:null},()=>{this.getUserID();});
