@@ -61,7 +61,7 @@ class User {
           this.githubid=response.data.gitHubId;
           this.githubuser=response.data.gitHubUser;
           
-//console.log("pre-reg role" + response.data[User.ROLE]);
+
           if(this.role==="Preregistrant"){
            this.role=response.data[User.ROLE];
           }//else role has been modified via an OTC and shouldn't be touched
@@ -115,7 +115,6 @@ class User {
     return nh4h.post(User.APICODEURL,body)
       .then((response)=>{
         if(!response.data.returnError){
-//           console.log("Code valid. Role "+response.data);
             this.role=response.data;
         }
       })
@@ -141,6 +140,9 @@ class User {
       if(resp.data.teamId.length>0) {
         this.myteam=resp.data.teamId[0];
         this.islead=resp.data.isLead;
+      }else{
+        this.islead=0;
+        this.myteam=null;
       }          
     });
   }

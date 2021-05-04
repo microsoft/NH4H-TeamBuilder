@@ -3,7 +3,7 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { gql } from '@apollo/client';
 const TEAMSQUERY=gql `
 query{
-  teams:getAllTeams{teamName teamId teamDescription   githubURL 
+  teams:getAllTeams{teamName id:teamId teamDescription   githubURL 
     skillsWanted modifiedBy createdBy challengeName
     msTeamsChannel Users{userID}}
 }

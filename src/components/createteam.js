@@ -56,9 +56,6 @@ class TeamForm extends React.Component {
         let desc=t.teamDescription;
         let chall=t.challengeName;
         let channel=t.msTeamsChannel;
-        console.log(t);
-        console.log('channel from db=' + channel);
-        console.log(chall);
         this.setState ({
           teamName: name,
           teamDescription: desc,
@@ -84,8 +81,6 @@ class TeamForm extends React.Component {
   }
 
   newTeam=()=>{
-    console.log('team channel: ' + this.state.msTeamsChannel);
-
     let body={
       teamName: this.state.teamName,
       teamDescription: this.state.teamDescription,

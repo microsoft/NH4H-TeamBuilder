@@ -26,16 +26,12 @@ class App extends Component {
       team: new Team(),
       username: "",
       email: "",
-      githubid: null,
       enableTeamBuilder:false,
-      userid: null,
       loggedin: false,
-      teams: [],
       t:null,
       myteam:-1,
       showcreate:false,
-      skillsWantedOptions:[],
-      allteams:[]
+      skillsWantedOptions:[]
     };
   }
 
@@ -68,7 +64,7 @@ class App extends Component {
       if(this.state.user.githubuser){   
         this.state.user.getTeam()
         .then(()=>{
-           this.setState({
+          this.setState({
               user:this.state.user,
               enableTeamBuilder:true},()=>{this.getTeams()});
         });
@@ -81,12 +77,8 @@ class App extends Component {
   getTeams = () => {
     this.state.team.getAllTeams()
    .then(()=>{
-     console.log("hi");
-     this.setState({team:this.state.team},()=>{
-      let t=this.state.team.allteams.find(obj => obj.teamId === this.state.user.myteam );
-      console.log(t);
-      console.log(this.state.team);
-      this.setState({t:t});
+     this.setState({team:this.state.team,user:this.state.user},()=>{
+      this.setMyTeam();
      });
      
     });
@@ -113,11 +105,12 @@ class App extends Component {
    }
 
   changeTeamMembership=(join, id,islead=0) =>{
+    
+      
+    
     this.state.user.changeTeamMembership(join,id,islead)
     .then(()=>{
-      //refresh teams list
-      //this.setState({myteam:-1,t:null},()=>{this.getUserID();});
-      this.getTeams();
+     
       this.getUserInfo();
     });
   }
@@ -136,7 +129,7 @@ saveGitUser=(body)=>{
 }
 
 setMyTeam=()=>{
-  let t=this.state.team.allteams.find(obj => obj.teamId === this.state.user.myteam );
+  let t=this.state.team.allteams.find(obj => obj.id === this.state.user.myteam );
   this.setState({t:t});
 }
 render() {
@@ -151,12 +144,12 @@ render() {
         :
           this.state.enableTeamBuilder ?
             <div id="TeamBuilder">
-              {this.state.t?
+              {this.state.user.myteam?
                 <div hidden={this.state.showCreate}>
                   <h2>Your Team </h2>
                   <div className="ui special fluid">
                     <TeamListItem Callback={this.changeTeamMembership} edit={this.toggleShowCreate}
-                    islead={this.state.user.islead} id={this.state.t.teamId} name={this.state.t.teamName} description={this.state.t.teamDescription} challengeName={this.state.t.challengeName} isTeamMember={this.state.t.teamId===this.state.user.myteam} skills={this.state.t.skillsWanted} teamslink={this.state.t.msTeamsChannel} msTeamsChannel={this.state.t.msTeamsChannel}/>
+                    islead={this.state.user.islead} team={this.state.t} isTeamMember={true} />
                   </div>
                 </div>
               :
