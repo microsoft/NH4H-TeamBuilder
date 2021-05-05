@@ -1,6 +1,7 @@
 import React from 'react';
 import { Accordion, Icon, Card } from 'semantic-ui-react'
 import TeamListItem from './teamlistitem';
+var _ = require('agile');
 
 class TeamsList extends React.Component {
   constructor(props){
@@ -50,6 +51,9 @@ class TeamsList extends React.Component {
 }
   // {this.getTeamListItems(this.state.teams[c])}
   getChallengesList=()=>{
+    const n = this.state.challenges.sort();
+    
+    
     return this.state.challenges.map((c, index)=>(
       <div key={index} >
       <Accordion.Title        
@@ -70,7 +74,8 @@ class TeamsList extends React.Component {
     ));
   }
   getTeamListItems=(teamlist)=>{
-  return teamlist.map( (team) => ( 
+    const t = _.orderBy(teamlist, 'msTeamsChannel')
+  return t.map( (team) => ( 
     <TeamListItem 
       Callback={this.joinOrLeaveTeam} 
       edit={this.editTeam}
