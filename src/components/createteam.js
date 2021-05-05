@@ -84,7 +84,7 @@ class TeamForm extends React.Component {
 
   updateDropDown = (n) => {
     this.state.channelOptions = []
-    for (let i = 1; i < 21; i++) { this.state.channelOptions.push({ key: 'Team '+ n + '.' + ('0' + i).slice(-2), text: 'Team '+ n + '.' + ('0' + i).slice(-2), value: 'Team 1.' + ('0' + i).slice(-2) }); }
+    for (let i = 1; i < 21; i++) { this.state.channelOptions.push({ key: 'Team '+ n + '.' + ('0' + i).slice(-2), text: 'Team '+ n + '.' + ('0' + i).slice(-2), value: 'Team ' + n +'.' + ('0' + i).slice(-2) }); }
   }
 
   newTeam = () => {
