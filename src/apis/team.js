@@ -5,7 +5,7 @@ const TEAMSQUERY=gql `
 query{
   teams:getAllTeams{teamName id:teamId teamDescription   githubURL 
     skillsWanted modifiedBy createdBy challengeName
-    msTeamsChannel Users{userID}}
+    msTeamsChannel Users{hackers{islead name} }}
 }
 `;
 class Team {
