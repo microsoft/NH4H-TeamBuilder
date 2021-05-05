@@ -34,6 +34,7 @@ class Team {
   createNewTeam=(body)=>{
     return nh4h.post(Team.APIURL, body)
           .then((response)=>{
+            console.log("in team createNewTeam", response)
             this.teamid=response.data.teamId;
           });
     

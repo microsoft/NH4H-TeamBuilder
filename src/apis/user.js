@@ -147,10 +147,13 @@ class User {
     });
   }
 
-  changeTeamMembership=(join, id,islead=0) =>{
+  changeTeamMembership=(join, id, name, isFromCreate = 0, islead=0) =>{
     let teamMembers = [];
+    let teamSlug = name.replace(/ +/g, "-");
+
     if (join) {
-      let thisUser = { TeamId: id, UserId: this.userid, IsLead: islead };
+      let thisUser = { TeamId: id, UserId: this.userid,  IsLead: islead };
+      
       teamMembers.splice(0, 0, thisUser);
     }else{
       //teamMembers.splice(index, 1);
@@ -158,10 +161,12 @@ class User {
     
     let body = {
       UserId: this.userid,
+      GitHubUser: this.githubuser,
+      GitHubId: this.githubid,
       tblTeamHackers:teamMembers
     };
         
-   return nh4h.put('/users/solutions/' + this.userid, body);
+   return nh4h.put('/users/solutions/' + this.userid + '?teamName=' + teamSlug + '&isFromCreate=' + isFromCreate, body);
   }
 
 }

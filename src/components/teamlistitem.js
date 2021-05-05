@@ -19,23 +19,22 @@ class TeamListItem extends React.Component {
           <Card fluid color='teal'>
             <Card.Content>
             {!this.props.isTeamMember? 
-                (!this.props.hasTeam? <Button floated='right' basic color="green" onClick={()=>{this.props.Callback(true,this.props.team.id)}}>Join</Button>: '' )            
+                (!this.props.hasTeam? <Button floated='right' basic color="green" onClick={()=>{this.props.Callback(true,this.props.team.id, this.props.team.teamName)}}>Join</Button>: '' )            
               :              
                 <div >                  
-                  <Button floated='right' basic color='red' onClick={()=>{this.props.Callback(false,this.props.team.id)}}>Leave</Button>   
+                  <Button floated='right' basic color='red' onClick={()=>{this.props.Callback(false, this.props.team.id, this.props.team.teamName)}}>Leave</Button>   
                   <Button floated='right' basic color='blue' onClick={()=>{this.props.edit()}}>Edit</Button>
                   {islead?
-                  <Button floated='right' color="red" onClick={()=>{this.props.Callback(true,this.props.team.id,0)}} icon>
+                  <Button floated='right' color="red" onClick={()=>{this.props.Callback(true, this.props.team.id, this.props.team.teamName, 0, 0)}} icon>
                   <Icon name='heart' />
                   Don't Lead
                 </Button>
                   :
-                  <Button floated='right' color="green" onClick={()=>{this.props.Callback(true,this.props.team.id,1)}} icon>
+                  <Button floated='right' color="green" onClick={()=>{this.props.Callback(true, this.props.team.id, this.props.team.teamName, 0, 1)}} icon>
                     <Icon name='heart' />
                     Lead
                   </Button>
                   }
-                                             
                 </div>                
               }             
               <Card.Header>

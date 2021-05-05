@@ -89,7 +89,7 @@ class App extends Component {
     body.createdBy=this.state.user.email; 
     this.state.team.createNewTeam(body)
       .then(()=>{
-        this.changeTeamMembership(true,this.state.team.teamid,1);
+        this.changeTeamMembership(true,this.state.team.teamid, body.teamName, 1, 1);
         this.toggleShowCreate();
         this.getTeams();  
       });      
@@ -103,12 +103,9 @@ class App extends Component {
       this.getTeams();  
     });
    }
+  changeTeamMembership=(join, id, name, isFromCreate, islead=0) =>{
+    this.state.user.changeTeamMembership(join, id, name, isFromCreate, islead)
 
-  changeTeamMembership=(join, id,islead=0) =>{
-    
-      
-    
-    this.state.user.changeTeamMembership(join,id,islead)
     .then(()=>{
      
       this.getUserInfo();
@@ -137,33 +134,41 @@ render() {
   
   let buttonText=!this.state.showCreate?'Create a Team!':'Never Mind';
   
+  if(!this.state.user.userid) {
     return (
-      <div className="ui">
-        {!this.state.user.userid?
-          <Message header='Contact Support!' content='User Not found please ask for help in general channel.'/>
-        :
-          this.state.enableTeamBuilder ?
-            <div id="TeamBuilder">
-              {this.state.user.myteam?
-                <div hidden={this.state.showCreate}>
-                  <h2>Your Team </h2>
-                  <div className="ui special fluid">
-                    <TeamListItem Callback={this.changeTeamMembership} edit={this.toggleShowCreate}
-                    islead={this.state.user.islead} team={this.state.t} isTeamMember={true} />
-                  </div>
+      <div class="ui active centered inline loader"></div> 
+      // <Message header='Contact Support!' content='User Not found please ask for help in general channel.'/>
+    );
+  } else if(this.state.enableTeamBuilder) {
+      return (
+        <div className="ui">
+          <div id="TeamBuilder">
+            {this.state.user.myteam?
+              <div hidden={this.state.showCreate}>
+                <h2>Your Team </h2>
+                <div className="ui special fluid">
+                  <TeamListItem Callback={this.changeTeamMembership} edit={this.toggleShowCreate}
+                  islead={this.state.user.islead} team={this.state.t} isTeamMember={true} />
+
                 </div>
-              :
-                <button onClick={this.toggleShowCreate} className="ui positive button">{buttonText}</button>
-              }
-              <TeamForm visible={this.state.showCreate} team={this.state.t} createTeam={this.CreateNewTeam} editTeam={this.editTeam} />
-              <br/><h2>All Teams</h2>
-              <TeamsList edit={this.toggleShowCreate} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} />
-            </div>
-          :
-            <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} />
-          }  
-      </div>
-    );  
+              </div>
+            :
+              <button onClick={this.toggleShowCreate} className="ui positive button">{buttonText}</button>
+            }
+            <TeamForm visible={this.state.showCreate} team={this.state.t} createTeam={this.CreateNewTeam} editTeam={this.editTeam} />
+            <br/><h2>All Teams</h2>
+            <TeamsList edit={this.toggleShowCreate} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} />
+          </div>
+        </div>
+      );  
+    } else {
+      return(
+        <div className="ui">
+          <div class="ui active centered inline loader"></div> 
+          <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} />
+        </div>
+      );
+    }
   }
 }
 
