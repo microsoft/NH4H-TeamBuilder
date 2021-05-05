@@ -26,16 +26,12 @@ class App extends Component {
       team: new Team(),
       username: "",
       email: "",
-      githubid: null,
       enableTeamBuilder:false,
-      userid: null,
       loggedin: false,
-      teams: [],
       t:null,
       myteam:-1,
       showcreate:false,
-      skillsWantedOptions:[],
-      allteams:[]
+      skillsWantedOptions:[]
     };
   }
 
@@ -68,7 +64,7 @@ class App extends Component {
       if(this.state.user.githubuser){   
         this.state.user.getTeam()
         .then(()=>{
-           this.setState({
+          this.setState({
               user:this.state.user,
               enableTeamBuilder:true},()=>{this.getTeams()});
         });
@@ -81,11 +77,8 @@ class App extends Component {
   getTeams = () => {
     this.state.team.getAllTeams()
    .then(()=>{
-     this.setState({team:this.state.team},()=>{
-      let t=this.state.team.allteams.find(obj => obj.teamId === this.state.user.myteam );
-      console.log(this.state.t);
-      console.log(this.state.team);
-      this.setState({t:t});
+     this.setState({team:this.state.team,user:this.state.user},()=>{
+      this.setMyTeam();
      });
      
     });
@@ -110,16 +103,11 @@ class App extends Component {
       this.getTeams();  
     });
    }
-
   changeTeamMembership=(join, id, name, isFromCreate, islead=0) =>{
-    console.log("name", name)
-    console.log("id", id)
-
     this.state.user.changeTeamMembership(join, id, name, isFromCreate, islead)
+
     .then(()=>{
-      //refresh teams list
-      //this.setState({myteam:-1,t:null},()=>{this.getUserID();});
-      this.getTeams();
+     
       this.getUserInfo();
     });
   }
@@ -138,7 +126,7 @@ saveGitUser=(body)=>{
 }
 
 setMyTeam=()=>{
-  let t=this.state.team.allteams.find(obj => obj.teamId === this.state.user.myteam );
+  let t=this.state.team.allteams.find(obj => obj.id === this.state.user.myteam );
   this.setState({t:t});
 }
 render() {
@@ -161,6 +149,7 @@ render() {
                 <div className="ui special fluid">
                   <TeamListItem Callback={this.changeTeamMembership} edit={this.toggleShowCreate}
                   islead={this.state.user.islead} team={this.state.t} isTeamMember={true} />
+
                 </div>
               </div>
             :
