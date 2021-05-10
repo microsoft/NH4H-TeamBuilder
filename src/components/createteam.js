@@ -79,12 +79,30 @@ class TeamForm extends React.Component {
       [name]: value
     });
 
-    this.updateDropDown(value.match(/(\d+)/)[0])
   }
+
+  handleInputChangeTrack = (event, d) => {
+
+    const target = event.target;
+    let value = target.type === 'checkbox' ? target.checked : target.value;
+    let name = target.name;
+    if (d) {
+      name = d.name;
+      value = d.value;
+    }
+    this.setState({
+      [name]: value
+    });
+
+    this.updateDropDown(value.match(/(\d+)/)[0])
+
+
+  }
+
 
   updateDropDown = (n) => {
     this.state.channelOptions = []
-    for (let i = 1; i < 21; i++) { this.state.channelOptions.push({ key: 'Team '+ n + '.' + ('0' + i).slice(-2), text: 'Team '+ n + '.' + ('0' + i).slice(-2), value: 'Team ' + n +'.' + ('0' + i).slice(-2) }); }
+    for (let i = 1; i < 21; i++) { this.state.channelOptions.push({ key: 'Team ' + n + '.' + ('0' + i).slice(-2), text: 'Team ' + n + '.' + ('0' + i).slice(-2), value: 'Team ' + n + '.' + ('0' + i).slice(-2) }); }
   }
 
   newTeam = () => {
@@ -146,7 +164,7 @@ class TeamForm extends React.Component {
             {this.props.team ? "" :
               <div className="field">
                 <label>Challenge Area</label>
-                <Dropdown name="challengeName" placeholder='Select a challenge' fluid selection options={this.state.challengeNameOptions} onChange={this.handleInputChange} defaultValue={this.state.challengeName} />
+                <Dropdown name="challengeName" placeholder='Select a challenge' fluid selection options={this.state.challengeNameOptions} onChange={this.handleInputChangeTrack} defaultValue={this.state.challengeName} />
               </div>
             }
 
