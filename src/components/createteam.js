@@ -141,6 +141,7 @@ class TeamForm extends React.Component {
 
   }
 
+
   render() {
 
     //Check if all fields have been populated
@@ -170,7 +171,7 @@ class TeamForm extends React.Component {
 
             <div className="field">
               <label>Assigned Team Channel</label>
-              <Dropdown name="msTeamsChannel" placeholder={this.state.msTeamsChannel} fluid selection options={this.state.channelOptions} onChange={this.handleInputChange} defaultValue={this.state.msTeamsChannel} />
+              <Dropdown name="msTeamsChannel" fluid selection options={this.state.channelOptions} onChange={this.handleInputChange} defaultValue={this.state.msTeamsChannel} />
 
             </div>
 
