@@ -11,7 +11,8 @@ class TeamListItem extends React.Component {
 
   render() {
     const hackers = [];
-    if(!this.props.self) {
+    if(this.props.team) {
+      console.log("this.props.team", this.props.team)
       for (let user of this.props.team.Users.hackers) {
         if(user.islead == 1) {
           hackers.push(<Label color='green'>{user.name}<Label.Detail>Lead</Label.Detail></Label>);
@@ -47,16 +48,16 @@ class TeamListItem extends React.Component {
               <Card.Header>
               {this.props.team.msTeamsChannel} : {this.props.team.teamName}                                    
               </Card.Header>
-                         
+              <br /><br />   
               <Card.Description>
-                Team Members:
+                {this.props.team.teamDescription}
+                <br /><br />
+                {this.props.team.Users.hackers.length} members: <br /><br />
                 <div>{hackers}</div>
-                <strong>{this.props.team.teamDescription}
-                <br></br>
-                {this.props.team.Users.hackers.length} teamMembers
-                <br></br>
+                
+                <br /><br />
 
-                We are looking for people with the following skills:</strong> {this.props.team.skills}
+                We are looking for people with the following skills: {this.props.team.skills}
                 <br/>
               </Card.Description>    
             </Card.Content>            
