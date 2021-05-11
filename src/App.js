@@ -148,7 +148,7 @@ render() {
                 <h2>Your Team </h2>
                 <div className="ui special fluid">
                   <TeamListItem Callback={this.changeTeamMembership} edit={this.toggleShowCreate}
-                  islead={this.state.user.islead} team={this.state.t} isTeamMember={true} />
+                  islead={this.state.user.islead} team={this.state.t} isTeamMember={true} self={true} />
 
                 </div>
               </div>

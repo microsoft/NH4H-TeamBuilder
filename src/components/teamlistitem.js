@@ -9,13 +9,20 @@ class TeamListItem extends React.Component {
     return this.props.teamslink?this.props.teamslink:DEF_TEAMSLINK;
   }
 
-
   render() {
+    const hackers = [];
+    if(!this.props.self) {
+      for (let user of this.props.team.Users.hackers) {
+        if(user.islead == 1) {
+          hackers.push(<li key={user.name}><span><span style={{"font-weight" :"bold"}}>{user.name}</span> (lead)</span></li>);
+        } else {
+          hackers.push(<li key={user.name}><span>{user.name}</span></li>);
+        }
+      }
+    }
     let islead=this.props.islead?this.props.islead===1:false;
     if(!this.props.team){return "";}
-    return(
-      
-        
+    return(      
           <Card fluid color='teal'>
             <Card.Content>
             {!this.props.isTeamMember? 
@@ -42,12 +49,15 @@ class TeamListItem extends React.Component {
               </Card.Header>
                          
               <Card.Description>
-              <strong>{this.props.team.teamDescription}
+                Team Members: <br/>
+                <ul style={{"list-style": "none"}}>{hackers}</ul>
+                <br /><br />
+                <strong>{this.props.team.teamDescription}
                 <br></br>
                 {this.props.team.Users.hackers.length} teamMembers
                 <br></br>
 
-               We are looking for people with the following skills:</strong> {this.props.team.skills}
+                We are looking for people with the following skills:</strong> {this.props.team.skills}
                 <br/>
               </Card.Description>    
             </Card.Content>            
