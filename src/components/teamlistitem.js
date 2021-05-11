@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Button, Icon } from 'semantic-ui-react'
+import { Card, Button, Icon, Label } from 'semantic-ui-react'
 //links to general of prod channel
 const DEF_TEAMSLINK='https://teams.microsoft.com/l/channel/19%3a6c83ba5af8664dc3b1a0d8a8a0774094%40thread.tacv2/General?groupId=abc0763c-f446-424c-ba5f-e374147c11a0&tenantId=e773e193-89d3-44d9-ae4e-17766699f674';
 class TeamListItem extends React.Component {
@@ -14,9 +14,9 @@ class TeamListItem extends React.Component {
     if(!this.props.self) {
       for (let user of this.props.team.Users.hackers) {
         if(user.islead == 1) {
-          hackers.push(<li key={user.name}><span><span style={{"font-weight" :"bold"}}>{user.name}</span> (lead)</span></li>);
+          hackers.push(<Label color='green'>{user.name}<Label.Detail>Lead</Label.Detail></Label>);
         } else {
-          hackers.push(<li key={user.name}><span>{user.name}</span></li>);
+          hackers.push(<Label color='blue'>{user.name}<Label.Detail>Member</Label.Detail></Label>);
         }
       }
     }
@@ -49,9 +49,8 @@ class TeamListItem extends React.Component {
               </Card.Header>
                          
               <Card.Description>
-                Team Members: <br/>
-                <ul style={{"list-style": "none"}}>{hackers}</ul>
-                <br /><br />
+                Team Members:
+                <div>{hackers}</div>
                 <strong>{this.props.team.teamDescription}
                 <br></br>
                 {this.props.team.Users.hackers.length} teamMembers
