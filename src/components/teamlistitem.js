@@ -12,12 +12,11 @@ class TeamListItem extends React.Component {
   render() {
     const hackers = [];
     if(this.props.team) {
-      console.log("this.props.team", this.props.team)
       for (let user of this.props.team.Users.hackers) {
         if(user.islead == 1) {
-          hackers.push(<Label color='green'>{user.name}<Label.Detail>Lead</Label.Detail></Label>);
+          hackers.push(<Label color='green' key={user.name}>{user.name}<Label.Detail>Lead</Label.Detail></Label>);
         } else {
-          hackers.push(<Label color='blue'>{user.name}<Label.Detail>Member</Label.Detail></Label>);
+          hackers.push(<Label color='blue' key={user.name}>{user.name}<Label.Detail>Member</Label.Detail></Label>);
         }
       }
     }
