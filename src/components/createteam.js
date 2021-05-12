@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown, Label } from 'semantic-ui-react'
 
 
 class TeamForm extends React.Component {
@@ -67,7 +67,10 @@ class TeamForm extends React.Component {
 
   }
   handleInputChange = (event, d) => {
-
+    // Hide warning label for duplicate names
+    if(document.getElementById("name-validation")) {
+      document.getElementById("name-validation").style["display"] = "none";
+    }
     const target = event.target;
     let value = target.type === 'checkbox' ? target.checked : target.value;
     let name = target.name;
@@ -82,7 +85,6 @@ class TeamForm extends React.Component {
   }
 
   handleInputChangeTrack = (event, d) => {
-
     const target = event.target;
     let value = target.type === 'checkbox' ? target.checked : target.value;
     let name = target.name;
@@ -138,18 +140,25 @@ class TeamForm extends React.Component {
           this.editTeam();
         }
       });
-    } 
+    } else { 
+      // alert ("Team name '" + this.state.teamName + "' already exists")
+      var warning = document.getElementById("name-validation");
+      warning.style["display"] = "";
+      return false;
+    }
+  
 
   }
 
   teamNameExists = (event) => {
     event.preventDefault();
     let newTeam = document.getElementById("teamName").value;
-    console.log("newTeam", newTeam);
-    this.props.teamNames.map((existingTeam) => {
-      if (existingTeam == newTeam) return true; 
-    });
-
+    for (let existingTeam of this.props.teamNames) {
+      if (existingTeam == newTeam) {
+        this.setState({nameExists: true});
+        return true;
+      }
+    }
     return false;
   }
 
@@ -191,7 +200,6 @@ class TeamForm extends React.Component {
               <div className="field">
                 <label>Team Name</label>
                 <input id="teamName" value={this.state.teamName} name="teamName" type="text" onChange={this.handleInputChange} />
-                <button onClick={this.checkTeamName}>Check if name exists</button>
               </div>
             }
 
@@ -213,7 +221,8 @@ class TeamForm extends React.Component {
                 <span className="ui">Creating...</span>
                 :
                 (valid ?
-                  <button className="ui primary button" type="submit">{this.props.team ? 'Save' : 'Create Team'}</button>
+                  <div><button className="ui primary button" type="submit">{this.props.team ? 'Save' : 'Create Team'}</button>
+                  <Label id="name-validation" style={{"display": "none"}} color="white">  '{this.state.teamName}'  already exists </Label> </div>
                   : <span className="ui message message-warning">All of the above are required</span>)
               }
             </div>
