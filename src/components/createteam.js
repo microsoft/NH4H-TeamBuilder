@@ -222,7 +222,7 @@ class TeamForm extends React.Component {
                 :
                 (valid ?
                   <div><button className="ui primary button" type="submit">{this.props.team ? 'Save' : 'Create Team'}</button>
-                  <Label id="name-validation" style={{"display": "none"}} color="white">  '{this.state.teamName}'  already exists </Label> </div>
+                  <Label id="name-validation" style={{"display": "none"}} color="grey">  '{this.state.teamName}'  already exists </Label> </div>
                   : <span className="ui message message-warning">All of the above are required</span>)
               }
             </div>
