@@ -169,7 +169,7 @@ render() {
       return(
         <div className="ui">
           <div class="ui active centered inline loader"></div> 
-          <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} />
+          <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} Callback={this.getTeams} />
         </div>
       );
     }

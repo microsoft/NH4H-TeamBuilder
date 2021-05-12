@@ -77,7 +77,7 @@ const GitHubUserEntryHook = (props) => {
       GitHubId: githubid
     };
     props.saveGH(body);
-   
+    props.Callback();
   };
 
   return (
