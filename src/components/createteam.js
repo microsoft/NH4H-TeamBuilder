@@ -112,15 +112,27 @@ class TeamForm extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    this.setState({ submitting: true }, () => {
-      if (!this.props.team) {
-        this.newTeam();
-      } else {
-        this.editTeam();
-      }
+    if(!this.teamNameExists(event)) {
+      this.setState({ submitting: true }, () => {
+        if (!this.props.team) {
+          this.newTeam();
+        } else {
+          this.editTeam();
+        }
+      });
+    } 
 
+  }
+
+  teamNameExists = (event) => {
+    event.preventDefault();
+    let newTeam = document.getElementById("teamName").value;
+    console.log("newTeam", newTeam);
+    this.props.teamNames.map((existingTeam) => {
+      if (existingTeam == newTeam) return true; 
     });
 
+    return false;
   }
 
   render() {
@@ -159,7 +171,8 @@ class TeamForm extends React.Component {
             {this.props.team ? "" :
               <div className="field">
                 <label>Team Name</label>
-                <input value={this.state.teamName} name="teamName" type="text" onChange={this.handleInputChange} />
+                <input id="teamName" value={this.state.teamName} name="teamName" type="text" onChange={this.handleInputChange} />
+                <button onClick={this.checkTeamName}>Check if name exists</button>
               </div>
             }
 
