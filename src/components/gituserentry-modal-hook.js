@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import gitapi from '../apis/gitapi';
 import { Button, Modal, Input, Dropdown, Menu, Label, Form, Divider } from 'semantic-ui-react';
 import nh4h from '../apis/nh4h';
+import gamification from '../apis/gamification';
 
 const GitHubUserEntryHook = (props) => {
   const placeholdertxt = "Select your user id";
@@ -77,8 +78,22 @@ const GitHubUserEntryHook = (props) => {
       GitHubId: githubid
     };
     props.saveGH(body);
+     // Activity Id for adding GitHub user is 11
+    addPoint(11); 
     props.Callback();
   };
+
+  const addPoint = (activityId) => {   
+    let body ={
+      UserEmail : props.userEmail,
+      ActivityId : activityId 
+    }
+    // += TODO: Get activity name and show it to user! 
+    gamification.post("/useractivity/Points", body) 
+      .then((response) => {
+        alert("Way to go! You've got a point :)");
+      });
+  }
 
   return (
     <div>

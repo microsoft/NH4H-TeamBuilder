@@ -103,7 +103,8 @@ class App extends Component {
       this.getTeams();  
     });
    }
-  changeTeamMembership=(join, id, name, isFromCreate, islead=0) =>{
+  
+   changeTeamMembership=(join, id, name, isFromCreate, islead=0) =>{
     this.state.user.changeTeamMembership(join, id, name, isFromCreate, islead)
 
     .then(()=>{
@@ -169,7 +170,7 @@ render() {
       return(
         <div className="ui">
           <div class="ui active centered inline loader"></div> 
-          <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} Callback={this.getTeams} />
+          <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} userEmail={this.state.email} Callback={this.getTeams} />
         </div>
       );
     }
