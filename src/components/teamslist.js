@@ -34,9 +34,8 @@ class TeamsList extends React.Component {
   }
   }
 
-  joinOrLeaveTeam=(type, id, name)=>{
-    this.props.Callback(type, id, name);
-  
+  joinOrLeaveTeam=(type, id, name, isCreate, islead)=>{
+    this.props.Callback(type, id, name, isCreate, islead);
   }
 
   editTeam=(e)=>{
@@ -76,16 +75,18 @@ class TeamsList extends React.Component {
   }
   getTeamListItems=(teamlist)=>{
     const t = _.orderBy(teamlist, 'msTeamsChannel')
-  return t.map( (team) => ( 
-    <TeamListItem 
-      Callback={this.joinOrLeaveTeam} 
-      edit={this.editTeam}
-      key={team.id}
-      team={team}
-      isTeamMember={team.id===this.props.myteam}
-      hasTeam={this.props.myteam>0}
-      />
-  ))
+    return t.map( (team) => ( 
+      <TeamListItem 
+        Callback={this.joinOrLeaveTeam} 
+        edit={this.editTeam}
+        key={team.id}
+        membership={this.props.membership}
+        team={team}
+        isTeamMember={team.id===this.props.myteam}
+        hasTeam={this.props.myteam>0}
+        islead={this.props.islead}
+        />
+    ))
   }
   
   render() {

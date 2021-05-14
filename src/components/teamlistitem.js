@@ -48,8 +48,6 @@ class TeamListItem extends React.Component {
         }
       }
     }
-    console.log(hackers);
-
     let islead = this.props.islead ? this.props.islead === 1 : false;
     if (!this.props.team) {
       return "";
@@ -99,8 +97,6 @@ class TeamListItem extends React.Component {
             )
           ) : (
             <div>
-              
-
               <Button
                 size="mini"
                 floated="right"

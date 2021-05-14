@@ -120,14 +120,13 @@ class App extends Component {
 
   updateView = () => {}
   
-  changeTeamMembership=(join, id, name, isFromCreate, islead=0) =>{
+  changeTeamMembership=(join, id, name, isFromCreate=0, islead=0) =>{
     if(join) {
       // Activity Id for joining a team is 13
       this.activityPoints(13);
     }
     this.state.user.changeTeamMembership(join, id, name, isFromCreate, islead)
     .then(()=>{
-      
       this.getUserInfo();
       window.location.reload(false);
     });
@@ -184,7 +183,7 @@ class App extends Component {
               }
               <TeamForm visible={this.state.showCreate} activityPoints={this.activityPoints} teamNames={existingTeamNames} team={this.state.t} createTeam={this.CreateNewTeam} editTeam={this.editTeam} cancel={this.toggleShowCreate} />
               <br/><h2>All Teams</h2>
-              <TeamsList edit={this.toggleShowCreate} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} />
+              <TeamsList edit={this.toggleShowCreate} membership={this.changeTeamMembership} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} islead={this.state.user.islead} />
             </div>
           </div>
         );  
