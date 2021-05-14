@@ -131,6 +131,7 @@ class TeamForm extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+    this.teamNameExists(event)
     if(!this.teamNameExists(event)) {
       this.setState({ submitting: true }, () => {
         if (!this.props.team) {
@@ -155,6 +156,11 @@ class TeamForm extends React.Component {
     event.preventDefault();
     if(document.getElementById("teamName")) {
       let newTeam = document.getElementById("teamName").value.toLowerCase();
+      
+      // Don't allow special characters
+      var isValid = newTeam.match(/^[a-zA-Z0-9]+$/g);
+      if (!isValid) return true;
+
       for (let existingTeam of this.props.teamNames) {
         if (existingTeam.toLowerCase() == newTeam) {
           this.setState({nameExists: true});
@@ -162,6 +168,7 @@ class TeamForm extends React.Component {
         }
       }
     }
+    
     return false;
   }
 
@@ -226,7 +233,7 @@ class TeamForm extends React.Component {
                   <div>
                     <button className="ui primary button" type="submit">{this.props.team ? 'Save' : 'Create Team'}</button>
                     <Label as='a' size='large' style={{"padding": "12px 15px"}} onClick={this.props.cancel}>Cancel</Label>
-                  <Label id="name-validation" style={{"display": "none"}} color="grey">  '{this.state.teamName}'  already exists </Label> </div>
+                  <Label id="name-validation" style={{"display": "none"}} color="grey">  '{this.state.teamName}' exists or the name is invalid (only alpha numeric is allowed.)</Label> </div>
                   : <span className="ui message message-warning">All of the above are required</span>)
                     }
                   </div>
