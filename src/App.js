@@ -93,18 +93,18 @@ class App extends Component {
         this.toggleShowCreate();
         this.getTeams();  
       });      
-   } 
+  } 
 
-   editTeam=(body)=>{
+  editTeam=(body)=>{
     body.modifiedBy=this.state.user.email; 
     this.state.team.editTeam(this.state.user.myteam,body)
-    .then(()=>{
-      this.toggleShowCreate();
-      this.getTeams();  
-    });
-   }
+      .then(()=>{
+        this.toggleShowCreate();
+        this.getTeams();  
+      });
+  }
   
-   changeTeamMembership=(join, id, name, isFromCreate, islead=0) =>{
+  changeTeamMembership=(join, id, name, isFromCreate, islead=0) =>{
     this.state.user.changeTeamMembership(join, id, name, isFromCreate, islead)
 
     .then(()=>{
@@ -113,59 +113,58 @@ class App extends Component {
     });
   }
 
-toggleShowCreate =()=>{
-  this.setState({showCreate:!this.state.showCreate});
-}
-
-saveGitUser=(body)=>{
-  body.UserId=this.state.user.userid;
-  nh4h.put("/users/github/" + this.state.user.userid, body )
-  .then((resp) => {
-    this.setState({enableTeamBuilder:true});
-  });
-
-}
-
-setMyTeam=()=>{
-  let t=this.state.team.allteams.find(obj => obj.id === this.state.user.myteam );
-  this.setState({t:t});
-}
-render() {
-  
-  let existingTeamNames = [];
-  for (let team of this.state.team.allteams) {
-    existingTeamNames.push(team.teamName);
+  toggleShowCreate =()=>{
+    this.setState({showCreate:!this.state.showCreate});
   }
 
-  let buttonText=!this.state.showCreate?'Create a Team!':'Never Mind';
-  
-  if(!this.state.user.userid) {
-    return (
-      <div class="ui active centered inline loader"></div> 
-      // <Message header='Contact Support!' content='User Not found please ask for help in general channel.'/>
-    );
-  } else if(this.state.enableTeamBuilder) {
-    return (
-        <div className="ui">
-          <div id="TeamBuilder">
-            {this.state.user.myteam?
-              <div hidden={this.state.showCreate}>
-                <h2>Your Team </h2>
-                <div className="ui special fluid">
-                  <TeamListItem Callback={this.changeTeamMembership} edit={this.toggleShowCreate}
-                  islead={this.state.user.islead} team={this.state.t} isTeamMember={true} />
+  saveGitUser=(body)=>{
+    body.UserId=this.state.user.userid;
+    nh4h.put("/users/github/" + this.state.user.userid, body )
+    .then((resp) => {
+      this.setState({enableTeamBuilder:true});
+    });
 
+  }
+
+  setMyTeam=()=>{
+    let t=this.state.team.allteams.find(obj => obj.id === this.state.user.myteam );
+    this.setState({t:t});
+  }
+  render() {
+    let existingTeamNames = [];
+    for (let team of this.state.team.allteams) {
+      existingTeamNames.push(team.teamName);
+    }
+
+    let buttonText=!this.state.showCreate?'Create a Team!':'Never Mind';
+    
+    if(!this.state.user.userid) {
+      return (
+        <div class="ui active centered inline loader"></div> 
+        // <Message header='Contact Support!' content='User Not found please ask for help in general channel.'/>
+      );
+    } else if(this.state.enableTeamBuilder) {
+      return (
+          <div className="ui">
+            <div id="TeamBuilder">
+              {this.state.user.myteam?
+                <div hidden={this.state.showCreate}>
+                  <h2>Your Team </h2>
+                  <div className="ui special fluid">
+                    <TeamListItem Callback={this.changeTeamMembership} edit={this.toggleShowCreate}
+                    islead={this.state.user.islead} team={this.state.t} isTeamMember={true} />
+
+                  </div>
                 </div>
-              </div>
-            :
-              <button onClick={this.toggleShowCreate} className="ui positive button">{buttonText}</button>
-            }
-            <TeamForm visible={this.state.showCreate} teamNames={existingTeamNames} team={this.state.t} createTeam={this.CreateNewTeam} editTeam={this.editTeam} />
-            <br/><h2>All Teams</h2>
-            <TeamsList edit={this.toggleShowCreate} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} />
+              :
+                <button onClick={this.toggleShowCreate} className="ui positive button">{buttonText}</button>
+              }
+              <TeamForm visible={this.state.showCreate} teamNames={existingTeamNames} team={this.state.t} createTeam={this.CreateNewTeam} editTeam={this.editTeam} />
+              <br/><h2>All Teams</h2>
+              <TeamsList edit={this.toggleShowCreate} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} />
+            </div>
           </div>
-        </div>
-      );  
+        );  
     } else {
       return(
         <div className="ui">

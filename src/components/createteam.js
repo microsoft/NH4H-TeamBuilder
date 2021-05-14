@@ -152,11 +152,13 @@ class TeamForm extends React.Component {
 
   teamNameExists = (event) => {
     event.preventDefault();
-    let newTeam = document.getElementById("teamName").value;
-    for (let existingTeam of this.props.teamNames) {
-      if (existingTeam == newTeam) {
-        this.setState({nameExists: true});
-        return true;
+    if(document.getElementById("teamName")) {
+      let newTeam = document.getElementById("teamName").value;
+      for (let existingTeam of this.props.teamNames) {
+        if (existingTeam == newTeam) {
+          this.setState({nameExists: true});
+          return true;
+        }
       }
     }
     return false;
@@ -192,7 +194,7 @@ class TeamForm extends React.Component {
 
             <div className="field">
               <label>Assigned Team Channel</label>
-              <Dropdown name="msTeamsChannel" fluid selection options={this.state.channelOptions} onChange={this.handleInputChange} defaultValue={this.state.msTeamsChannel} />
+              <Dropdown name="msTeamsChannel" fluid selection options={this.state.channelOptions} onChange={this.handleInputChange} placeholder={this.state.msTeamsChannel} />
 
             </div>
 
