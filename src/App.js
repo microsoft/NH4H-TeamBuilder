@@ -154,10 +154,10 @@ class App extends Component {
 
     let buttonText=!this.state.showCreate?'Create a Team!':'Never Mind';
     
-    if(!this.state.user.userid) {
+    if(!this.state.user.found) {
       return (
-        <div class="ui active centered inline loader"></div> 
-        // <Message header='Contact Support!' content='User Not found please ask for help in general channel.'/>
+        // <div class="ui active centered inline loader"></div> 
+        <Message header='Contact Support!' content='User Not found please ask for help in general channel.'/>
       );
     } else if(this.state.enableTeamBuilder) {
       return (
@@ -182,8 +182,7 @@ class App extends Component {
           </div>
         );  
     } else {
-      return(
-        
+      return(        
         <div className="ui">
            {this.state.user.githubuser ? 
             <div class="ui active centered inline loader"></div> :
