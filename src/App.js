@@ -129,7 +129,9 @@ class App extends Component {
     .then(()=>{
       
       this.getUserInfo();
+      window.location.reload(false);
     });
+    
   }
 
   toggleShowCreate =()=>{
