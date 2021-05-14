@@ -164,7 +164,7 @@ class TeamForm extends React.Component {
       }
 
       // Don't allow special characters
-      var isValid = newTeam.match(/^[a-zA-Z0-9]+$/g);
+      var isValid = newTeam.match(/^[a-zA-Z0-9\s]+$/g);
       if (!isValid) return true
       
       return false;
