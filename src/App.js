@@ -112,10 +112,13 @@ class App extends Component {
     body.modifiedBy=this.state.user.email; 
     this.state.team.editTeam(this.state.user.myteam,body)
       .then(()=>{
+        window.location.reload(false); // refreshes page to put the form in clean state
         this.toggleShowCreate();
         this.getTeams();  
       });
   }
+
+  updateView = () => {}
   
   changeTeamMembership=(join, id, name, isFromCreate, islead=0) =>{
     if(join) {
@@ -130,7 +133,9 @@ class App extends Component {
   }
 
   toggleShowCreate =()=>{
-    this.setState({showCreate:!this.state.showCreate});
+    this.setState({
+      showCreate:!this.state.showCreate
+    });
   }
 
   saveGitUser=(body)=>{
@@ -157,7 +162,7 @@ class App extends Component {
     if(!this.state.user.found) {
       return (
         // <div class="ui active centered inline loader"></div> 
-        <Message header='Contact Support!' content='User Not found please ask for help in general channel.'/>
+        <Message header='Contact Support!' content='User is not found or TeamBuilder API is down. Please ask for help in general channel.'/>
       );
     } else if(this.state.enableTeamBuilder) {
       return (
@@ -175,7 +180,7 @@ class App extends Component {
               :
                 <button onClick={this.toggleShowCreate} className="ui positive button">{buttonText}</button>
               }
-              <TeamForm visible={this.state.showCreate} activityPoints={this.activityPoints} teamNames={existingTeamNames} team={this.state.t} createTeam={this.CreateNewTeam} editTeam={this.editTeam} />
+              <TeamForm visible={this.state.showCreate} activityPoints={this.activityPoints} teamNames={existingTeamNames} team={this.state.t} createTeam={this.CreateNewTeam} editTeam={this.editTeam} cancel={this.toggleShowCreate} />
               <br/><h2>All Teams</h2>
               <TeamsList edit={this.toggleShowCreate} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} />
             </div>

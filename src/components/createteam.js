@@ -154,9 +154,9 @@ class TeamForm extends React.Component {
   teamNameExists = (event) => {
     event.preventDefault();
     if(document.getElementById("teamName")) {
-      let newTeam = document.getElementById("teamName").value;
+      let newTeam = document.getElementById("teamName").value.toLowerCase();
       for (let existingTeam of this.props.teamNames) {
-        if (existingTeam == newTeam) {
+        if (existingTeam.toLowerCase() == newTeam) {
           this.setState({nameExists: true});
           return true;
         }
@@ -223,11 +223,13 @@ class TeamForm extends React.Component {
                 <span className="ui">Creating...</span>
                 :
                 (valid ?
-                  <div><button className="ui primary button" type="submit">{this.props.team ? 'Save' : 'Create Team'}</button>
+                  <div>
+                    <button className="ui primary button" type="submit">{this.props.team ? 'Save' : 'Create Team'}</button>
+                    <Label as='a' size='large' style={{"padding": "12px 15px"}} onClick={this.props.cancel}>Cancel</Label>
                   <Label id="name-validation" style={{"display": "none"}} color="grey">  '{this.state.teamName}'  already exists </Label> </div>
                   : <span className="ui message message-warning">All of the above are required</span>)
-              }
-            </div>
+                    }
+                  </div>
           </form>
           :
           <span className="ui">Team Created</span>

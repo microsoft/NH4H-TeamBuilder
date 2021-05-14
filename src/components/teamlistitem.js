@@ -14,8 +14,6 @@ class TeamListItem extends React.Component {
     let islead=this.props.islead?this.props.islead===1:false;
     if(!this.props.team){return "";}
     return(
-      
-        
           <Card fluid color='teal'>
             <Card.Content>
             {!this.props.isTeamMember? 

@@ -82,18 +82,6 @@ const GitHubUserEntryHook = (props) => {
     props.Callback();
   };
 
-  // const addPoint = (activityId) => {   
-  //   let body ={
-  //     UserEmail : props.userEmail,
-  //     ActivityId : activityId 
-  //   }
-  //   // += TODO: Get activity name and show it to user! 
-  //   gamification.post("/useractivity/Points", body) 
-  //     .then((response) => {
-  //       alert("Way to go! You've got a point :)");
-  //     });
-  // }
-
   return (
     <div>
       <Modal
