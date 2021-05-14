@@ -131,7 +131,6 @@ class TeamForm extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    this.teamNameExists(event)
     if(!this.teamNameExists(event)) {
       this.setState({ submitting: true }, () => {
         if (!this.props.team) {
@@ -157,16 +156,20 @@ class TeamForm extends React.Component {
     if(document.getElementById("teamName")) {
       let newTeam = document.getElementById("teamName").value.toLowerCase();
       
-      // Don't allow special characters
-      var isValid = newTeam.match(/^[a-zA-Z0-9]+$/g);
-      if (!isValid) return true;
-
       for (let existingTeam of this.props.teamNames) {
         if (existingTeam.toLowerCase() == newTeam) {
           this.setState({nameExists: true});
           return true;
         }
       }
+
+      // Don't allow special characters
+      var isValid = newTeam.match(/^[a-zA-Z0-9]+$/g);
+      if (!isValid) return true
+      
+      return false;
+      
+
     }
     
     return false;
