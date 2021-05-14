@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import * as Msal from "msal";
 import TeamsList from './components/teamslist';
 import nh4h from './apis/nh4h';
+import gamification from './apis/gamification';
 import TeamForm from './components/createteam';
 import TeamListItem from './components/teamlistitem';
 import GitHubUserEntry from './components/gituserentry-modal-hook';
@@ -33,6 +34,18 @@ class App extends Component {
       showcreate:false,
       skillsWantedOptions:[]
     };
+  }
+  
+  activityPoints = (activityId) => {   
+    // gamification.API.addPoint(this.props.userEmail, activityId);
+    let body ={
+      UserEmail : this.state.email,
+      ActivityId : activityId 
+    }
+    // += TODO: Get activity name and show it to user! 
+    gamification.post("/useractivity/Points", body) 
+      .then((response) => {
+      });
   }
 
   componentDidMount() {
@@ -105,10 +118,13 @@ class App extends Component {
   }
   
   changeTeamMembership=(join, id, name, isFromCreate, islead=0) =>{
+    if(join) {
+      // Activity Id for joining a team is 13
+      this.activityPoints(13);
+    }
     this.state.user.changeTeamMembership(join, id, name, isFromCreate, islead)
-
     .then(()=>{
-     
+      
       this.getUserInfo();
     });
   }
@@ -159,7 +175,7 @@ class App extends Component {
               :
                 <button onClick={this.toggleShowCreate} className="ui positive button">{buttonText}</button>
               }
-              <TeamForm visible={this.state.showCreate} teamNames={existingTeamNames} team={this.state.t} createTeam={this.CreateNewTeam} editTeam={this.editTeam} />
+              <TeamForm visible={this.state.showCreate} activityPoints={this.activityPoints} teamNames={existingTeamNames} team={this.state.t} createTeam={this.CreateNewTeam} editTeam={this.editTeam} />
               <br/><h2>All Teams</h2>
               <TeamsList edit={this.toggleShowCreate} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} />
             </div>
@@ -169,7 +185,7 @@ class App extends Component {
       return(
         <div className="ui">
           <div class="ui active centered inline loader"></div> 
-          <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} userEmail={this.state.email} Callback={this.getTeams} />
+          <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} activityPoints={this.activityPoints} Callback={this.getTeams} />
         </div>
       );
     }

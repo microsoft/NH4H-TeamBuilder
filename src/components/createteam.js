@@ -1,6 +1,5 @@
 import React from 'react';
-import { Dropdown, Label } from 'semantic-ui-react'
-
+import { Dropdown, Label } from 'semantic-ui-react';
 
 class TeamForm extends React.Component {
   constructor(props) {
@@ -48,6 +47,7 @@ class TeamForm extends React.Component {
       channelOptions: channelItems,
     };
   }
+  
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.team !== this.props.team) {
       if (this.props.team) {
@@ -66,6 +66,7 @@ class TeamForm extends React.Component {
     }
 
   }
+  
   handleInputChange = (event, d) => {
     // Hide warning label for duplicate names
     if(document.getElementById("name-validation")) {
@@ -97,8 +98,6 @@ class TeamForm extends React.Component {
     });
 
     this.updateDropDown(value.match(/(\d+)/)[0])
-
-
   }
 
 
@@ -135,6 +134,8 @@ class TeamForm extends React.Component {
     if(!this.teamNameExists(event)) {
       this.setState({ submitting: true }, () => {
         if (!this.props.team) {
+          // Activity Id for creating team is 12
+          this.props.activityPoints(12)
           this.newTeam();
         } else {
           this.editTeam();
@@ -163,7 +164,6 @@ class TeamForm extends React.Component {
     }
     return false;
   }
-
 
   render() {
 
