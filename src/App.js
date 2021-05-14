@@ -103,7 +103,8 @@ class App extends Component {
       this.getTeams();  
     });
    }
-  changeTeamMembership=(join, id, name, isFromCreate, islead=0) =>{
+  
+   changeTeamMembership=(join, id, name, isFromCreate, islead=0) =>{
     this.state.user.changeTeamMembership(join, id, name, isFromCreate, islead)
 
     .then(()=>{
@@ -130,8 +131,12 @@ setMyTeam=()=>{
   this.setState({t:t});
 }
 render() {
- 
   
+  let existingTeamNames = [];
+  for (let team of this.state.team.allteams) {
+    existingTeamNames.push(team.teamName);
+  }
+
   let buttonText=!this.state.showCreate?'Create a Team!':'Never Mind';
   
   if(!this.state.user.userid) {
@@ -140,7 +145,7 @@ render() {
       // <Message header='Contact Support!' content='User Not found please ask for help in general channel.'/>
     );
   } else if(this.state.enableTeamBuilder) {
-      return (
+    return (
         <div className="ui">
           <div id="TeamBuilder">
             {this.state.user.myteam?
@@ -155,7 +160,7 @@ render() {
             :
               <button onClick={this.toggleShowCreate} className="ui positive button">{buttonText}</button>
             }
-            <TeamForm visible={this.state.showCreate} team={this.state.t} createTeam={this.CreateNewTeam} editTeam={this.editTeam} />
+            <TeamForm visible={this.state.showCreate} teamNames={existingTeamNames} team={this.state.t} createTeam={this.CreateNewTeam} editTeam={this.editTeam} />
             <br/><h2>All Teams</h2>
             <TeamsList edit={this.toggleShowCreate} Callback={this.changeTeamMembership} myteam={this.state.user.myteam} teams={this.state.team.allteams} />
           </div>
@@ -165,7 +170,7 @@ render() {
       return(
         <div className="ui">
           <div class="ui active centered inline loader"></div> 
-          <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} />
+          <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} userEmail={this.state.email} Callback={this.getTeams} />
         </div>
       );
     }

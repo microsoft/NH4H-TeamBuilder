@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown, Label } from 'semantic-ui-react'
 
 
 class TeamForm extends React.Component {
@@ -67,7 +67,24 @@ class TeamForm extends React.Component {
 
   }
   handleInputChange = (event, d) => {
+    // Hide warning label for duplicate names
+    if(document.getElementById("name-validation")) {
+      document.getElementById("name-validation").style["display"] = "none";
+    }
+    const target = event.target;
+    let value = target.type === 'checkbox' ? target.checked : target.value;
+    let name = target.name;
+    if (d) {
+      name = d.name;
+      value = d.value;
+    }
+    this.setState({
+      [name]: value
+    });
 
+  }
+
+  handleInputChangeTrack = (event, d) => {
     const target = event.target;
     let value = target.type === 'checkbox' ? target.checked : target.value;
     let name = target.name;
@@ -80,11 +97,14 @@ class TeamForm extends React.Component {
     });
 
     this.updateDropDown(value.match(/(\d+)/)[0])
+
+
   }
+
 
   updateDropDown = (n) => {
     this.state.channelOptions = []
-    for (let i = 1; i < 21; i++) { this.state.channelOptions.push({ key: 'Team '+ n + '.' + ('0' + i).slice(-2), text: 'Team '+ n + '.' + ('0' + i).slice(-2), value: 'Team ' + n +'.' + ('0' + i).slice(-2) }); }
+    for (let i = 1; i < 21; i++) { this.state.channelOptions.push({ key: 'Team ' + n + '.' + ('0' + i).slice(-2), text: 'Team ' + n + '.' + ('0' + i).slice(-2), value: 'Team ' + n + '.' + ('0' + i).slice(-2) }); }
   }
 
   newTeam = () => {
@@ -112,16 +132,36 @@ class TeamForm extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    this.setState({ submitting: true }, () => {
-      if (!this.props.team) {
-        this.newTeam();
-      } else {
-        this.editTeam();
-      }
-
-    });
+    if(!this.teamNameExists(event)) {
+      this.setState({ submitting: true }, () => {
+        if (!this.props.team) {
+          this.newTeam();
+        } else {
+          this.editTeam();
+        }
+      });
+    } else { 
+      // alert ("Team name '" + this.state.teamName + "' already exists")
+      var warning = document.getElementById("name-validation");
+      warning.style["display"] = "";
+      return false;
+    }
+  
 
   }
+
+  teamNameExists = (event) => {
+    event.preventDefault();
+    let newTeam = document.getElementById("teamName").value;
+    for (let existingTeam of this.props.teamNames) {
+      if (existingTeam == newTeam) {
+        this.setState({nameExists: true});
+        return true;
+      }
+    }
+    return false;
+  }
+
 
   render() {
 
@@ -146,20 +186,20 @@ class TeamForm extends React.Component {
             {this.props.team ? "" :
               <div className="field">
                 <label>Challenge Area</label>
-                <Dropdown name="challengeName" placeholder='Select a challenge' fluid selection options={this.state.challengeNameOptions} onChange={this.handleInputChange} defaultValue={this.state.challengeName} />
+                <Dropdown name="challengeName" placeholder='Select a challenge' fluid selection options={this.state.challengeNameOptions} onChange={this.handleInputChangeTrack} defaultValue={this.state.challengeName} />
               </div>
             }
 
             <div className="field">
               <label>Assigned Team Channel</label>
-              <Dropdown name="msTeamsChannel" placeholder={this.state.msTeamsChannel} fluid selection options={this.state.channelOptions} onChange={this.handleInputChange} defaultValue={this.state.msTeamsChannel} />
+              <Dropdown name="msTeamsChannel" fluid selection options={this.state.channelOptions} onChange={this.handleInputChange} defaultValue={this.state.msTeamsChannel} />
 
             </div>
 
             {this.props.team ? "" :
               <div className="field">
                 <label>Team Name</label>
-                <input value={this.state.teamName} name="teamName" type="text" onChange={this.handleInputChange} />
+                <input id="teamName" value={this.state.teamName} name="teamName" type="text" onChange={this.handleInputChange} />
               </div>
             }
 
@@ -181,7 +221,8 @@ class TeamForm extends React.Component {
                 <span className="ui">Creating...</span>
                 :
                 (valid ?
-                  <button className="ui primary button" type="submit">{this.props.team ? 'Save' : 'Create Team'}</button>
+                  <div><button className="ui primary button" type="submit">{this.props.team ? 'Save' : 'Create Team'}</button>
+                  <Label id="name-validation" style={{"display": "none"}} color="grey">  '{this.state.teamName}'  already exists </Label> </div>
                   : <span className="ui message message-warning">All of the above are required</span>)
               }
             </div>
