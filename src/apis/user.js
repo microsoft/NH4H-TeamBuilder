@@ -32,6 +32,7 @@ class User {
   islead;
   githubid;
   githubuser;
+  notfound;
 
   constructor(){
     this.userid=false;
@@ -55,7 +56,10 @@ class User {
           * We don't want to register this user
           *   this.preRegister();     
           */
+         this.found = false;
+         console.log("AM I HERE")
         }else{
+          this.found = true;
           this.userid= response.data.userId;
           this.mySkills= response.data[User.SKILLS];
           this.githubid=response.data.gitHubId;

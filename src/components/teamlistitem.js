@@ -76,6 +76,7 @@ class TeamListItem extends React.Component {
               <div>
                 
                 <Button
+                  size="mini"
                   floated="right"
                   basic
                   color="green"
@@ -101,6 +102,7 @@ class TeamListItem extends React.Component {
               
 
               <Button
+                size="mini"
                 floated="right"
                 basic
                 color="red"
@@ -115,6 +117,7 @@ class TeamListItem extends React.Component {
                 Leave
               </Button>
               <Button
+                size="mini"
                 floated="right"
                 basic
                 color="blue"
@@ -127,6 +130,7 @@ class TeamListItem extends React.Component {
               {islead ? (
                 
                 <Button
+                  size="mini"
                   floated="right"
                   color="red"
                   onClick={() => {
@@ -145,6 +149,7 @@ class TeamListItem extends React.Component {
                 </Button>
               ) : (
                 <Button
+                  size="mini"
                   floated="right"
                   color="green"
                   onClick={() => {
@@ -166,37 +171,6 @@ class TeamListItem extends React.Component {
             </div>
           )}
 
-          {/* {!this.props.isTeamMember ?
-            (!this.props.hasTeam ?
-              <div>
-                <Button size="mini" floated='right' basic color="green" onClick={() => { this.props.Callback(true, this.props.team.id, this.props.team.teamName) }}>Join</Button>
-                <Icon name='user' aria-label="Members:" /> {hackers}
-              </div>
-
-
-              : '')
-            :
-            <div>
-              <Icon name='user' aria-label="Members:" /> {hackers}
-
-
-              <Button size="mini" floated='right' basic color='red' onClick={() => { this.props.Callback(false, this.props.team.id, this.props.team.teamName) }}>Leave</Button>
-              <Button size="mini" floated='right' basic color='blue' onClick={() => { this.props.edit() }}>Edit</Button>
-
-              {islead ?
-                <Button size="mini" floated='right' color="red" onClick={() => { this.props.Callback(true, this.props.team.id, this.props.team.teamName, 0, 0) }} icon>
-                  <Icon name='heart' />
-                Don't Lead
-              </Button>
-                :
-                <Button floated='right' color="green" onClick={() => { this.props.Callback(true, this.props.team.id, this.props.team.teamName, 0, 1) }} icon size="mini">
-                  <Icon name='heart' />
-                  Lead
-                </Button>
-              }
-            </div>
-
-          } */}
         </Card.Content>
       </Card>
     );
