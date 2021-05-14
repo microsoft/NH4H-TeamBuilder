@@ -219,10 +219,10 @@ class TeamForm extends React.Component {
               <label>Team description</label>
               <textarea value={this.state.teamDescription} name="teamDescription" rows="2" onChange={this.handleInputChange}></textarea>
             </div>
-            <div className="field">
+            {/* <div className="field">
               <label>We are looking for people with these skills (comma seperated (ex: C#, HIPPA, EPIC)</label>
               <input value={this.state.skillsWanted} name="skillsWanted" type="text" onChange={this.handleInputChange} />
-            </div>
+            </div> */}
             {this.props.team ? "" :
               <div className="field">
 
