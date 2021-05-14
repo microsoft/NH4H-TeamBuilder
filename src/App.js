@@ -183,9 +183,12 @@ class App extends Component {
         );  
     } else {
       return(
+        
         <div className="ui">
-          <div class="ui active centered inline loader"></div> 
-          <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} activityPoints={this.activityPoints} Callback={this.getTeams} />
+           {this.state.user.githubuser ? 
+            <div class="ui active centered inline loader"></div> :
+            <GitHubUserEntry saveGH={this.saveGitUser} userid={this.state.user.userid} activityPoints={this.activityPoints} Callback={this.getTeams} />
+           }
         </div>
       );
     }
