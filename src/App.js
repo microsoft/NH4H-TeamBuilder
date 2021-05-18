@@ -9,6 +9,7 @@ import GitHubUserEntry from './components/gituserentry-modal-hook';
 import { Message } from 'semantic-ui-react'
 import User from './apis/user';
 import Team from './apis/team';
+import InvitationForm from './components/inviteUsersIntoTeams';
 
 class App extends Component {
   constructor(props) {
@@ -159,6 +160,10 @@ class App extends Component {
     }
 
     let buttonText=!this.state.showCreate?'Create a Team!':'Never Mind';
+
+    // return(
+    //   <InvitationForm />
+    // )
     
     if(!this.state.user.found) {
       return (

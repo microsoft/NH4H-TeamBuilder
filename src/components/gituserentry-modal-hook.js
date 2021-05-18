@@ -50,7 +50,7 @@ const GitHubUserEntryHook = (props) => {
     let ghuser = document.getElementById("gituserid-input").value;
     var tempghuserlist = [];
     
-    gitapi.get("/users?q=" + ghuser + "&per_page=100").then((resp) => {
+    gitapi.get("/search/users?q=" + ghuser + "&per_page=100").then((resp) => {
       resp.data.items.map(i => {
         setId(i.id); 
         tempghuserlist.push({ key: i.login , text: i.login , value: i.login, image: { avatar: true, src: i.avatar_url }});
