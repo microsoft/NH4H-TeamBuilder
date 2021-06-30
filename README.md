@@ -10,7 +10,24 @@ TODO: Guide users through getting your code up and running on their own system. 
 4.	API references
 
 # Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+**Why?**
+The purpose of this application is to facilitate collaboration during the hackathon. In order to do so, the functionalities include creating and joining teams.
+
+This application is intended to facilitate collaboration and maintain structure during the hackathon by creating teams. To begin, click “Create a Team!”.
+![](images/TBStart.PNG)
+
+Next, fill out the information about your team. This includes the “Challenge Area,” “Assigned Team Channel,” “Team Name,” and “Team description.” Once finished, click “Create Team”.
+![](images/TB2.PNG)
+
+You can create a team, and you can also join a team under “All Teams.” Below is an example of a team. In addition to the team’s name, channel, and description, there is a list with the team members and a button, “Join.” Click “Join” to become a member. 
+![](images/TB3.PNG)
+
+You can now see this team you joined under “Your Team.” You also have options to “Lead”, “Edit”, and “Leave.” By clicking on “Lead”, you will be assigned the role of leader for the group. By clicking on “Leave,” you will leave the group and it will be removed from “Your Team.”
+![](images/TB4.PNG)
+
+By clicking on “Edit,” you can change the “Assigned Team Channel” and “Team description.”
+![](images/TB5.PNG)
+ 
 
 # Ideas for Spring
 * Maybe sort teams by least number of participants
