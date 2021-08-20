@@ -8,6 +8,8 @@ import GitHubUserEntry from './components/gituserentry-modal-hook';
 import { Message } from 'semantic-ui-react'
 import User from './apis/user';
 import Team from './apis/team';
+import nh4h from './apis/nh4h';
+import { ApiScope } from './apis/nh4h';
 
 class App extends Component {
   constructor(props) {
@@ -31,8 +33,7 @@ class App extends Component {
       t: null,
       myteam: -1,
       showcreate: false,
-      skillsWantedOptions: [],
-      apiScope: "api://05fc1a93-6c0e-4af6-9424-368474961462/user_impersonation"
+      skillsWantedOptions: []
     };
   }
 
@@ -77,7 +78,7 @@ class App extends Component {
 
   getAccessToken = async () => {
     let req = {
-      scopes: [this.state.apiScope]
+      scopes: [ApiScope]
     }
 
     let resp = await this.state.msalInstance.acquireTokenSilent(req);
