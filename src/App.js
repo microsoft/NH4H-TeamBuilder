@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import * as Msal from "msal";
 import TeamsList from './components/teamslist';
-import nh4h from './apis/nh4h';
 import gamification from './apis/gamification';
 import TeamForm from './components/createteam';
 import TeamListItem from './components/teamlistitem';
@@ -54,14 +53,19 @@ class App extends Component {
       let id = this.state.msalInstance.getAccount();
       let nUser = this.state.user;
       nUser.email = id.userName;
-      this.setState({
-        loggedin: true,
-        user: nUser,
-        email: id.userName,
-        username: id.name
+      this.getAccessToken()
+        .then((token)=>{
+        
+        this.setState({
+          loggedin: true,
+          user: nUser,
+          email: id.userName,
+          username: id.name,
+          team: new Team(token)
       }, () => {
         this.getUserInfo();
       });
+    })
 
     } else {
       let loginRequest = {
@@ -111,9 +115,10 @@ class App extends Component {
 
   }
 
-  CreateNewTeam = (body) => {
+  CreateNewTeam = async (body) => {
+    let authToken = await this.getAccessToken();
     body.createdBy = this.state.user.email;
-    this.state.team.createNewTeam(body)
+    this.state.team.createNewTeam(authToken, body)
       .then(() => {
         this.changeTeamMembership(true, this.state.team.teamid, body.teamName, 1, 1);
         this.toggleShowCreate();
@@ -121,9 +126,10 @@ class App extends Component {
       });
   }
 
-  editTeam = (body) => {
+  editTeam = async (body) => {
+    let authToken = await this.getAccessToken();
     body.modifiedBy = this.state.user.email;
-    this.state.team.editTeam(this.state.user.myteam, body)
+    this.state.team.editTeam(authToken, this.state.user.myteam, body)
       .then(() => {
         window.location.reload(false); // refreshes page to put the form in clean state
         this.toggleShowCreate();
