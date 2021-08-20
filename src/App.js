@@ -155,13 +155,14 @@ class App extends Component {
     });
   }
 
-  saveGitUser = (body) => {
+  saveGitUser = async (body) => {
+    let authToken = await this.getAccessToken();
+
     body.UserId = this.state.user.userid;
-    nh4h.put("/users/github/" + this.state.user.userid, body)
-      .then((resp) => {
+    this.state.user.saveGitUserId(authToken, this.state.user.userid, body)
+      .then(() => {
         this.setState({ enableTeamBuilder: true });
       });
-
   }
 
   setMyTeam = () => {

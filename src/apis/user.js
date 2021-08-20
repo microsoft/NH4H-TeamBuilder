@@ -90,6 +90,13 @@ class User {
       });
   }
 
+  saveGitUserId = (authToken, userId, data) => {
+    let apiClient = nh4h(authToken);
+    
+    return apiClient.put("/users/github/" + userId, data)
+      .catch(err => console.error(err));      
+  }
+
   checkCode = (authToken, otccode) => {
     let apiClient = nh4h(authToken);
     let body = {
